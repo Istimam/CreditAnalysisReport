@@ -330,6 +330,12 @@
     border-color: var(--danger-red) !important;
     background-color: #fef2f2;
   }
+  .form-control:disabled {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
   .field-error-msg {
     font-size: 9.5px;
     color: var(--danger-red);
@@ -496,11 +502,18 @@
     color: #ffffff !important;
     font-weight: 700 !important;
     padding: 4px 7px;
-    border-bottom: 2px solid #00332c;
+    border-bottom: 3px solid #00332c;
     border-right: 1px solid #005a4e;
     text-align: right;
+    box-shadow: 0 3px 4px rgba(0,0,0,0.15);
   }
   table.report-table tr.grand-total-row td.center { text-align: center; }
+
+  /* Ensure first data row has clear visual separation from sticky grand total */
+  table.report-table tbody tr:first-child td {
+    padding-top: 8px;
+    border-top: 2px solid var(--border-light);
+  }
 
   /* Base header cells */
   th.base-hdr {
@@ -543,6 +556,45 @@
   th.sub-credit { background-color: var(--band-credit-sub); }
   th.sub-coll { background-color: var(--band-coll-sub); }
   th.sub-due { background-color: var(--band-due-sub); }
+
+  /* Column Header Tooltip (for calculation info on hover) */
+  th[data-calc-tip] {
+    position: relative;
+    cursor: help;
+  }
+  th[data-calc-tip]::after {
+    content: " ℹ";
+    font-size: 9px;
+    opacity: 0.7;
+  }
+  th[data-calc-tip]:hover .calc-tooltip {
+    display: block;
+  }
+  .calc-tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    min-width: 220px;
+    max-width: 300px;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 10.5px;
+    font-weight: 400;
+    line-height: 1.45;
+    padding: 8px 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    white-space: normal;
+    text-align: left;
+    pointer-events: none;
+  }
+  .calc-tooltip strong {
+    color: #93c5fd;
+    font-weight: 600;
+  }
 
   /* Table Body */
   table.report-table tbody td {
@@ -1431,28 +1483,43 @@ const State = {
  * -----------------------------------------------------------------------------
  */
 
-// Constraint: Sales From & To dates cannot be smaller than Collection From Date,
-// and cannot be greater than Collection To Date (disable in calendar).
+// Constraint: Both Collection From & To must be picked first before Sales dates are enabled.
+// Sales From Date cannot be future than Collection From Date (Sales From max = Collection From).
+// Sales To Date cannot be future than Collection To Date (Sales To max = Collection To).
 function updateSalesDateConstraints() {
   const collFromVal = document.getElementById("f-coll-from").value;
   const collToVal = document.getElementById("f-coll-to").value;
   const salesFromInput = document.getElementById("f-coll-sales-from");
   const salesToInput = document.getElementById("f-coll-sales-to");
 
-  if (collFromVal) {
-    salesFromInput.min = collFromVal;
-    salesToInput.min = collFromVal;
-  } else {
+  // Both collection dates must be picked first - disable sales pickers until then
+  const bothCollPicked = !!(collFromVal && collToVal);
+  salesFromInput.disabled = !bothCollPicked;
+  salesToInput.disabled = !bothCollPicked;
+
+  if (!bothCollPicked) {
+    // Clear sales dates when collection dates are not fully set
+    salesFromInput.value = "";
+    salesToInput.value = "";
     salesFromInput.removeAttribute("min");
+    salesFromInput.removeAttribute("max");
     salesToInput.removeAttribute("min");
+    salesToInput.removeAttribute("max");
+    return;
   }
 
-  if (collToVal) {
-    salesFromInput.max = collToVal;
-    salesToInput.max = collToVal;
+  // Sales From: max = Collection From Date (cannot be future of collection from)
+  // No explicit min constraint on Sales From (can be any past date)
+  salesFromInput.removeAttribute("min");
+  salesFromInput.max = collFromVal;
+
+  // Sales To: max = Collection To Date (cannot be future of collection to)
+  // min = Sales From value if filled, otherwise no min
+  salesToInput.max = collToVal;
+  if (salesFromInput.value) {
+    salesToInput.min = salesFromInput.value;
   } else {
-    salesFromInput.removeAttribute("max");
-    salesToInput.removeAttribute("max");
+    salesToInput.removeAttribute("min");
   }
 }
 
@@ -1672,14 +1739,9 @@ function validateFilters() {
         showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To Date cannot be before Sales From Date");
         isValid = false;
       }
-      // Sales From cannot be smaller than Collection From Date
-      if (collFromVal && salesFromVal < collFromVal) {
-        showFieldError("err-coll-sales-from", "f-coll-sales-from", "Sales From date cannot be smaller than Collection From Date");
-        isValid = false;
-      }
-      // Sales To cannot be smaller than Collection From Date
-      if (collFromVal && salesToVal < collFromVal) {
-        showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To date cannot be smaller than Collection From Date");
+      // Sales From cannot be future than Collection From Date
+      if (collFromVal && salesFromVal > collFromVal) {
+        showFieldError("err-coll-sales-from", "f-coll-sales-from", "Sales From date cannot be future than Collection From Date");
         isValid = false;
       }
       // Sales To cannot be greater than Collection To Date
@@ -1985,22 +2047,22 @@ function renderSummaryReportView(isCollectionMode) {
             <th class="band-hdr band-credit" colspan="3">Credit Band</th>
             <th class="band-hdr band-coll" colspan="${collColsCount}">Collection Band</th>
 
-            <th class="base-hdr" rowspan="2">Credit Due</th>
-            <th class="base-hdr" rowspan="2">Remaining Cr Balance</th>
+            <th class="base-hdr" rowspan="2" data-calc-tip>Credit Due<span class="calc-tooltip"><strong>Credit Due</strong> = Net Credit − Total Collected<br>The outstanding credit amount yet to be collected from the customer.</span></th>
+            <th class="base-hdr" rowspan="2" data-calc-tip>Remaining Cr Balance<span class="calc-tooltip"><strong>Remaining Cr Balance</strong> = Cr Limit − Customer's Total Current Credit Due<br>How much more credit this customer can still take.</span></th>
             <th class="base-hdr" rowspan="2">Cr Limit</th>
           </tr>
 
           <tr>
             <th class="band-sub-hdr sub-sales">Gross Sale</th>
             <th class="band-sub-hdr sub-sales">Discount</th>
-            <th class="band-sub-hdr sub-sales">Disc %</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Disc %<span class="calc-tooltip"><strong>Disc %</strong> = Discount ÷ Gross Sale<br>Shows what percentage of the gross sale was given as discount.</span></th>
             <th class="band-sub-hdr sub-sales">Round Off</th>
-            <th class="band-sub-hdr sub-sales">Net Sale</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount ± Round Off<br>Total Return is shown separately and is NOT subtracted from Net Sale.</span></th>
             <th class="band-sub-hdr sub-sales">Total Return</th>
 
             <th class="band-sub-hdr sub-credit">Credit Sold</th>
             <th class="band-sub-hdr sub-credit">Credit Returned</th>
-            <th class="band-sub-hdr sub-credit">Net Credit</th>
+            <th class="band-sub-hdr sub-credit" data-calc-tip>Net Credit<span class="calc-tooltip"><strong>Net Credit</strong> = Credit Sold − Credit Returned<br>The actual credit obligation after accounting for returned credit.</span></th>
 
             ${activeAccounts.map(acc => `<th class="band-sub-hdr sub-coll">${acc}</th>`).join('')}
             <th class="band-sub-hdr sub-coll">Total Collected</th>
@@ -2203,22 +2265,22 @@ function renderDetailsReportView(isCollectionMode) {
             <th class="base-hdr" rowspan="2">JV/Collection Number</th>
             <th class="band-hdr band-coll" colspan="${collColsCount}">Collection Band</th>
 
-            <th class="base-hdr" rowspan="2">Credit Due</th>
-            <th class="base-hdr" rowspan="2">Remaining Cr Balance</th>
+            <th class="base-hdr" rowspan="2" data-calc-tip>Credit Due<span class="calc-tooltip"><strong>Credit Due</strong> = Net Credit − Total Collected<br>The outstanding credit amount yet to be collected from the customer.</span></th>
+            <th class="base-hdr" rowspan="2" data-calc-tip>Remaining Cr Balance<span class="calc-tooltip"><strong>Remaining Cr Balance</strong> = Cr Limit − Customer's Total Current Credit Due<br>How much more credit this customer can still take.</span></th>
             <th class="base-hdr" rowspan="2">Cr Limit</th>
           </tr>
 
           <tr>
             <th class="band-sub-hdr sub-sales">Gross Sale</th>
             <th class="band-sub-hdr sub-sales">Discount</th>
-            <th class="band-sub-hdr sub-sales">Disc %</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Disc %<span class="calc-tooltip"><strong>Disc %</strong> = Discount ÷ Gross Sale<br>Shows what percentage of the gross sale was given as discount.</span></th>
             <th class="band-sub-hdr sub-sales">Round Off</th>
-            <th class="band-sub-hdr sub-sales">Net Sale</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount ± Round Off<br>Total Return is shown separately and is NOT subtracted from Net Sale.</span></th>
             <th class="band-sub-hdr sub-sales">Total Return</th>
 
             <th class="band-sub-hdr sub-credit">Credit Sold</th>
             <th class="band-sub-hdr sub-credit">Credit Returned</th>
-            <th class="band-sub-hdr sub-credit">Net Credit</th>
+            <th class="band-sub-hdr sub-credit" data-calc-tip>Net Credit<span class="calc-tooltip"><strong>Net Credit</strong> = Credit Sold − Credit Returned<br>The actual credit obligation after accounting for returned credit.</span></th>
 
             ${activeAccounts.map(acc => `<th class="band-sub-hdr sub-coll">${acc}</th>`).join('')}
             <th class="band-sub-hdr sub-coll">Total Collected</th>
