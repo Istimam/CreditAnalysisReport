@@ -26,24 +26,26 @@ The report area stays completely **blank on initial load** until the user clicks
 ### 1. 📋 Summary View (Default & Is Collection Summary)
 * **Ordering**: Ordered strictly by **Partner Code** ascending. No cluttering group sub-rows.
 * **Granularity**: One row per customer.
+* **Partner Code Drilldown**: Clicking on the **Partner Code** hyperlink opens a **Customer Details** modal (matching the Managerium design) showing all invoices filtered in that customer's `Invoice Count`, complete with `Gross Amount`, `Credit Receive Amount`, `Due Amount`, `Remaining Balance`, `Net Amount`, aggregate totals, and an Excel export button.
 * **Columns**:
-  `SL` | `Partner Code` | `Customer Name` (clickable link) | `Phone` | `Customer Group` | `Invoice Count` |  
+  `SL` | `Partner Code` (clickable drilldown) | `Customer Name` (plain text) | `Phone` | `Customer Group` | `Invoice Count` |  
   **Sales Band**: `Gross Sale` | `Discount` | `Disc %` | `Round Off` | `Net Sale` | `Total Return` |  
   **Credit Band**: `Credit Sold` | `Credit Returned` | `Net Credit` |  
   **Collection Band**: `[One Column Per Active Account]` | `Total Collected` |  
   `Credit Due` | `Remaining Cr Balance` | `Cr Limit`
 * **Dynamic Collection Columns**: Only accounts with at least one collection in the filtered result appear (e.g., `Cash`, `Cash-02`, `bKASH`, `UCB`, `Bank1`, `Bank2`); all-zero accounts are automatically omitted.
-* **Sticky Elements**: Table header and dark teal `Grand Total` row stay sticky when scrolling vertically.
+* **Sticky Elements & Aggregate Disc %**: Table header and dark teal `Grand Total` row stay sticky when scrolling vertically. The Grand Total line displays the aggregate discount percentage ($$\text{Grand Discount} / \text{Grand Gross}$$, 4 decimal places).
 
 ---
 
 ### 2. 📑 Details View (`Is Details` Mode)
 * **Granularity**: One invoice block per invoice, with one sub-row per collection receipt.
-* **Rowspan Logic**: Invoice-level metadata (`SL`, `Partner Code`, `Customer Name`, `ID`, `Phone`, `Customer Group`, `Invoice Date`, `Invoice No`, Sales Band, Credit Band, `Total Collected`, `Credit Due`, `Remaining Cr Balance`, `Cr Limit`) use `rowspan` across all collection rows of that invoice.
+* **Plain Invoice Numbers**: `Invoice No` is displayed as clean unclickable text.
+* **Rowspan Logic**: Invoice-level metadata (`SL`, `Partner Code`, `Customer Name`, `ID`, `Phone`, `Customer Group`, `Invoice Date`, `Invoice No`, `Sales JV No`, Sales Band, Credit Band, `Total Collected`, `Credit Due`, `Remaining Cr Balance`, `Cr Limit`) use `rowspan` across all collection rows of that invoice.
   * Invoices with multiple collections (e.g., 2 or 3 collections across different payment methods) occupy multiple rows inside one clean block.
   * Invoices with no collections show a single row with blank/hyphen collection cells and `0.00` Total Collected.
 * **Pagination**: Paginates by complete **invoice blocks**, ensuring an invoice's collection rows are never split across pages.
-* **Voucher Drilldown**: Clicking any `JV/Collection Number` (e.g., `JV-26103434`, `CR-2610001`) opens an **Account Journal Details** modal showing double-entry journal vouchers (`COA No`, `Account Name`, `Debit`, `Credit`).
+* **Voucher Drilldown**: Both Sales JV and Collection JV numbers are clickable links opening the **Account Journal Details** modal showing double-entry journal vouchers (`COA No`, `Account Name`, `Debit`, `Credit`).
 
 ---
 
@@ -84,10 +86,13 @@ Modeled directly on the Managerium **Item History** interface:
 
 1. **Mandatory Field Checks**: Red outline and error text under any empty required fields. Report container remains **completely blank** if invalid.
 2. **Date Order**: `From Date <= To Date` for all ranges.
-3. **Cross-Range Check in Is Collection Mode**:
-   * `Sales To Date` cannot be greater than `Collection To Date` (`"Sales To date cannot be greater than Collection To Date"`).
+3. **Cross-Range & Dynamic Calendar Constraints in Is Collection Mode**:
+   * **Dynamic Calendar Range**: When `Collection From Date` and `Collection To Date` are selected, both `Sales From Date` and `Sales To Date` pickers automatically restrict valid calendar choices with `min = Collection From Date` and `max = Collection To Date`. Dates outside this window are disabled in the browser picker.
+   * `Sales From Date` cannot be smaller than `Collection From Date`.
+   * `Sales To Date` cannot be greater than `Collection To Date`.
    * If either `Sales From Date` or `Sales To Date` is filled, both are mandatory.
 4. **Credit History Mode**: Requires a customer to be selected via autocomplete (`min 3 characters`).
+5. **Auto-Clear on Filter Change**: Whenever any filter, input, or mode checkbox changes, the active report and export buttons immediately disappear until **View** is clicked again.
 
 ---
 

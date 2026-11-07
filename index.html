@@ -561,13 +561,13 @@
   td.center, th.center { text-align: center; }
 
   /* Links */
-  a.cust-link, a.inv-link, a.jv-link {
+  a.cust-link, a.jv-link {
     color: var(--primary-blue);
     text-decoration: underline;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
   }
-  a.cust-link:hover, a.inv-link:hover, a.jv-link:hover {
+  a.cust-link:hover, a.jv-link:hover {
     color: var(--primary-blue-hover);
   }
 
@@ -663,6 +663,9 @@
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     overflow: hidden;
   }
+  .modal-box.modal-wide {
+    max-width: 1050px;
+  }
   .modal-header {
     padding: 10px 14px;
     background: #f8fafc;
@@ -688,16 +691,37 @@
     margin-top: 6px;
   }
   .mini-table th {
-    background: #f1f5f9;
-    color: #334155;
-    padding: 4px 6px;
+    background: #dceaf7;
+    color: #0f2d4a;
+    padding: 5px 6px;
     border: 1px solid #cbd5e1;
-    font-weight: 600;
+    font-weight: 700;
+    text-align: center;
   }
   .mini-table td {
     padding: 4px 6px;
     border: 1px solid #e2e8f0;
     color: #1e293b;
+  }
+  .mini-table tr.total-row td {
+    background-color: #e0f2fe;
+    font-weight: 700;
+    border-top: 2px solid #b6d3ec;
+  }
+
+  .modal-close-text-btn {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+  }
+  .modal-close-text-btn:hover {
+    text-decoration: underline;
   }
 
   /* Notification Toast */
@@ -988,7 +1012,63 @@
      MODALS
      ========================================================================== -->
 
-<!-- 1. Account Journal Details Modal -->
+<!-- 1. Customer Details (Invoices Filtered in Invoice Count) Modal (Matches Image 1) -->
+<div class="modal-overlay" id="modal-customer-details">
+  <div class="modal-box modal-wide">
+    <div class="modal-header">
+      <div class="modal-title">Customer Details</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn btn-outline-blue" id="btn-m-cust-excel" onclick="exportCustomerDetailsModalToExcel()">EXCEL</button>
+        <button class="modal-close-btn" onclick="closeModal('modal-customer-details')">✕</button>
+      </div>
+    </div>
+    <div style="padding: 6px 14px; background: #f8fafc; border-bottom: 1px solid var(--border-light); font-size: 11px; font-weight: 600; color: #475569;" id="m-cust-date-range">
+      From Date: 01-11-2026   To Date: 04-11-2026
+    </div>
+    <div class="modal-body" style="padding: 10px 14px;">
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th>SL</th>
+            <th>Date</th>
+            <th>Invoice No.</th>
+            <th>Customer Name</th>
+            <th class="num">Credit Limit</th>
+            <th class="num">Sale Qty</th>
+            <th>Invoice Count</th>
+            <th class="num">Gross Amount</th>
+            <th>Collection Date</th>
+            <th>Collection Type</th>
+            <th class="num">Credit Receive Amount</th>
+            <th class="num">Due Amount</th>
+            <th class="num">Remaining Balance</th>
+            <th class="num">Net Amount</th>
+          </tr>
+        </thead>
+        <tbody id="m-cust-invoices-tbody"></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="5" class="center">Total</td>
+            <td class="num" id="m-cust-tot-qty">0.00</td>
+            <td class="center" id="m-cust-tot-count">0</td>
+            <td class="num" id="m-cust-tot-gross">0.00</td>
+            <td class="center">-</td>
+            <td class="center">-</td>
+            <td class="num" id="m-cust-tot-recv">0.00</td>
+            <td class="num" id="m-cust-tot-due">0.00</td>
+            <td class="num" id="m-cust-tot-rem">0.00</td>
+            <td class="num" id="m-cust-tot-net">0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="padding: 6px 14px; background: #ffffff; border-top: 1px solid var(--border-light); text-align: right;">
+      <button class="modal-close-text-btn" onclick="closeModal('modal-customer-details')">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Account Journal Details Modal -->
 <div class="modal-overlay" id="modal-journal">
   <div class="modal-box">
     <div class="modal-header">
@@ -1017,31 +1097,6 @@
             <td class="num" id="m-jv-tot-credit">0.00</td>
           </tr>
         </tfoot>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- 2. Invoice Details Modal -->
-<div class="modal-overlay" id="modal-invoice">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title" id="m-inv-title">Invoice Details</div>
-      <button class="modal-close-btn" onclick="closeModal('modal-invoice')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div id="m-inv-summary" style="margin-bottom:8px;"></div>
-      <h4 style="font-size:11px; font-weight:700; margin:8px 0 4px 0; color:#047857;">Collections Received</h4>
-      <table class="mini-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Voucher</th>
-            <th>Account</th>
-            <th class="num">Amount (BDT)</th>
-          </tr>
-        </thead>
-        <tbody id="m-inv-colls-tbody"></tbody>
       </table>
     </div>
   </div>
@@ -1171,7 +1226,6 @@ function generateMockData() {
     const customer = DB.customers[i % customerCount];
     const invNo = `1326${invSeq}`;
 
-    // Distribution: 70% in Oct 2026, 30% in Nov 1-4 2026
     let saleDate;
     const isNov = (i % 3 === 0);
     if (isNov) {
@@ -1188,10 +1242,8 @@ function generateMockData() {
     const roundOff = 0.00;
     const netSale = parseFloat((gross - discount + roundOff).toFixed(2));
 
-    // Part credit sold
     const creditSold = parseFloat((netSale * randFloat(0.7, 0.95)).toFixed(2));
 
-    // ~10% returns
     let hasReturn = (i % 10 === 2);
     let totalReturn = 0;
     let creditReturned = 0;
@@ -1217,7 +1269,6 @@ function generateMockData() {
 
     const netCredit = parseFloat((creditSold - creditReturned).toFixed(2));
 
-    // Collections applied (60% to 70% collected)
     let invCollections = [];
     let totalCollected = 0;
     const willCollect = (i % 10 < 7);
@@ -1236,7 +1287,6 @@ function generateMockData() {
         }
         if (collAmt <= 0) break;
 
-        // Collection date never before sale date
         let collDate = saleDate;
         if (saleDate.startsWith("2026-10")) {
           if (cIdx === 1 || i % 6 === 0) {
@@ -1299,8 +1349,7 @@ function generateMockData() {
     });
   }
 
-  // Ensure specific exact sample invoices for demonstration
-  // 1. FP-2709573 (MD. SELIM HOWLADER) Invoice 132611104502 with 2 collections
+  // Pre-seed exact example rows matching user specifications
   const inv1 = DB.invoices[0];
   const cust1 = DB.customers[0];
   inv1.invNo = "132611104502";
@@ -1322,7 +1371,6 @@ function generateMockData() {
   inv1.creditDue = 500;
   inv1.saleJvNo = "JV-26103430";
 
-  // 2. FP-2709577 (KAMAL HOSSAIN) Invoice 132611104508 with 3 collections
   const inv2 = DB.invoices[4];
   const cust2 = DB.customers[4];
   inv2.invNo = "132611104508";
@@ -1379,9 +1427,34 @@ const State = {
 
 /**
  * -----------------------------------------------------------------------------
- * 4. UI EVENT BINDINGS & MODE TOGGLES
+ * 4. UI EVENT BINDINGS & CALENDAR CONSTRAINTS
  * -----------------------------------------------------------------------------
  */
+
+// Constraint: Sales From & To dates cannot be smaller than Collection From Date,
+// and cannot be greater than Collection To Date (disable in calendar).
+function updateSalesDateConstraints() {
+  const collFromVal = document.getElementById("f-coll-from").value;
+  const collToVal = document.getElementById("f-coll-to").value;
+  const salesFromInput = document.getElementById("f-coll-sales-from");
+  const salesToInput = document.getElementById("f-coll-sales-to");
+
+  if (collFromVal) {
+    salesFromInput.min = collFromVal;
+    salesToInput.min = collFromVal;
+  } else {
+    salesFromInput.removeAttribute("min");
+    salesToInput.removeAttribute("min");
+  }
+
+  if (collToVal) {
+    salesFromInput.max = collToVal;
+    salesToInput.max = collToVal;
+  } else {
+    salesFromInput.removeAttribute("max");
+    salesToInput.removeAttribute("max");
+  }
+}
 
 // Auto-hide report when any filter or checkbox is modified
 function onFilterCriteriaChange() {
@@ -1400,6 +1473,7 @@ document.getElementById("chk-is-details").addEventListener("change", (e) => {
 document.getElementById("chk-is-collection").addEventListener("change", (e) => {
   State.isCollection = e.target.checked;
   syncFilterModeFields();
+  updateSalesDateConstraints();
   onFilterCriteriaChange();
 });
 
@@ -1426,8 +1500,14 @@ document.getElementById("chk-is-history").addEventListener("change", (e) => {
 
 // Attach change listeners to all filter inputs so the report disappears until View is clicked again
 document.querySelectorAll(".filter-input").forEach(input => {
-  input.addEventListener("input", onFilterCriteriaChange);
-  input.addEventListener("change", onFilterCriteriaChange);
+  input.addEventListener("input", () => {
+    updateSalesDateConstraints();
+    onFilterCriteriaChange();
+  });
+  input.addEventListener("change", () => {
+    updateSalesDateConstraints();
+    onFilterCriteriaChange();
+  });
 });
 
 function syncFilterModeFields() {
@@ -1463,6 +1543,7 @@ function syncFilterModeFields() {
       grpCollTo.style.display = "";
       grpCollSalesFrom.style.display = "";
       grpCollSalesTo.style.display = "";
+      updateSalesDateConstraints();
     } else {
       grpSalesFrom.style.display = "";
       grpSalesTo.style.display = "";
@@ -1591,6 +1672,17 @@ function validateFilters() {
         showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To Date cannot be before Sales From Date");
         isValid = false;
       }
+      // Sales From cannot be smaller than Collection From Date
+      if (collFromVal && salesFromVal < collFromVal) {
+        showFieldError("err-coll-sales-from", "f-coll-sales-from", "Sales From date cannot be smaller than Collection From Date");
+        isValid = false;
+      }
+      // Sales To cannot be smaller than Collection From Date
+      if (collFromVal && salesToVal < collFromVal) {
+        showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To date cannot be smaller than Collection From Date");
+        isValid = false;
+      }
+      // Sales To cannot be greater than Collection To Date
       if (collToVal && salesToVal > collToVal) {
         showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To date cannot be greater than Collection To Date");
         isValid = false;
@@ -1755,7 +1847,7 @@ function renderSummaryReportView(isCollectionMode) {
     });
   }
 
-  // Aggregate by Customer (with completely robust customer lookup)
+  // Aggregate by Customer
   const customerMap = {};
   const activeAccountsSet = new Set();
 
@@ -1874,6 +1966,8 @@ function renderSummaryReportView(isCollectionMode) {
   };
 
   const collColsCount = activeAccounts.length + 1;
+  // Compute grand discount percentage
+  const grandDiscPctFormatted = grandTotal.gross > 0 ? (grandTotal.discount / grandTotal.gross).toFixed(4) : "0.0000";
 
   root.innerHTML = `
     <div class="table-container">
@@ -1918,7 +2012,8 @@ function renderSummaryReportView(isCollectionMode) {
 
             <td class="num">${formatMoney(grandTotal.gross)}</td>
             <td class="num">${formatMoney(grandTotal.discount)}</td>
-            <td class="center">-</td>
+            <!-- Display calculated discount percentage on the Grand Total line -->
+            <td class="center">${grandDiscPctFormatted}</td>
             <td class="num">${formatMoney(grandTotal.roundOff)}</td>
             <td class="num">${formatMoney(grandTotal.netSale)}</td>
             <td class="num">${formatMoney(grandTotal.totalReturn)}</td>
@@ -1940,13 +2035,16 @@ function renderSummaryReportView(isCollectionMode) {
             <tr><td colspan="${15 + collColsCount}" style="text-align:center; padding:30px; color:#64748b;">No data found for the selected criteria.</td></tr>
           ` : pagedList.map((c, idx) => {
             const sl = startIdx + idx + 1;
-            const discPctFormatted = c.gross > 0 ? (c.discount / c.gross).toFixed(4) : "0";
+            const discPctFormatted = c.gross > 0 ? (c.discount / c.gross).toFixed(4) : "0.0000";
 
             return `
               <tr>
                 <td class="center">${sl}</td>
-                <td>${c.partnerCode}</td>
-                <!-- Customer Name is plain unclickable text as requested -->
+                <!-- Partner Code is a clickable hyperlink that opens the invoices modal -->
+                <td>
+                  <a class="cust-link" onclick="openCustomerInvoicesModal('${c.partnerCode}')" title="Click to view filtered invoices for ${c.partnerCode}">${c.partnerCode}</a>
+                </td>
+                <!-- Customer Name is plain unclickable text -->
                 <td>${c.customerName}</td>
                 <td>${c.phone}</td>
                 <td>${c.group}</td>
@@ -2082,6 +2180,7 @@ function renderDetailsReportView(isCollectionMode) {
   };
 
   const collColsCount = activeAccounts.length + 1;
+  const grandDiscPctFormatted = grandGross > 0 ? (grandDisc / grandGross).toFixed(4) : "0.0000";
 
   root.innerHTML = `
     <div class="table-container">
@@ -2096,7 +2195,6 @@ function renderDetailsReportView(isCollectionMode) {
             <th class="base-hdr" rowspan="2">Customer Group</th>
             <th class="base-hdr" rowspan="2">Invoice Date</th>
             <th class="base-hdr" rowspan="2">Invoice No</th>
-            <!-- Added Sales JV No column after Invoice No -->
             <th class="base-hdr" rowspan="2">Sales JV No</th>
 
             <th class="band-hdr band-sales" colspan="6">Sales Band</th>
@@ -2131,7 +2229,7 @@ function renderDetailsReportView(isCollectionMode) {
 
             <td class="num">${formatMoney(grandGross)}</td>
             <td class="num">${formatMoney(grandDisc)}</td>
-            <td class="center">-</td>
+            <td class="center">${grandDiscPctFormatted}</td>
             <td class="num">${formatMoney(grandRound)}</td>
             <td class="num">${formatMoney(grandNetSale)}</td>
             <td class="num">${formatMoney(grandReturn)}</td>
@@ -2159,7 +2257,7 @@ function renderDetailsReportView(isCollectionMode) {
             const cust = block.cust;
             const colls = block.collections;
             const rowSpan = Math.max(1, colls.length);
-            const discPctFormatted = inv.gross > 0 ? (inv.discount / inv.gross).toFixed(4) : "0";
+            const discPctFormatted = inv.gross > 0 ? (inv.discount / inv.gross).toFixed(4) : "0.0000";
 
             let blockHtml = '';
             const firstColl = colls.length > 0 ? colls[0] : null;
@@ -2175,9 +2273,8 @@ function renderDetailsReportView(isCollectionMode) {
                 <td rowspan="${rowSpan}">${inv.customerPhone}</td>
                 <td rowspan="${rowSpan}">${inv.customerGroup}</td>
                 <td class="center" rowspan="${rowSpan}">${formatDateDMY(inv.date)}</td>
-                <td rowspan="${rowSpan}">
-                  <a class="inv-link" onclick="openInvoiceModal('${inv.invNo}')">${inv.invNo}</a>
-                </td>
+                <!-- Stopped hyperlink on Invoice No in details view as requested -->
+                <td rowspan="${rowSpan}">${inv.invNo}</td>
                 <!-- Sales JV No cell with link to Journal Modal -->
                 <td rowspan="${rowSpan}">
                   <a class="jv-link" onclick="openJournalModal('${inv.saleJvNo}')">${inv.saleJvNo}</a>
@@ -2441,10 +2538,8 @@ function renderCustomerCreditHistoryView() {
           ${events.map((evt, idx) => {
             const sl = idx + 2;
             let refHtml = evt.ref;
-            if (evt.refType === "invoice") {
-              refHtml = `<a class="inv-link" onclick="openInvoiceModal('${evt.ref}')">${evt.ref}</a>`;
-            } else if (evt.refType === "collection") {
-              refHtml = `<a class="inv-link" onclick="openInvoiceModal('${evt.ref}')">${evt.ref}</a>`;
+            if (evt.refType === "invoice" || evt.refType === "collection") {
+              refHtml = `<span style="font-weight:600;">${evt.ref}</span>`;
             }
 
             return `
@@ -2528,40 +2623,144 @@ document.addEventListener("change", (e) => {
  * 8. MODAL HANDLERS
  * -----------------------------------------------------------------------------
  */
-function openInvoiceModal(invNo) {
-  const inv = DB.invoices.find(i => i.invNo === invNo);
-  if (!inv) return;
 
-  document.getElementById("m-inv-title").textContent = `Invoice Details: ${inv.invNo}`;
-  document.getElementById("m-inv-summary").innerHTML = `
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; background:#f8fafc; padding:8px; border-radius:4px; border:1px solid #e2e8f0;">
-      <div><strong>Customer:</strong> ${inv.customerName} (${inv.customerCode})</div>
-      <div><strong>Invoice Date:</strong> ${formatDateDMY(inv.date)}</div>
-      <div><strong>Sales JV No:</strong> <a class="jv-link" onclick="openJournalModal('${inv.saleJvNo}')">${inv.saleJvNo}</a></div>
-      <div><strong>Gross / Discount:</strong> ${formatMoney(inv.gross)} / ${formatMoney(inv.discount)}</div>
-      <div><strong>Net Sale:</strong> ${formatMoney(inv.netSale)}</div>
-      <div><strong>Credit Sold:</strong> ${formatMoney(inv.creditSold)}</div>
-      <div><strong>Credit Returned:</strong> ${formatMoney(inv.creditReturned)}</div>
-      <div><strong>Net Credit:</strong> ${formatMoney(inv.netCredit)}</div>
-      <div><strong>Credit Due:</strong> <span style="color:#b91c1c; font-weight:700;">${formatMoney(inv.creditDue)} BDT</span></div>
-    </div>
-  `;
+// Global storage for the currently inspected customer invoices in modal
+let currentModalCustomer = null;
+let currentModalInvoices = [];
 
-  const tbody = document.getElementById("m-inv-colls-tbody");
-  if (inv.collections && inv.collections.length > 0) {
-    tbody.innerHTML = inv.collections.map(c => `
-      <tr>
-        <td>${formatDateDMY(c.date)}</td>
-        <td><a class="jv-link" onclick="openJournalModal('${c.voucher}')">${c.voucher}</a></td>
-        <td>${c.account}</td>
-        <td class="num">${formatMoney(c.amount)}</td>
-      </tr>
-    `).join('');
+function openCustomerInvoicesModal(partnerCode) {
+  const cust = DB.customers.find(c => c.code === partnerCode);
+  if (!cust) return;
+
+  // Filter invoices belonging to this customer that match the current active criteria
+  let filtered = [];
+  if (State.isCollection) {
+    filtered = DB.invoices.filter(inv => {
+      if (inv.customerCode !== partnerCode) return false;
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      if (State.collSalesFromDate && State.collSalesToDate) {
+        if (inv.date < State.collSalesFromDate || inv.date > State.collSalesToDate) return false;
+      }
+      return inv.collections.some(c => c.date >= State.collFromDate && c.date <= State.collToDate);
+    });
   } else {
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">No collections received for this invoice.</td></tr>`;
+    filtered = DB.invoices.filter(inv => {
+      if (inv.customerCode !== partnerCode) return false;
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      return inv.date >= State.fromDate && inv.date <= State.toDate;
+    });
   }
 
-  openModal("modal-invoice");
+  currentModalCustomer = cust;
+  currentModalInvoices = filtered;
+
+  // Subtitle date range
+  let rangeSubtitle = `From Date: ${formatDateDMY(State.fromDate)}   To Date: ${formatDateDMY(State.toDate)}`;
+  if (State.isCollection) {
+    rangeSubtitle = `Collection Range: ${formatDateDMY(State.collFromDate)} to ${formatDateDMY(State.collToDate)}`;
+    if (State.collSalesFromDate && State.collSalesToDate) {
+      rangeSubtitle += ` | Sales Range: ${formatDateDMY(State.collSalesFromDate)} to ${formatDateDMY(State.collSalesToDate)}`;
+    }
+  }
+  document.getElementById("m-cust-date-range").textContent = rangeSubtitle;
+
+  let totQty = 0, totGross = 0, totRecv = 0, totDue = 0, totNet = 0;
+
+  const tbody = document.getElementById("m-cust-invoices-tbody");
+  tbody.innerHTML = filtered.map((inv, idx) => {
+    const qty = parseFloat((inv.gross / 160).toFixed(2));
+    totQty += qty;
+    totGross += inv.gross;
+    totRecv += inv.totalCollected;
+    totDue += inv.creditDue;
+    totNet += inv.netCredit;
+
+    const firstColl = inv.collections.length > 0 ? inv.collections[0] : null;
+
+    return `
+      <tr>
+        <td class="center">${idx + 1}</td>
+        <td class="center">${formatDateDMY(inv.date)}</td>
+        <td>${inv.invNo}</td>
+        <td>${inv.customerName}</td>
+        <td class="num">${formatMoney(cust.limit)}</td>
+        <td class="num">${qty.toFixed(2)}</td>
+        <td class="center">1</td>
+        <td class="num">${formatMoney(inv.gross)}</td>
+        <td class="center">${firstColl ? formatDateDMY(firstColl.date) : ''}</td>
+        <td class="center">${firstColl ? firstColl.account : ''}</td>
+        <td class="num">${formatMoney(inv.totalCollected)}</td>
+        <td class="num" style="color:#b91c1c; font-weight:600;">${formatMoney(inv.creditDue)}</td>
+        <td class="num">${formatMoney(Math.max(0, cust.limit - cust.totalCreditDue))}</td>
+        <td class="num" style="font-weight:600;">${formatMoney(inv.netCredit)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById("m-cust-tot-qty").textContent = totQty.toFixed(2);
+  document.getElementById("m-cust-tot-count").textContent = filtered.length;
+  document.getElementById("m-cust-tot-gross").textContent = formatMoney(totGross);
+  document.getElementById("m-cust-tot-recv").textContent = formatMoney(totRecv);
+  document.getElementById("m-cust-tot-due").textContent = formatMoney(totDue);
+  document.getElementById("m-cust-tot-rem").textContent = formatMoney(Math.max(0, cust.limit - cust.totalCreditDue));
+  document.getElementById("m-cust-tot-net").textContent = formatMoney(totNet);
+
+  openModal("modal-customer-details");
+}
+
+function exportCustomerDetailsModalToExcel() {
+  if (!currentModalCustomer || currentModalInvoices.length === 0) return;
+  const cust = currentModalCustomer;
+  const fileName = `Customer_Details_${cust.code}_${Date.now()}.xls`;
+
+  let totQty = 0, totGross = 0, totRecv = 0, totDue = 0, totNet = 0;
+
+  let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head>
+    <body>
+      <h2>Customer Details: ${cust.name} (${cust.code})</h2>
+      <p>${document.getElementById("m-cust-date-range").textContent}</p>
+      <table border="1">
+        <thead>
+          <tr style="background:#dceaf7; font-weight:bold;">
+            <th>SL</th><th>Date</th><th>Invoice No.</th><th>Customer Name</th><th>Credit Limit</th><th>Sale Qty</th><th>Invoice Count</th>
+            <th>Gross Amount</th><th>Collection Date</th><th>Collection Type</th><th>Credit Receive Amount</th><th>Due Amount</th><th>Remaining Balance</th><th>Net Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${currentModalInvoices.map((inv, idx) => {
+            const qty = parseFloat((inv.gross / 160).toFixed(2));
+            totQty += qty; totGross += inv.gross; totRecv += inv.totalCollected; totDue += inv.creditDue; totNet += inv.netCredit;
+            const firstColl = inv.collections.length > 0 ? inv.collections[0] : null;
+            return `
+              <tr>
+                <td>${idx + 1}</td><td>${inv.date}</td><td>${inv.invNo}</td><td>${inv.customerName}</td>
+                <td>${cust.limit}</td><td>${qty.toFixed(2)}</td><td>1</td><td>${inv.gross}</td>
+                <td>${firstColl ? firstColl.date : ''}</td><td>${firstColl ? firstColl.account : ''}</td>
+                <td>${inv.totalCollected}</td><td>${inv.creditDue}</td><td>${Math.max(0, cust.limit - cust.totalCreditDue)}</td><td>${inv.netCredit}</td>
+              </tr>
+            `;
+          }).join('')}
+          <tr style="background:#e0f2fe; font-weight:bold;">
+            <td colspan="5">Total</td><td>${totQty.toFixed(2)}</td><td>${currentModalInvoices.length}</td><td>${totGross.toFixed(2)}</td>
+            <td></td><td></td><td>${totRecv.toFixed(2)}</td><td>${totDue.toFixed(2)}</td><td>${Math.max(0, cust.limit - cust.totalCreditDue)}</td><td>${totNet.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </body></html>
+  `;
+
+  const blob = new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("Customer invoices exported to Excel");
 }
 
 function openJournalModal(vchNo) {
@@ -2671,7 +2870,8 @@ function exportReportToExcel() {
           `).join('')}
           <tr class="grand">
             <td colspan="5">Grand Total</td><td>${data.grandTotal.invoiceCount}</td>
-            <td class="num">${data.grandTotal.gross}</td><td class="num">${data.grandTotal.discount}</td><td>-</td>
+            <td class="num">${data.grandTotal.gross}</td><td class="num">${data.grandTotal.discount}</td>
+            <td>${data.grandTotal.gross > 0 ? (data.grandTotal.discount / data.grandTotal.gross).toFixed(4) : "0.0000"}</td>
             <td class="num">${data.grandTotal.roundOff}</td><td class="num">${data.grandTotal.netSale}</td><td class="num">${data.grandTotal.totalReturn}</td>
             <td class="num">${data.grandTotal.creditSold}</td><td class="num">${data.grandTotal.creditReturned}</td><td class="num">${data.grandTotal.netCredit}</td>
             ${data.activeAccounts.map(a => `<td class="num">${data.grandTotal.accountColls[a]}</td>`).join('')}
@@ -2807,6 +3007,7 @@ document.getElementById("sidebar-toggle").addEventListener("click", () => {
 
 window.addEventListener("DOMContentLoaded", () => {
   syncFilterModeFields();
+  updateSalesDateConstraints();
 });
 </script>
 </body>
