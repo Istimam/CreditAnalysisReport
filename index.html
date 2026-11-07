@@ -341,38 +341,12 @@
     display: block;
   }
 
-  /* Multi-select Chip Display */
-  .chip-select-wrap {
-    display: flex;
-    align-items: center;
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 3px;
-    height: 28px;
-    padding: 0 4px;
-    cursor: pointer;
-  }
-  .filter-chip {
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    border-radius: 3px;
-    padding: 1px 6px;
-    font-size: 10px;
-    font-weight: 600;
-    color: #334155;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .filter-chip .chip-x { cursor: pointer; color: #64748b; font-weight: bold; }
-  .filter-chip .chip-x:hover { color: #dc2626; }
-
   /* Checkboxes */
   .checkbox-group-row {
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-top: 18px;
+    margin-top: 14px;
   }
   .checkbox-label {
     display: flex;
@@ -910,45 +884,45 @@
           <!-- Standard Sales Range (Default & Credit History) -->
           <div class="filter-group" id="grp-sales-from">
             <label class="filter-label" for="f-from-date">From Date <span class="req">*</span></label>
-            <input type="date" class="form-control" id="f-from-date" value="2026-11-01">
+            <input type="date" class="form-control filter-input" id="f-from-date" value="2026-11-01">
             <div class="field-error-msg" id="err-from-date">From Date is required</div>
           </div>
 
           <div class="filter-group" id="grp-sales-to">
             <label class="filter-label" for="f-to-date">To Date <span class="req">*</span></label>
-            <input type="date" class="form-control" id="f-to-date" value="2026-11-04">
+            <input type="date" class="form-control filter-input" id="f-to-date" value="2026-11-04">
             <div class="field-error-msg" id="err-to-date">To Date is required</div>
           </div>
 
           <!-- Collection Mode Ranges (Only visible when Is Collection is checked) -->
           <div class="filter-group" id="grp-coll-from" style="display:none;">
             <label class="filter-label" for="f-coll-from">Collection From Date <span class="req">*</span></label>
-            <input type="date" class="form-control" id="f-coll-from" value="2026-11-01">
+            <input type="date" class="form-control filter-input" id="f-coll-from" value="2026-11-01">
             <div class="field-error-msg" id="err-coll-from">Collection From is required</div>
           </div>
 
           <div class="filter-group" id="grp-coll-to" style="display:none;">
             <label class="filter-label" for="f-coll-to">Collection To Date <span class="req">*</span></label>
-            <input type="date" class="form-control" id="f-coll-to" value="2026-11-04">
+            <input type="date" class="form-control filter-input" id="f-coll-to" value="2026-11-04">
             <div class="field-error-msg" id="err-coll-to">Collection To is required</div>
           </div>
 
           <div class="filter-group" id="grp-coll-sales-from" style="display:none;">
             <label class="filter-label" for="f-coll-sales-from">Sales From Date</label>
-            <input type="date" class="form-control" id="f-coll-sales-from">
+            <input type="date" class="form-control filter-input" id="f-coll-sales-from">
             <div class="field-error-msg" id="err-coll-sales-from">Both Sales dates required</div>
           </div>
 
           <div class="filter-group" id="grp-coll-sales-to" style="display:none;">
             <label class="filter-label" for="f-coll-sales-to">Sales To Date</label>
-            <input type="date" class="form-control" id="f-coll-sales-to">
+            <input type="date" class="form-control filter-input" id="f-coll-sales-to">
             <div class="field-error-msg" id="err-coll-sales-to">Sales To cannot exceed Collection To</div>
           </div>
 
-          <!-- Customer Group (Chip Select) -->
+          <!-- Customer Group -->
           <div class="filter-group" id="grp-cust-group">
             <label class="filter-label" for="f-group-select">Customer Group</label>
-            <select class="form-control" id="f-group-select" style="min-width:180px;">
+            <select class="form-control filter-input" id="f-group-select" style="min-width:180px;">
               <option value="ALL">ALL (All Groups)</option>
               <option value="Warehouse Staff (5000TK)">Warehouse Staff (5000TK)</option>
               <option value="Delivery Team (5000TK)">Delivery Team (5000TK)</option>
@@ -960,7 +934,7 @@
           <!-- Single Customer Search (Credit History Mode Only) -->
           <div class="filter-group autocomplete-container" id="grp-customer-search" style="display:none;">
             <label class="filter-label" for="f-cust-input">Customer <span class="req">*</span></label>
-            <input type="text" class="form-control" id="f-cust-input" placeholder="Search by name, code (FP-) or mobile..." autocomplete="off">
+            <input type="text" class="form-control filter-input" id="f-cust-input" placeholder="Search by name, code (FP-) or mobile..." autocomplete="off">
             <input type="hidden" id="f-cust-id" value="">
             <div class="field-error-msg" id="err-cust-id">Please select a customer</div>
             <div class="autocomplete-dropdown" id="cust-autocomplete-list"></div>
@@ -1130,11 +1104,21 @@ const CUSTOMER_GROUPS = [
 const COLLECTION_ACCOUNTS = ["Cash", "Cash-02", "bKASH", "UCB", "Bank1", "Bank2"];
 
 const NAMES_POOL = [
-  "MD. SELIM HOWLADER", "MD. AL-AMIN", "ABDUR RAHMAN", "KAMAL HOSSAIN", "ANISUR RAHMAN",
-  "MOHAMMED ALI", "KABIR AHMED", "ROBIUL ISLAM", "MST NAZNIN PURNIMA", "SHIKHA AKTER",
+  "MD. SELIM HOWLADER", "MD. AL-AMIN", "ABDUR RAHMAN", "MOHAMMED ALI", "KAMAL HOSSAIN", "ANISUR RAHMAN",
+  "KABIR AHMED", "ROBIUL ISLAM", "MST NAZNIN PURNIMA", "SHIKHA AKTER",
   "MD. EADRISH FAKIR", "SHAMIR MITRA", "MD. AHAD ALI", "DELOWAR HOSSAIN", "FARHANA BEGUM",
   "TANVIR AHMED", "ZAHID HASAN", "MAMUN KHAN", "JASHIM UDDIN", "TAREK MAHMUD",
   "ALAMGIR HOSSAIN", "MONIR CHOWDHURY", "RUBEL SARKER", "SUMON BHUIYAN"
+];
+
+// Predefined first 6 customers matching user's CSV samples exactly
+const PREDEFINED_CUSTOMERS = [
+  { code: "FP-2709573", name: "MD. SELIM HOWLADER", phone: "01730344022", id: "2233", group: "Warehouse Staff (5000TK)", limit: 5000 },
+  { code: "FP-2709574", name: "MD. AL-AMIN", phone: "01711223344", id: "2234", group: "Warehouse Staff (5000TK)", limit: 5000 },
+  { code: "FP-2709575", name: "ABDUR RAHMAN", phone: "01730344025", id: "2235", group: "Delivery Team (5000TK)", limit: 5000 },
+  { code: "FP-2709576", name: "MOHAMMED ALI", phone: "01918273645", id: "2236", group: "Warehouse Staff (5000TK)", limit: 5000 },
+  { code: "FP-2709577", name: "KAMAL HOSSAIN", phone: "01819234567", id: "2237", group: "Sales Executive (10000TK)", limit: 10000 },
+  { code: "FP-2709578", name: "ANISUR RAHMAN", phone: "01912345678", id: "2238", group: "Warehouse Staff (5000TK)", limit: 5000 }
 ];
 
 const DB = {
@@ -1146,28 +1130,36 @@ const DB = {
 
 function generateMockData() {
   const customerCount = 1500;
-  let codeSeq = 2709573;
 
-  // 1. Generate Customers
+  // 1. Generate Customers with 100% unique, sequential partner codes
   for (let i = 0; i < customerCount; i++) {
-    const grp = CUSTOMER_GROUPS[i % CUSTOMER_GROUPS.length];
-    const limit = grp.includes("10000TK") ? 10000 : 5000;
-    const name = i < NAMES_POOL.length ? NAMES_POOL[i] : `${randChoice(NAMES_POOL)} ${i}`;
-    const code = `FP-${codeSeq + i}`;
-    const phone = `017${randInt(10000000, 99999999)}`;
-    const custId = `${2233 + i}`;
+    if (i < PREDEFINED_CUSTOMERS.length) {
+      DB.customers.push({
+        ...PREDEFINED_CUSTOMERS[i],
+        creditDays: 30,
+        createDate: "2025-03-15",
+        totalCreditDue: 0
+      });
+    } else {
+      const grp = CUSTOMER_GROUPS[i % CUSTOMER_GROUPS.length];
+      const limit = grp.includes("10000TK") ? 10000 : 5000;
+      const name = `${randChoice(NAMES_POOL)} ${i}`;
+      const code = `FP-${2709573 + i}`;
+      const phone = `017${randInt(10000000, 99999999)}`;
+      const custId = `${2239 + i}`;
 
-    DB.customers.push({
-      id: custId,
-      code: code,
-      name: name,
-      phone: phone,
-      group: grp,
-      limit: limit,
-      creditDays: 30,
-      createDate: "2025-03-15",
-      totalCreditDue: 0
-    });
+      DB.customers.push({
+        id: custId,
+        code: code,
+        name: name,
+        phone: phone,
+        group: grp,
+        limit: limit,
+        creditDays: 30,
+        createDate: "2025-03-15",
+        totalCreditDue: 0
+      });
+    }
   }
 
   // 2. Generate Invoices (~6,000 credit invoices)
@@ -1207,11 +1199,9 @@ function generateMockData() {
 
     if (hasReturn) {
       if (i % 2 === 0) {
-        // Return reduces credit
         totalReturn = randFloat(100, Math.min(300, creditSold));
         creditReturned = totalReturn;
       } else {
-        // Return only on cash portion
         totalReturn = randFloat(100, 250);
         creditReturned = 0.00;
       }
@@ -1228,7 +1218,6 @@ function generateMockData() {
     const netCredit = parseFloat((creditSold - creditReturned).toFixed(2));
 
     // Collections applied (60% to 70% collected)
-    // Some invoices have 1 collection, some 2 or 3 collections across different accounts
     let invCollections = [];
     let totalCollected = 0;
     const willCollect = (i % 10 < 7);
@@ -1250,7 +1239,6 @@ function generateMockData() {
         // Collection date never before sale date
         let collDate = saleDate;
         if (saleDate.startsWith("2026-10")) {
-          // Some collected in Oct, some in Nov
           if (cIdx === 1 || i % 6 === 0) {
             collDate = `2026-11-0${randInt(1, 4)}`;
           } else {
@@ -1311,22 +1299,10 @@ function generateMockData() {
     });
   }
 
-  // Inject user specific sample rows to match the CSVs exactly
-  ensureExactSampleRows();
-}
-
-function ensureExactSampleRows() {
-  // Ensure FP-2709573 (MD. SELIM HOWLADER) has an invoice with 2 collections (one in Oct via UCB, one in Nov via Bank2)
-  const cust1 = DB.customers[0];
-  cust1.name = "MD. SELIM HOWLADER";
-  cust1.phone = "01730344022";
-  cust1.code = "FP-2709573";
-  cust1.id = "2233";
-  cust1.group = "Warehouse Staff (5000TK)";
-  cust1.limit = 5000;
-
-  // Invoice 132611104502
+  // Ensure specific exact sample invoices for demonstration
+  // 1. FP-2709573 (MD. SELIM HOWLADER) Invoice 132611104502 with 2 collections
   const inv1 = DB.invoices[0];
+  const cust1 = DB.customers[0];
   inv1.invNo = "132611104502";
   inv1.date = "2026-11-01";
   inv1.gross = 1200;
@@ -1344,17 +1320,11 @@ function ensureExactSampleRows() {
   ];
   inv1.totalCollected = 200;
   inv1.creditDue = 500;
+  inv1.saleJvNo = "JV-26103430";
 
-  // Ensure FP-2709577 (KAMAL HOSSAIN) has invoice 132611104508 with 3 collections
-  const cust2 = DB.customers[3];
-  cust2.name = "KAMAL HOSSAIN";
-  cust2.phone = "01819234567";
-  cust2.code = "FP-2709577";
-  cust2.id = "2235";
-  cust2.group = "Sales Executive (10000TK)";
-  cust2.limit = 10000;
-
-  const inv2 = DB.invoices[3];
+  // 2. FP-2709577 (KAMAL HOSSAIN) Invoice 132611104508 with 3 collections
+  const inv2 = DB.invoices[4];
+  const cust2 = DB.customers[4];
   inv2.invNo = "132611104508";
   inv2.date = "2026-11-02";
   inv2.gross = 3200;
@@ -1373,6 +1343,7 @@ function ensureExactSampleRows() {
   ];
   inv2.totalCollected = 1000;
   inv2.creditDue = 900;
+  inv2.saleJvNo = "JV-26103435";
 }
 
 generateMockData();
@@ -1383,16 +1354,13 @@ generateMockData();
  * -----------------------------------------------------------------------------
  */
 const State = {
-  // Mode Checkboxes
   isDetails: false,
   isCollection: false,
   isCreditHistory: false,
 
-  // Saved states when toggling Is Credit History
   savedIsDetails: false,
   savedIsCollection: false,
 
-  // Filter Values
   fromDate: "2026-11-01",
   toDate: "2026-11-04",
   collFromDate: "2026-11-01",
@@ -1403,7 +1371,6 @@ const State = {
   selectedCustomerId: "",
   selectedCustomer: null,
 
-  // Pagination & Active View Data
   pageSize: 50,
   currentPage: 1,
   renderedData: null,
@@ -1416,22 +1383,30 @@ const State = {
  * -----------------------------------------------------------------------------
  */
 
+// Auto-hide report when any filter or checkbox is modified
+function onFilterCriteriaChange() {
+  if (State.isReportActive) {
+    clearReportArea();
+  }
+}
+
 // Checkbox: Is Details
 document.getElementById("chk-is-details").addEventListener("change", (e) => {
   State.isDetails = e.target.checked;
+  onFilterCriteriaChange();
 });
 
 // Checkbox: Is Collection
 document.getElementById("chk-is-collection").addEventListener("change", (e) => {
   State.isCollection = e.target.checked;
   syncFilterModeFields();
+  onFilterCriteriaChange();
 });
 
 // Checkbox: Is Credit History
 document.getElementById("chk-is-history").addEventListener("change", (e) => {
   State.isCreditHistory = e.target.checked;
   if (State.isCreditHistory) {
-    // Save current states and uncheck/hide Is Details & Is Collection
     State.savedIsDetails = State.isDetails;
     State.savedIsCollection = State.isCollection;
 
@@ -1440,13 +1415,19 @@ document.getElementById("chk-is-history").addEventListener("change", (e) => {
     document.getElementById("chk-is-details").checked = false;
     document.getElementById("chk-is-collection").checked = false;
   } else {
-    // Restore previous states
     State.isDetails = State.savedIsDetails;
     State.isCollection = State.savedIsCollection;
     document.getElementById("chk-is-details").checked = State.isDetails;
     document.getElementById("chk-is-collection").checked = State.isCollection;
   }
   syncFilterModeFields();
+  onFilterCriteriaChange();
+});
+
+// Attach change listeners to all filter inputs so the report disappears until View is clicked again
+document.querySelectorAll(".filter-input").forEach(input => {
+  input.addEventListener("input", onFilterCriteriaChange);
+  input.addEventListener("change", onFilterCriteriaChange);
 });
 
 function syncFilterModeFields() {
@@ -1461,7 +1442,6 @@ function syncFilterModeFields() {
   const lblIsCollection = document.getElementById("lbl-is-collection");
 
   if (State.isCreditHistory) {
-    // Credit History Mode
     lblIsDetails.style.display = "none";
     lblIsCollection.style.display = "none";
     grpSalesFrom.style.display = "";
@@ -1477,7 +1457,6 @@ function syncFilterModeFields() {
     grpCustSearch.style.display = "none";
 
     if (State.isCollection) {
-      // Is Collection Mode: Hide plain From/To, show Collection range + optional Sales range
       grpSalesFrom.style.display = "none";
       grpSalesTo.style.display = "none";
       grpCollFrom.style.display = "";
@@ -1485,7 +1464,6 @@ function syncFilterModeFields() {
       grpCollSalesFrom.style.display = "";
       grpCollSalesTo.style.display = "";
     } else {
-      // Default Mode
       grpSalesFrom.style.display = "";
       grpSalesTo.style.display = "";
       grpCollFrom.style.display = "none";
@@ -1513,7 +1491,6 @@ custInput.addEventListener("input", (e) => {
     return;
   }
 
-  // Filter customers by selected group if not ALL
   const grpFilter = document.getElementById("f-group-select").value;
   let matches = DB.customers.filter(c => {
     if (grpFilter !== "ALL" && c.group !== grpFilter) return false;
@@ -1544,6 +1521,7 @@ function selectCustomer(id) {
   custInput.value = `${c.name} (${c.code})`;
   custDropdown.style.display = "none";
   clearFieldError("err-cust-id", "f-cust-input");
+  onFilterCriteriaChange();
 }
 
 document.addEventListener("click", (e) => {
@@ -1562,7 +1540,6 @@ function validateFilters() {
   clearAllErrors();
 
   if (State.isCreditHistory) {
-    // 1. From & To dates required
     const fromVal = document.getElementById("f-from-date").value;
     const toVal = document.getElementById("f-to-date").value;
 
@@ -1578,14 +1555,11 @@ function validateFilters() {
       showFieldError("err-to-date", "f-to-date", "To Date cannot be before From Date");
       isValid = false;
     }
-
-    // 2. Customer required
     if (!State.selectedCustomerId) {
       showFieldError("err-cust-id", "f-cust-input", "Please select a customer (min 3 chars)");
       isValid = false;
     }
   } else if (State.isCollection) {
-    // Collection mode validation
     const collFromVal = document.getElementById("f-coll-from").value;
     const collToVal = document.getElementById("f-coll-to").value;
     const salesFromVal = document.getElementById("f-coll-sales-from").value;
@@ -1604,7 +1578,6 @@ function validateFilters() {
       isValid = false;
     }
 
-    // Sales range: optional, but if one filled, both required
     if (salesFromVal && !salesToVal) {
       showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To Date is required when Sales From is set");
       isValid = false;
@@ -1618,14 +1591,12 @@ function validateFilters() {
         showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To Date cannot be before Sales From Date");
         isValid = false;
       }
-      // Sales To Date cannot be greater than Collection To Date
       if (collToVal && salesToVal > collToVal) {
         showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To date cannot be greater than Collection To Date");
         isValid = false;
       }
     }
   } else {
-    // Standard mode validation
     const fromVal = document.getElementById("f-from-date").value;
     const toVal = document.getElementById("f-to-date").value;
 
@@ -1681,12 +1652,10 @@ document.getElementById("btn-view").addEventListener("click", () => {
 
 function executeViewAction() {
   if (!validateFilters()) {
-    // Keep report area completely blank and disable buttons
     clearReportArea();
     return;
   }
 
-  // Read updated filter states
   State.fromDate = document.getElementById("f-from-date").value;
   State.toDate = document.getElementById("f-to-date").value;
   State.collFromDate = document.getElementById("f-coll-from").value;
@@ -1707,9 +1676,9 @@ function clearReportArea() {
   document.getElementById("btn-print").disabled = true;
   document.getElementById("report-output-root").innerHTML = `
     <div class="blank-report-state">
-      <div class="blank-icon">⚠️</div>
-      <div style="font-size:13px; font-weight:600; color:#dc2626;">Validation Failed</div>
-      <p style="margin-top:4px;">Please review the highlighted errors above and try again.</p>
+      <div class="blank-icon">📋</div>
+      <div style="font-size:13px; font-weight:600; color:#334155;">Ready to Generate Report</div>
+      <p style="margin-top:4px;">Criteria modified. Click <strong>View</strong> to display the Credit Analysis Report.</p>
     </div>
   `;
 }
@@ -1720,7 +1689,6 @@ function renderActiveReport() {
   document.getElementById("btn-print").disabled = false;
   document.getElementById("report-header-block").style.display = "block";
 
-  // Title & Subtitle
   const titleEl = document.getElementById("r-mode-title");
   const rangesEl = document.getElementById("r-ranges-text");
 
@@ -1770,36 +1738,39 @@ function renderActiveReport() {
 function renderSummaryReportView(isCollectionMode) {
   const root = document.getElementById("report-output-root");
 
-  // Step 1: Filter Invoices
   let candidateInvoices = [];
 
   if (isCollectionMode) {
-    // Only invoices with at least one collection in Collection Date Range
-    // and if Sales Date Range given, sale date in that range
     candidateInvoices = DB.invoices.filter(inv => {
       if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
       if (State.collSalesFromDate && State.collSalesToDate) {
         if (inv.date < State.collSalesFromDate || inv.date > State.collSalesToDate) return false;
       }
-      // Check if invoice has collections in collection range
-      const hasCollInRange = inv.collections.some(c => c.date >= State.collFromDate && c.date <= State.collToDate);
-      return hasCollInRange;
+      return inv.collections.some(c => c.date >= State.collFromDate && c.date <= State.collToDate);
     });
   } else {
-    // Default mode: Invoices sold in From/To range
     candidateInvoices = DB.invoices.filter(inv => {
       if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
       return inv.date >= State.fromDate && inv.date <= State.toDate;
     });
   }
 
-  // Step 2: Aggregate by Customer
+  // Aggregate by Customer (with completely robust customer lookup)
   const customerMap = {};
   const activeAccountsSet = new Set();
 
   candidateInvoices.forEach(inv => {
     if (!customerMap[inv.customerCode]) {
-      const cust = DB.customers.find(c => c.code === inv.customerCode);
+      const cust = DB.customers.find(c => c.code === inv.customerCode) || {
+        code: inv.customerCode,
+        name: inv.customerName,
+        phone: inv.customerPhone,
+        group: inv.customerGroup,
+        id: inv.customerId || '2233',
+        limit: 5000,
+        totalCreditDue: 0
+      };
+
       customerMap[inv.customerCode] = {
         partnerCode: cust.code,
         customerName: cust.name,
@@ -1836,7 +1807,6 @@ function renderSummaryReportView(isCollectionMode) {
     agg.creditReturned += inv.creditReturned;
     agg.netCredit += inv.netCredit;
 
-    // Collections calculation
     let relevantCollections = inv.collections;
     if (isCollectionMode) {
       relevantCollections = inv.collections.filter(c => c.date >= State.collFromDate && c.date <= State.collToDate);
@@ -1852,7 +1822,6 @@ function renderSummaryReportView(isCollectionMode) {
     agg.totalCollected += invCollSum;
   });
 
-  // Calculate Credit Due and Remaining Balance per customer
   const customersList = Object.values(customerMap);
   customersList.forEach(c => {
     c.creditDue = parseFloat((c.netCredit - c.totalCollected).toFixed(2));
@@ -1861,13 +1830,10 @@ function renderSummaryReportView(isCollectionMode) {
     c.remainingBalance = Math.max(0, parseFloat((c.limit - overallDue).toFixed(2)));
   });
 
-  // Order by Partner Code ascending
   customersList.sort((a, b) => a.partnerCode.localeCompare(b.partnerCode));
 
-  // Determine active dynamic accounts (ordered matching standard list, only accounts with > 0 collections)
   const activeAccounts = COLLECTION_ACCOUNTS.filter(acc => activeAccountsSet.has(acc));
 
-  // Grand totals across all rows
   const grandTotal = {
     invoiceCount: 0, gross: 0, discount: 0, roundOff: 0, netSale: 0, totalReturn: 0,
     creditSold: 0, creditReturned: 0, netCredit: 0, accountColls: {}, totalCollected: 0,
@@ -1894,14 +1860,12 @@ function renderSummaryReportView(isCollectionMode) {
     grandTotal.limit += c.limit;
   });
 
-  // Pagination
   const totalRows = customersList.length;
   const totalPages = Math.ceil(totalRows / State.pageSize) || 1;
   const startIdx = (State.currentPage - 1) * State.pageSize;
   const endIdx = Math.min(startIdx + State.pageSize, totalRows);
   const pagedList = customersList.slice(startIdx, endIdx);
 
-  // Store for Excel
   State.renderedData = {
     type: 'summary',
     customers: customersList,
@@ -1909,13 +1873,12 @@ function renderSummaryReportView(isCollectionMode) {
     activeAccounts: activeAccounts
   };
 
-  const collColsCount = activeAccounts.length + 1; // accounts + Total Collected
+  const collColsCount = activeAccounts.length + 1;
 
   root.innerHTML = `
     <div class="table-container">
       <table class="report-table" id="report-main-table">
         <thead>
-          <!-- Row 1: Group Bands -->
           <tr>
             <th class="base-hdr" rowspan="2">SL</th>
             <th class="base-hdr" rowspan="2">Partner Code</th>
@@ -1933,9 +1896,7 @@ function renderSummaryReportView(isCollectionMode) {
             <th class="base-hdr" rowspan="2">Cr Limit</th>
           </tr>
 
-          <!-- Row 2: Sub-headers -->
           <tr>
-            <!-- Sales -->
             <th class="band-sub-hdr sub-sales">Gross Sale</th>
             <th class="band-sub-hdr sub-sales">Discount</th>
             <th class="band-sub-hdr sub-sales">Disc %</th>
@@ -1943,17 +1904,14 @@ function renderSummaryReportView(isCollectionMode) {
             <th class="band-sub-hdr sub-sales">Net Sale</th>
             <th class="band-sub-hdr sub-sales">Total Return</th>
 
-            <!-- Credit -->
             <th class="band-sub-hdr sub-credit">Credit Sold</th>
             <th class="band-sub-hdr sub-credit">Credit Returned</th>
             <th class="band-sub-hdr sub-credit">Net Credit</th>
 
-            <!-- Collection Dynamic Accounts -->
             ${activeAccounts.map(acc => `<th class="band-sub-hdr sub-coll">${acc}</th>`).join('')}
             <th class="band-sub-hdr sub-coll">Total Collected</th>
           </tr>
 
-          <!-- Row 3: Sticky Grand Total Row Under Headers -->
           <tr class="grand-total-row">
             <td class="center" colspan="5">Grand Total (${totalRows.toLocaleString()} Customers)</td>
             <td class="center">${grandTotal.invoiceCount}</td>
@@ -1988,9 +1946,8 @@ function renderSummaryReportView(isCollectionMode) {
               <tr>
                 <td class="center">${sl}</td>
                 <td>${c.partnerCode}</td>
-                <td>
-                  <a class="cust-link" onclick="openCreditHistoryForCustomer('${c.customerId}')">${c.customerName}</a>
-                </td>
+                <!-- Customer Name is plain unclickable text as requested -->
+                <td>${c.customerName}</td>
                 <td>${c.phone}</td>
                 <td>${c.group}</td>
                 <td class="center">${c.invoiceCount}</td>
@@ -2029,7 +1986,6 @@ function renderSummaryReportView(isCollectionMode) {
 function renderDetailsReportView(isCollectionMode) {
   const root = document.getElementById("report-output-root");
 
-  // Step 1: Filter Invoices
   let candidateInvoices = [];
 
   if (isCollectionMode) {
@@ -2047,14 +2003,12 @@ function renderDetailsReportView(isCollectionMode) {
     });
   }
 
-  // Order by Partner Code, then Invoice Date
   candidateInvoices.sort((a, b) => {
     const codeCmp = a.customerCode.localeCompare(b.customerCode);
     if (codeCmp !== 0) return codeCmp;
     return a.date.localeCompare(b.date);
   });
 
-  // Prepare Invoice Blocks with their respective collection rows
   const activeAccountsSet = new Set();
   const invoiceBlocks = [];
 
@@ -2109,14 +2063,12 @@ function renderDetailsReportView(isCollectionMode) {
 
   const activeAccounts = COLLECTION_ACCOUNTS.filter(acc => activeAccountsSet.has(acc));
 
-  // Pagination by Invoice Blocks (never splitting an invoice across pages)
   const totalBlocks = invoiceBlocks.length;
   const totalPages = Math.ceil(totalBlocks / State.pageSize) || 1;
   const startIdx = (State.currentPage - 1) * State.pageSize;
   const endIdx = Math.min(startIdx + State.pageSize, totalBlocks);
   const pagedBlocks = invoiceBlocks.slice(startIdx, endIdx);
 
-  // Store for Excel
   State.renderedData = {
     type: 'details',
     blocks: invoiceBlocks,
@@ -2135,7 +2087,6 @@ function renderDetailsReportView(isCollectionMode) {
     <div class="table-container">
       <table class="report-table" id="report-main-table">
         <thead>
-          <!-- Row 1: Group Bands -->
           <tr>
             <th class="base-hdr" rowspan="2">SL</th>
             <th class="base-hdr" rowspan="2">Partner Code</th>
@@ -2145,6 +2096,8 @@ function renderDetailsReportView(isCollectionMode) {
             <th class="base-hdr" rowspan="2">Customer Group</th>
             <th class="base-hdr" rowspan="2">Invoice Date</th>
             <th class="base-hdr" rowspan="2">Invoice No</th>
+            <!-- Added Sales JV No column after Invoice No -->
+            <th class="base-hdr" rowspan="2">Sales JV No</th>
 
             <th class="band-hdr band-sales" colspan="6">Sales Band</th>
             <th class="band-hdr band-credit" colspan="3">Credit Band</th>
@@ -2157,9 +2110,7 @@ function renderDetailsReportView(isCollectionMode) {
             <th class="base-hdr" rowspan="2">Cr Limit</th>
           </tr>
 
-          <!-- Row 2: Sub-headers -->
           <tr>
-            <!-- Sales -->
             <th class="band-sub-hdr sub-sales">Gross Sale</th>
             <th class="band-sub-hdr sub-sales">Discount</th>
             <th class="band-sub-hdr sub-sales">Disc %</th>
@@ -2167,19 +2118,16 @@ function renderDetailsReportView(isCollectionMode) {
             <th class="band-sub-hdr sub-sales">Net Sale</th>
             <th class="band-sub-hdr sub-sales">Total Return</th>
 
-            <!-- Credit -->
             <th class="band-sub-hdr sub-credit">Credit Sold</th>
             <th class="band-sub-hdr sub-credit">Credit Returned</th>
             <th class="band-sub-hdr sub-credit">Net Credit</th>
 
-            <!-- Collection Dynamic Accounts -->
             ${activeAccounts.map(acc => `<th class="band-sub-hdr sub-coll">${acc}</th>`).join('')}
             <th class="band-sub-hdr sub-coll">Total Collected</th>
           </tr>
 
-          <!-- Row 3: Sticky Grand Total Row -->
           <tr class="grand-total-row">
-            <td class="center" colspan="8">Grand Total (${totalBlocks.toLocaleString()} Invoices)</td>
+            <td class="center" colspan="9">Grand Total (${totalBlocks.toLocaleString()} Invoices)</td>
 
             <td class="num">${formatMoney(grandGross)}</td>
             <td class="num">${formatMoney(grandDisc)}</td>
@@ -2205,7 +2153,7 @@ function renderDetailsReportView(isCollectionMode) {
         </thead>
         <tbody>
           ${pagedBlocks.length === 0 ? `
-            <tr><td colspan="${19 + collColsCount}" style="text-align:center; padding:30px; color:#64748b;">No data found for the selected criteria.</td></tr>
+            <tr><td colspan="${20 + collColsCount}" style="text-align:center; padding:30px; color:#64748b;">No data found for the selected criteria.</td></tr>
           ` : pagedBlocks.map(block => {
             const inv = block.inv;
             const cust = block.cust;
@@ -2214,8 +2162,6 @@ function renderDetailsReportView(isCollectionMode) {
             const discPctFormatted = inv.gross > 0 ? (inv.discount / inv.gross).toFixed(4) : "0";
 
             let blockHtml = '';
-
-            // First Row of this invoice block
             const firstColl = colls.length > 0 ? colls[0] : null;
 
             blockHtml += `
@@ -2223,14 +2169,18 @@ function renderDetailsReportView(isCollectionMode) {
                 <td class="center" rowspan="${rowSpan}">${block.sl}</td>
                 <td rowspan="${rowSpan}">${inv.customerCode}</td>
                 <td rowspan="${rowSpan}">
-                  <a class="cust-link" onclick="openCreditHistoryForCustomer('${cust ? cust.id : ''}')">${inv.customerName}</a>
+                  <span style="font-weight:500;">${inv.customerName}</span>
                 </td>
-                <td rowspan="${rowSpan}">${cust ? cust.id : ''}</td>
+                <td rowspan="${rowSpan}">${cust ? cust.id : (inv.customerId || '')}</td>
                 <td rowspan="${rowSpan}">${inv.customerPhone}</td>
                 <td rowspan="${rowSpan}">${inv.customerGroup}</td>
                 <td class="center" rowspan="${rowSpan}">${formatDateDMY(inv.date)}</td>
                 <td rowspan="${rowSpan}">
                   <a class="inv-link" onclick="openInvoiceModal('${inv.invNo}')">${inv.invNo}</a>
+                </td>
+                <!-- Sales JV No cell with link to Journal Modal -->
+                <td rowspan="${rowSpan}">
+                  <a class="jv-link" onclick="openJournalModal('${inv.saleJvNo}')">${inv.saleJvNo}</a>
                 </td>
 
                 <!-- Sales Band (Rowspan) -->
@@ -2264,7 +2214,6 @@ function renderDetailsReportView(isCollectionMode) {
               </tr>
             `;
 
-            // Subsequent Collection Rows (if any)
             for (let cIdx = 1; cIdx < colls.length; cIdx++) {
               const c = colls[cIdx];
               blockHtml += `
@@ -2300,7 +2249,6 @@ function renderCustomerCreditHistoryView() {
   const from = State.fromDate;
   const to = State.toDate;
 
-  // Retrieve all activities for this customer
   const allCustInvoices = DB.invoices.filter(i => i.customerCode === cust.code);
   const allCustCollections = DB.collections.filter(c => c.customerCode === cust.code);
   const allCustReturns = DB.returns.filter(r => {
@@ -2308,7 +2256,6 @@ function renderCustomerCreditHistoryView() {
     return inv && inv.customerCode === cust.code;
   });
 
-  // Calculate Opening Balance (Prior to From Date)
   let openingCreditSold = 0;
   let openingCreditReturned = 0;
   let openingCollected = 0;
@@ -2325,12 +2272,10 @@ function renderCustomerCreditHistoryView() {
 
   const openingBalance = parseFloat((openingCreditSold - openingCreditReturned - openingCollected).toFixed(2));
 
-  // Transactions within range
   const rangeInvoices = allCustInvoices.filter(i => i.date >= from && i.date <= to);
   const rangeReturns = allCustReturns.filter(r => r.date >= from && r.date <= to);
   const rangeCollections = allCustCollections.filter(c => c.date >= from && c.date <= to);
 
-  // Compute Card Totals for the selected range
   let cardCreditSold = 0;
   let cardCreditReturned = 0;
   let cardCollected = 0;
@@ -2346,7 +2291,6 @@ function renderCustomerCreditHistoryView() {
   const closingDueAsOfTo = parseFloat((openingBalance + cardCreditSold - cardCreditReturned - cardCollected).toFixed(2));
   const remainingCrBalance = Math.max(0, parseFloat((cust.limit - closingDueAsOfTo).toFixed(2)));
 
-  // Build Chronological Ledger Events
   let events = [];
 
   rangeInvoices.forEach(inv => {
@@ -2405,13 +2349,11 @@ function renderCustomerCreditHistoryView() {
     });
   });
 
-  // Sort chronological (by Date, then sortOrder: sale, return, collection)
   events.sort((a, b) => {
     if (a.date !== b.date) return a.date.localeCompare(b.date);
     return a.sortOrder - b.sortOrder;
   });
 
-  // Calculate Running Balance
   let curBal = openingBalance;
   events.forEach(evt => {
     curBal += evt.creditSold;
@@ -2420,7 +2362,6 @@ function renderCustomerCreditHistoryView() {
     evt.runningBal = parseFloat(curBal.toFixed(2));
   });
 
-  // Total sums for bottom row
   let totGross = 0, totDisc = 0, totNetSale = 0;
   events.forEach(e => {
     totGross += e.gross;
@@ -2428,7 +2369,6 @@ function renderCustomerCreditHistoryView() {
     totNetSale += e.netSale;
   });
 
-  // Store for Excel
   State.renderedData = {
     type: 'history',
     customer: cust,
@@ -2439,7 +2379,6 @@ function renderCustomerCreditHistoryView() {
   };
 
   root.innerHTML = `
-    <!-- Key/Value Card (Modeled on Item History Screen) -->
     <div class="history-key-value-card">
       <div class="hist-col">
         <div class="hist-row"><span class="hist-label">Customer Name</span><span class="hist-val" style="color:var(--primary-blue); font-size:12px;">${cust.name}</span></div>
@@ -2466,7 +2405,6 @@ function renderCustomerCreditHistoryView() {
       </div>
     </div>
 
-    <!-- Chronological Ledger Table -->
     <div class="table-container">
       <table class="report-table" id="report-main-table">
         <thead>
@@ -2487,7 +2425,6 @@ function renderCustomerCreditHistoryView() {
           </tr>
         </thead>
         <tbody>
-          <!-- Row 1: Opening Balance -->
           <tr style="background:#f1f5f9; font-weight:700;">
             <td class="center">1</td>
             <td class="center">${formatDateDMY(from)}</td>
@@ -2529,7 +2466,6 @@ function renderCustomerCreditHistoryView() {
             `;
           }).join('')}
 
-          <!-- Last Row: Total Sums & Closing Balance -->
           <tr style="background:#f1f5f9; font-weight:700; border-top:2px solid #cbd5e1;">
             <td class="center" colspan="6" style="text-align:right;">Total:</td>
             <td class="num">${formatMoney(totGross)}</td>
@@ -2544,28 +2480,6 @@ function renderCustomerCreditHistoryView() {
       </table>
     </div>
   `;
-}
-
-// Helper: Open Credit History from customer link in Summary or Details table
-function openCreditHistoryForCustomer(customerId) {
-  const cust = DB.customers.find(c => c.id === customerId);
-  if (!cust) return;
-
-  // Set Is Credit History mode
-  State.isCreditHistory = true;
-  document.getElementById("chk-is-history").checked = true;
-  State.savedIsDetails = State.isDetails;
-  State.savedIsCollection = State.isCollection;
-  State.isDetails = false;
-  State.isCollection = false;
-  document.getElementById("chk-is-details").checked = false;
-  document.getElementById("chk-is-collection").checked = false;
-
-  syncFilterModeFields();
-
-  selectCustomer(cust.id);
-  executeViewAction();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // -----------------------------------------------------------------------------
@@ -2623,6 +2537,7 @@ function openInvoiceModal(invNo) {
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px; background:#f8fafc; padding:8px; border-radius:4px; border:1px solid #e2e8f0;">
       <div><strong>Customer:</strong> ${inv.customerName} (${inv.customerCode})</div>
       <div><strong>Invoice Date:</strong> ${formatDateDMY(inv.date)}</div>
+      <div><strong>Sales JV No:</strong> <a class="jv-link" onclick="openJournalModal('${inv.saleJvNo}')">${inv.saleJvNo}</a></div>
       <div><strong>Gross / Discount:</strong> ${formatMoney(inv.gross)} / ${formatMoney(inv.discount)}</div>
       <div><strong>Net Sale:</strong> ${formatMoney(inv.netSale)}</div>
       <div><strong>Credit Sold:</strong> ${formatMoney(inv.creditSold)}</div>
@@ -2767,13 +2682,11 @@ function exportReportToExcel() {
       </table>
     `;
   } else if (data.type === 'details') {
-    // In Details exports: repeat Invoice No, customer and dates on EVERY collection row,
-    // but place invoice-level money columns on the FIRST row of the invoice only (no merged cells, no double-counting sums).
     html += `
       <table border="1">
         <thead>
           <tr class="hdr">
-            <th>SL</th><th>Partner Code</th><th>Customer Name</th><th>ID</th><th>Phone</th><th>Customer Group</th><th>Invoice Date</th><th>Invoice No</th>
+            <th>SL</th><th>Partner Code</th><th>Customer Name</th><th>ID</th><th>Phone</th><th>Customer Group</th><th>Invoice Date</th><th>Invoice No</th><th>Sales JV No</th>
             <th>Gross Sale</th><th>Discount</th><th>Disc %</th><th>Round Off</th><th>Net Sale</th><th>Total Return</th>
             <th>Credit Sold</th><th>Credit Returned</th><th>Net Credit</th>
             <th>Collection Date</th><th>JV/Collection Number</th>
@@ -2791,13 +2704,13 @@ function exportReportToExcel() {
                 <td>${b.sl}</td>
                 <td>${inv.customerCode}</td>
                 <td>${inv.customerName}</td>
-                <td>${b.cust ? b.cust.id : ''}</td>
+                <td>${b.cust ? b.cust.id : (inv.customerId || '')}</td>
                 <td>${inv.customerPhone}</td>
                 <td>${inv.customerGroup}</td>
                 <td>${inv.date}</td>
                 <td>${inv.invNo}</td>
+                <td>${inv.saleJvNo}</td>
 
-                <!-- Money columns only on row 0 -->
                 <td class="num">${cIdx === 0 ? inv.gross : ''}</td>
                 <td class="num">${cIdx === 0 ? inv.discount : ''}</td>
                 <td>${cIdx === 0 ? (inv.discount / (inv.gross || 1)).toFixed(4) : ''}</td>
@@ -2880,7 +2793,6 @@ document.getElementById("btn-print").addEventListener("click", () => {
   window.print();
 });
 
-// Toast Helper
 function showToast(msg) {
   const t = document.getElementById("toast");
   t.textContent = msg;
@@ -2888,13 +2800,11 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 2200);
 }
 
-// Sidebar toggle
 document.getElementById("sidebar-toggle").addEventListener("click", () => {
   const sb = document.getElementById("sidebar");
   sb.style.display = sb.style.display === "none" ? "flex" : "none";
 });
 
-// Initialize on load (blank report area, buttons disabled, prefilled dates)
 window.addEventListener("DOMContentLoaded", () => {
   syncFilterModeFields();
 });
