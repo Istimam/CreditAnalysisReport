@@ -1,0 +1,3076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Managerium - Credit Analysis Report</title>
+<style>
+  /* ==========================================================================
+     MANAGERIUM THEME & COMPACT LAYOUT
+     ========================================================================== */
+  :root {
+    --primary-blue: #1c64d9;
+    --primary-blue-hover: #1552b5;
+    --sidebar-bg: #eaf1f8;
+    --sidebar-text: #2c3e50;
+    --sidebar-active: #d8e9f8;
+    --topbar-bg: #ffffff;
+    --topbar-border: #e2e8f0;
+    --content-bg: #f8fafc;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+    --border-light: #e2e8f0;
+    --danger-red: #ef4444;
+
+    /* Print-friendly high-contrast Column Bands */
+    --band-sales-hdr: #d97706;    /* Amber */
+    --band-sales-sub: #b45309;
+    --band-credit-hdr: #4f46e5;   /* Indigo */
+    --band-credit-sub: #4338ca;
+    --band-coll-hdr: #059669;     /* Green */
+    --band-coll-sub: #047857;
+    --band-due-hdr: #dc2626;      /* Coral / Red */
+    --band-due-sub: #b91c1c;
+    --grand-total-bg: #004d40;    /* Dark Teal */
+
+    --table-header-bg: #dceaf7;
+    --table-row-hover: #f1f7fc;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 11.5px;
+    color: var(--text-main);
+    background-color: var(--content-bg);
+    overflow-x: hidden;
+  }
+
+  #app-root {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Left Sidebar */
+  #sidebar {
+    width: 210px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid #d0deea;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    user-select: none;
+    transition: width 0.2s ease;
+  }
+
+  .sidebar-header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-weight: 700;
+    color: #0f3057;
+    border-bottom: 1px solid #d8e4ee;
+    font-size: 12.5px;
+  }
+
+  .sidebar-menu {
+    list-style: none;
+    padding: 6px 0;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #334e68;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 11.5px;
+  }
+  .sidebar-item:hover { background-color: #dfebf6; }
+  .sidebar-item-content { display: flex; align-items: center; gap: 8px; }
+
+  .sidebar-submenu {
+    list-style: none;
+    background-color: #f2f7fc;
+    padding: 2px 0 4px 0;
+  }
+  .sidebar-subitem {
+    padding: 6px 14px 6px 36px;
+    color: #486581;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .sidebar-subitem:hover { color: var(--primary-blue); background-color: #e5f0fa; }
+  .sidebar-subitem.active {
+    background-color: var(--sidebar-active);
+    color: var(--primary-blue);
+    font-weight: 700;
+    border-right: 3px solid var(--primary-blue);
+  }
+
+  /* Main Workspace */
+  #main-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background-color: #ffffff;
+  }
+
+  /* Top Navigation Bar */
+  #top-navbar {
+    height: 48px;
+    background-color: var(--topbar-bg);
+    border-bottom: 1px solid var(--topbar-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-left { display: flex; align-items: center; gap: 12px; }
+  .nav-toggle-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+    font-size: 14px;
+    color: #475569;
+  }
+
+  .brand-logo-wrap { display: flex; align-items: center; gap: 7px; text-decoration: none; }
+  .brand-m-box {
+    width: 24px;
+    height: 24px;
+    background: #0d3b66;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 14px;
+    border-bottom: 2px solid #e63946;
+  }
+  .brand-name {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+  }
+
+  .nav-search { position: relative; margin-left: 16px; }
+  .nav-search input {
+    height: 28px;
+    width: 220px;
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 0 10px 0 28px;
+    font-size: 11px;
+    outline: none;
+  }
+  .nav-search-icon {
+    position: absolute;
+    left: 8px;
+    top: 7px;
+    font-size: 11px;
+    color: #94a3b8;
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .nav-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    font-size: 13px;
+    padding: 4px 6px;
+  }
+  .nav-icon-btn:hover { color: var(--primary-blue); }
+
+  .branch-select-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 8px;
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .branch-avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #ffedd5;
+    color: #c2410c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .user-avatar-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #334155;
+    cursor: pointer;
+    font-size: 11px;
+  }
+
+  /* Page Header & Tabs */
+  .page-header {
+    padding: 10px 18px 0 18px;
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .page-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+  }
+  .report-tabs {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    overflow-x: auto;
+  }
+  .report-tab-item {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    padding-bottom: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .report-tab-item:hover { color: var(--primary-blue); }
+  .report-tab-item.active {
+    color: var(--primary-blue);
+    border-bottom: 2px solid var(--primary-blue);
+  }
+
+  /* Content Body */
+  .page-content {
+    padding: 12px 18px 30px 18px;
+    background-color: #f8fafc;
+    flex: 1;
+  }
+
+  /* Compact Filter Bar (Managerium Style) */
+  .filter-panel {
+    background-color: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 10px 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    margin-bottom: 12px;
+  }
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 130px;
+    position: relative;
+  }
+  .filter-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 3px;
+  }
+  .filter-label span.req { color: var(--danger-red); margin-left: 2px; }
+
+  .form-control {
+    height: 28px;
+    padding: 0 7px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--text-main);
+    background-color: #ffffff;
+    outline: none;
+  }
+  .form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(28, 100, 217, 0.12);
+  }
+  .form-control.input-error {
+    border-color: var(--danger-red) !important;
+    background-color: #fef2f2;
+  }
+  .form-control:disabled {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .field-error-msg {
+    font-size: 9.5px;
+    color: var(--danger-red);
+    font-weight: 600;
+    margin-top: 2px;
+    display: none;
+  }
+  .field-error-msg.visible {
+    display: block;
+  }
+
+  /* Checkboxes */
+  .checkbox-group-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    user-select: none;
+  }
+  .checkbox-label input[type="checkbox"] {
+    accent-color: var(--primary-blue);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+
+  /* Buttons */
+  .btn {
+    height: 28px;
+    padding: 0 14px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .btn-primary {
+    background-color: var(--primary-blue);
+    color: #ffffff;
+  }
+  .btn-primary:hover:not(:disabled) { background-color: var(--primary-blue-hover); }
+
+  .btn-outline-blue {
+    background-color: #ffffff;
+    color: var(--primary-blue);
+    border-color: var(--primary-blue);
+  }
+  .btn-outline-blue:hover:not(:disabled) { background-color: #f0f7ff; }
+  .btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: #cbd5e1 !important;
+    color: #94a3b8 !important;
+  }
+
+  /* Customer Autocomplete Dropdown */
+  .autocomplete-container {
+    position: relative;
+    width: 260px;
+  }
+  .autocomplete-dropdown {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 50;
+    display: none;
+  }
+  .autocomplete-item {
+    padding: 5px 8px;
+    cursor: pointer;
+    font-size: 11px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .autocomplete-item:hover { background-color: #eff6ff; }
+  .autocomplete-item strong { color: var(--primary-blue); }
+
+  /* Centered Report Header Block */
+  .report-center-header {
+    text-align: center;
+    margin: 14px 0 10px 0;
+  }
+  .r-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: 0.2px;
+  }
+  .r-company {
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    margin-top: 1px;
+  }
+  .r-address {
+    font-size: 10.5px;
+    color: #64748b;
+  }
+  .r-ranges {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-top: 3px;
+  }
+
+  /* Table Container */
+  .table-container {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    overflow-x: auto;
+    position: relative;
+    max-height: 680px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  table.report-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 10.5px;
+    white-space: nowrap;
+  }
+
+  /* Sticky Headers */
+  table.report-table thead tr:first-child th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  table.report-table thead tr:nth-child(2) th {
+    position: sticky;
+    top: 22px;
+    z-index: 20;
+  }
+  /* Sticky Grand Total Row */
+  table.report-table tr.grand-total-row th,
+  table.report-table tr.grand-total-row td {
+    position: sticky;
+    top: 44px;
+    z-index: 19;
+    background-color: var(--grand-total-bg) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    padding: 4px 7px;
+    border-bottom: 3px solid #00332c;
+    border-right: 1px solid #005a4e;
+    text-align: right;
+    box-shadow: 0 3px 4px rgba(0,0,0,0.15);
+  }
+  table.report-table tr.grand-total-row td.center { text-align: center; }
+
+  /* Ensure first data row has clear visual separation from sticky grand total */
+  table.report-table tbody tr:first-child td {
+    padding-top: 8px;
+    border-top: 2px solid var(--border-light);
+  }
+
+  /* Base header cells */
+  th.base-hdr {
+    background-color: var(--table-header-bg);
+    color: #0f2d4a;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-bottom: 1px solid #b6d3ec;
+    border-right: 1px solid #b6d3ec;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  /* Band Sub-Headers */
+  th.band-hdr {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 3px 5px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-right: 1px solid rgba(255,255,255,0.2);
+  }
+  th.band-sales { background-color: var(--band-sales-hdr); }
+  th.band-credit { background-color: var(--band-credit-hdr); }
+  th.band-coll { background-color: var(--band-coll-hdr); }
+  th.band-due { background-color: var(--band-due-hdr); }
+
+  th.band-sub-hdr {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 9.5px;
+    padding: 3px 5px;
+    text-align: center;
+    border-bottom: 1px solid #cbd5e1;
+    border-right: 1px solid rgba(255,255,255,0.2);
+  }
+  th.sub-sales { background-color: var(--band-sales-sub); }
+  th.sub-credit { background-color: var(--band-credit-sub); }
+  th.sub-coll { background-color: var(--band-coll-sub); }
+  th.sub-due { background-color: var(--band-due-sub); }
+
+  /* Column Header Tooltip (for calculation info on hover) */
+  th[data-calc-tip] {
+    position: relative;
+    cursor: help;
+  }
+  th[data-calc-tip]::after {
+    content: " ℹ";
+    font-size: 9px;
+    opacity: 0.7;
+  }
+  th[data-calc-tip]:hover .calc-tooltip {
+    display: block;
+  }
+  .calc-tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    min-width: 220px;
+    max-width: 300px;
+    background: #1e293b;
+    color: #f8fafc;
+    font-size: 10.5px;
+    font-weight: 400;
+    line-height: 1.45;
+    padding: 8px 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    white-space: normal;
+    text-align: left;
+    pointer-events: none;
+  }
+  .calc-tooltip strong {
+    color: #93c5fd;
+    font-weight: 600;
+  }
+
+  /* Table Body */
+  table.report-table tbody td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #e2e8f0;
+    border-right: 1px solid #f1f5f9;
+    color: #1e293b;
+  }
+  table.report-table tbody tr:hover td {
+    background-color: var(--table-row-hover);
+  }
+  td.num, th.num {
+    text-align: right;
+    font-feature-settings: "tnum";
+  }
+  td.center, th.center { text-align: center; }
+
+  /* Links */
+  a.cust-link, a.jv-link {
+    color: var(--primary-blue);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  a.cust-link:hover, a.jv-link:hover {
+    color: var(--primary-blue-hover);
+  }
+
+  /* Pagination Bar */
+  .pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-top: none;
+    font-size: 10.5px;
+    color: #475569;
+  }
+  .page-nav-btns { display: flex; align-items: center; gap: 4px; }
+  .btn-page {
+    height: 22px;
+    min-width: 22px;
+    padding: 0 5px;
+    border: 1px solid var(--border-color);
+    background: #ffffff;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 10.5px;
+  }
+  .btn-page:hover:not(:disabled) {
+    background: #f1f5f9;
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+  }
+  .btn-page:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Customer Credit History Card (Item History Model) */
+  .history-key-value-card {
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 11px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .hist-col { padding: 8px 14px; }
+  .hist-col:first-child { border-right: 1px solid var(--border-light); }
+  .hist-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px dashed #f1f5f9;
+  }
+  .hist-row:last-child { border-bottom: none; }
+  .hist-label { color: #64748b; font-weight: 500; }
+  .hist-val { font-weight: 600; color: #0f172a; }
+
+  /* Blank State */
+  .blank-report-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #64748b;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 4px;
+  }
+  .blank-icon { font-size: 32px; margin-bottom: 8px; color: #94a3b8; }
+
+  /* Modals */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-box {
+    background: #ffffff;
+    border-radius: 6px;
+    width: 90%;
+    max-width: 760px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  .modal-box.modal-wide {
+    max-width: 1050px;
+  }
+  .modal-header {
+    padding: 10px 14px;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title { font-size: 13px; font-weight: 700; color: #0f172a; }
+  .modal-close-btn {
+    background: none; border: none; font-size: 16px; color: #64748b; cursor: pointer;
+  }
+  .modal-close-btn:hover { color: #dc2626; }
+  .modal-body {
+    padding: 12px 14px;
+    overflow-y: auto;
+    font-size: 11px;
+  }
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5px;
+    margin-top: 6px;
+  }
+  .mini-table th {
+    background: #dceaf7;
+    color: #0f2d4a;
+    padding: 5px 6px;
+    border: 1px solid #cbd5e1;
+    font-weight: 700;
+    text-align: center;
+  }
+  .mini-table td {
+    padding: 4px 6px;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+  }
+  .mini-table tr.total-row td {
+    background-color: #e0f2fe;
+    font-weight: 700;
+    border-top: 2px solid #b6d3ec;
+  }
+
+  .modal-close-text-btn {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+  }
+  .modal-close-text-btn:hover {
+    text-decoration: underline;
+  }
+
+  /* Notification Toast */
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #1e293b;
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 11px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ==========================================================================
+     PRINT STYLESHEET
+     ========================================================================== */
+  @media print {
+    @page {
+      size: A4 landscape;
+      margin: 8mm;
+    }
+    body {
+      background-color: #ffffff !important;
+      font-size: 8.5pt !important;
+      color: #000000 !important;
+    }
+    #sidebar, #top-navbar, .page-header, .filter-panel, .pagination-bar, #toast, .modal-overlay {
+      display: none !important;
+    }
+    #main-panel { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+    .page-content { padding: 0 !important; background: none !important; }
+    .table-container {
+      max-height: none !important;
+      overflow: visible !important;
+      border: 1px solid #000000 !important;
+      box-shadow: none !important;
+    }
+    table.report-table { width: 100% !important; }
+    table.report-table thead tr th,
+    table.report-table tbody td,
+    table.report-table tr.grand-total-row td,
+    table.report-table tr.grand-total-row th {
+      position: static !important;
+    }
+    thead { display: table-header-group !important; }
+    tr { page-break-inside: avoid !important; }
+    th.band-hdr, th.band-sub-hdr {
+      background-color: #e5e5e5 !important;
+      color: #000000 !important;
+      border: 1px solid #999 !important;
+    }
+    tr.grand-total-row th, tr.grand-total-row td {
+      background-color: #333333 !important;
+      color: #ffffff !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="app-root">
+  <!-- Left Sidebar (Managerium Shell) -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#1c64d9;"></span>
+        <span>Navigation Menu</span>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>🛍️</span><span>Purchase</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item" style="color:var(--primary-blue); font-weight:700;">
+        <div class="sidebar-item-content"><span>📟</span><span>POS</span></div>
+        <span style="transform:rotate(90deg);font-size:9px;">›</span>
+      </li>
+      <ul class="sidebar-submenu">
+        <li class="sidebar-subitem" onclick="showToast('POS Dashboard')">POS Dashboard</li>
+        <li class="sidebar-subitem" onclick="showToast('Setup')">Setup</li>
+        <li class="sidebar-subitem active">Reports</li>
+        <li class="sidebar-subitem" onclick="showToast('POS Sales')">POS Sales</li>
+      </ul>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>📦</span><span>Inventory</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>🏛️</span><span>Accounts</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>👥</span><span>Payroll</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>💼</span><span>Asset</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>🏭</span><span>Production</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>✅</span><span>Approval</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>📑</span><span>Vat Management</span></div>
+        <span>›</span>
+      </li>
+      <li class="sidebar-item">
+        <div class="sidebar-item-content"><span>⚙️</span><span>Configuration</span></div>
+        <span>›</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main id="main-panel">
+    <!-- Top Bar -->
+    <header id="top-navbar">
+      <div class="nav-left">
+        <button class="nav-toggle-btn" id="sidebar-toggle" title="Toggle Sidebar">☰</button>
+        <div class="brand-logo-wrap">
+          <div class="brand-m-box">M</div>
+          <span class="brand-name">MANAGERIUM</span>
+        </div>
+        <div class="nav-search">
+          <span class="nav-search-icon">🔍</span>
+          <input type="text" placeholder="Go to page... (Ctrl+K)">
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon-btn" title="Shortcuts">▦</button>
+        <button class="nav-icon-btn" title="Notifications">💬</button>
+        <div class="branch-select-badge" title="Active Branch / Office">
+          <div class="branch-avatar">FP</div>
+          <span>FairPrice</span>
+          <span style="font-size:8px;">▼</span>
+        </div>
+        <div class="user-avatar-btn" title="MD. NASRULLAH">N</div>
+      </div>
+    </header>
+
+    <!-- Page Title & Tabs -->
+    <div class="page-header">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <h1 class="page-title">Credit Analysis Report</h1>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline-blue" id="btn-excel" disabled title="Export to Excel (.xls)">📊 EXCEL</button>
+          <button class="btn btn-outline-blue" id="btn-print" disabled title="Print / Save PDF">🖨️ PRINT/PDF</button>
+        </div>
+      </div>
+      <ul class="report-tabs">
+        <li class="report-tab-item" onclick="showToast('Inventory Report')">INVENTORY REPORT</li>
+        <li class="report-tab-item active">POS SALES REPORT</li>
+        <li class="report-tab-item" onclick="showToast('VAT Report')">VAT REPORT</li>
+        <li class="report-tab-item" onclick="showToast('Discount Report')">DISCOUNT REPORT</li>
+        <li class="report-tab-item" onclick="showToast('Data Log Report')">DATA LOG REPORT</li>
+        <li class="report-tab-item" onclick="showToast('MIS Report')">MIS REPORT</li>
+      </ul>
+    </div>
+
+    <!-- Body Container -->
+    <div class="page-content">
+
+      <!-- Compact Managerium Filter Block -->
+      <div class="filter-panel" id="filter-block">
+        <div class="filter-row" id="filter-fields-row">
+          
+          <!-- Standard Sales Range (Default & Credit History) -->
+          <div class="filter-group" id="grp-sales-from">
+            <label class="filter-label" for="f-from-date">From Date <span class="req">*</span></label>
+            <input type="date" class="form-control filter-input" id="f-from-date" value="2026-11-01">
+            <div class="field-error-msg" id="err-from-date">From Date is required</div>
+          </div>
+
+          <div class="filter-group" id="grp-sales-to">
+            <label class="filter-label" for="f-to-date">To Date <span class="req">*</span></label>
+            <input type="date" class="form-control filter-input" id="f-to-date" value="2026-11-04">
+            <div class="field-error-msg" id="err-to-date">To Date is required</div>
+          </div>
+
+          <!-- Collection Mode Ranges (Only visible when Is Collection is checked) -->
+          <div class="filter-group" id="grp-coll-from" style="display:none;">
+            <label class="filter-label" for="f-coll-from">Collection From Date <span class="req">*</span></label>
+            <input type="date" class="form-control filter-input" id="f-coll-from" value="2026-11-01">
+            <div class="field-error-msg" id="err-coll-from">Collection From is required</div>
+          </div>
+
+          <div class="filter-group" id="grp-coll-to" style="display:none;">
+            <label class="filter-label" for="f-coll-to">Collection To Date <span class="req">*</span></label>
+            <input type="date" class="form-control filter-input" id="f-coll-to" value="2026-11-04">
+            <div class="field-error-msg" id="err-coll-to">Collection To is required</div>
+          </div>
+
+          <div class="filter-group" id="grp-coll-sales-from" style="display:none;">
+            <label class="filter-label" for="f-coll-sales-from">Sales From Date</label>
+            <input type="date" class="form-control filter-input" id="f-coll-sales-from">
+            <div class="field-error-msg" id="err-coll-sales-from">Both Sales dates required</div>
+          </div>
+
+          <div class="filter-group" id="grp-coll-sales-to" style="display:none;">
+            <label class="filter-label" for="f-coll-sales-to">Sales To Date</label>
+            <input type="date" class="form-control filter-input" id="f-coll-sales-to">
+            <div class="field-error-msg" id="err-coll-sales-to">Sales To cannot exceed Collection To</div>
+          </div>
+
+          <!-- Customer Group -->
+          <div class="filter-group" id="grp-cust-group">
+            <label class="filter-label" for="f-group-select">Customer Group</label>
+            <select class="form-control filter-input" id="f-group-select" style="min-width:180px;">
+              <option value="ALL">ALL (All Groups)</option>
+              <option value="Warehouse Staff (5000TK)">Warehouse Staff (5000TK)</option>
+              <option value="Delivery Team (5000TK)">Delivery Team (5000TK)</option>
+              <option value="Sales Executive (10000TK)">Sales Executive (10000TK)</option>
+              <option value="Showroom Staff (5000TK)">Showroom Staff (5000TK)</option>
+            </select>
+          </div>
+
+          <!-- Single Customer Search (Credit History Mode Only) -->
+          <div class="filter-group autocomplete-container" id="grp-customer-search" style="display:none;">
+            <label class="filter-label" for="f-cust-input">Customer <span class="req">*</span></label>
+            <input type="text" class="form-control filter-input" id="f-cust-input" placeholder="Search by name, code (FP-) or mobile..." autocomplete="off">
+            <input type="hidden" id="f-cust-id" value="">
+            <div class="field-error-msg" id="err-cust-id">Please select a customer</div>
+            <div class="autocomplete-dropdown" id="cust-autocomplete-list"></div>
+          </div>
+
+        </div>
+
+        <!-- Checkbox Row & View Button -->
+        <div class="checkbox-group-row">
+          <label class="checkbox-label" id="lbl-is-details">
+            <input type="checkbox" id="chk-is-details">
+            <span>Is Details</span>
+          </label>
+
+          <label class="checkbox-label" id="lbl-is-collection">
+            <input type="checkbox" id="chk-is-collection">
+            <span>Is Collection</span>
+          </label>
+
+          <label class="checkbox-label" id="lbl-is-history">
+            <input type="checkbox" id="chk-is-history">
+            <span>Is Credit History</span>
+          </label>
+
+          <button class="btn btn-primary" id="btn-view" style="margin-left:auto; padding:0 24px;">View</button>
+        </div>
+      </div>
+
+      <!-- Centered Report Header Block -->
+      <div class="report-center-header" id="report-header-block" style="display:none;">
+        <div class="r-title" id="r-mode-title">Credit Analysis Report - Sales Summary</div>
+        <div class="r-company">FairPrice</div>
+        <div class="r-address">Karol, Surichala, Kaliakoir, Gazipur</div>
+        <div class="r-ranges" id="r-ranges-text">From: 01-11-2026  To: 04-11-2026</div>
+      </div>
+
+      <!-- Report Output Container -->
+      <div id="report-output-root">
+        <div class="blank-report-state">
+          <div class="blank-icon">📋</div>
+          <div style="font-size:13px; font-weight:600; color:#334155;">Ready to Generate Report</div>
+          <p style="margin-top:4px;">Select your date criteria and click <strong>View</strong> to display the Credit Analysis Report.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ==========================================================================
+     MODALS
+     ========================================================================== -->
+
+<!-- 1. Customer Details (Invoices Filtered in Invoice Count) Modal (Matches Image 1) -->
+<div class="modal-overlay" id="modal-customer-details">
+  <div class="modal-box modal-wide">
+    <div class="modal-header">
+      <div class="modal-title">Customer Details</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn btn-outline-blue" id="btn-m-cust-excel" onclick="exportCustomerDetailsModalToExcel()">EXCEL</button>
+        <button class="modal-close-btn" onclick="closeModal('modal-customer-details')">✕</button>
+      </div>
+    </div>
+    <div style="padding: 6px 14px; background: #f8fafc; border-bottom: 1px solid var(--border-light); font-size: 11px; font-weight: 600; color: #475569;" id="m-cust-date-range">
+      From Date: 01-11-2026   To Date: 04-11-2026
+    </div>
+    <div class="modal-body" style="padding: 10px 14px;">
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th>SL</th>
+            <th>Date</th>
+            <th>Invoice No.</th>
+            <th>Customer Name</th>
+            <th class="num">Credit Limit</th>
+            <th class="num">Sale Qty</th>
+            <th>Invoice Count</th>
+            <th class="num">Gross Amount</th>
+            <th>Collection Date</th>
+            <th>Collection Type</th>
+            <th class="num">Credit Receive Amount</th>
+            <th class="num">Due Amount</th>
+            <th class="num">Remaining Balance</th>
+            <th class="num">Net Amount</th>
+          </tr>
+        </thead>
+        <tbody id="m-cust-invoices-tbody"></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="5" class="center">Total</td>
+            <td class="num" id="m-cust-tot-qty">0.00</td>
+            <td class="center" id="m-cust-tot-count">0</td>
+            <td class="num" id="m-cust-tot-gross">0.00</td>
+            <td class="center">-</td>
+            <td class="center">-</td>
+            <td class="num" id="m-cust-tot-recv">0.00</td>
+            <td class="num" id="m-cust-tot-due">0.00</td>
+            <td class="num" id="m-cust-tot-rem">0.00</td>
+            <td class="num" id="m-cust-tot-net">0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="padding: 6px 14px; background: #ffffff; border-top: 1px solid var(--border-light); text-align: right;">
+      <button class="modal-close-text-btn" onclick="closeModal('modal-customer-details')">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Account Journal Details Modal -->
+<div class="modal-overlay" id="modal-journal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="m-jv-title">Account Journal Details</div>
+      <button class="modal-close-btn" onclick="closeModal('modal-journal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:8px; font-size:11px; color:#475569;" id="m-jv-meta"></div>
+      <table class="mini-table">
+        <thead>
+          <tr>
+            <th>SL</th>
+            <th>Chart Of Account No</th>
+            <th>Name</th>
+            <th>Customer</th>
+            <th>Remarks</th>
+            <th class="num">Debit (BDT)</th>
+            <th class="num">Credit (BDT)</th>
+          </tr>
+        </thead>
+        <tbody id="m-jv-tbody"></tbody>
+        <tfoot>
+          <tr style="font-weight:700; background:#f1f5f9;">
+            <td colspan="5" style="text-align:right;">Total:</td>
+            <td class="num" id="m-jv-tot-debit">0.00</td>
+            <td class="num" id="m-jv-tot-credit">0.00</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="toast">Notice</div>
+
+<!-- ==========================================================================
+     JAVASCRIPT LOGIC
+     ========================================================================== -->
+<script>
+/**
+ * -----------------------------------------------------------------------------
+ * 1. SEEDED PSEUDO RANDOM NUMBER GENERATOR (Mulberry32)
+ * -----------------------------------------------------------------------------
+ */
+function Mulberry32(seed) {
+  return function() {
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rng = Mulberry32(20261108);
+
+function randInt(min, max) {
+  return Math.floor(rng() * (max - min + 1)) + min;
+}
+function randFloat(min, max, decimals = 2) {
+  const v = rng() * (max - min) + min;
+  return parseFloat(v.toFixed(decimals));
+}
+function randChoice(arr) {
+  return arr[Math.floor(rng() * arr.length)];
+}
+
+function formatMoney(n) {
+  if (n === undefined || n === null || isNaN(n)) return '0.00';
+  return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function formatDateDMY(iso) {
+  if (!iso) return '';
+  const p = iso.split('-');
+  return p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : iso;
+}
+
+/**
+ * -----------------------------------------------------------------------------
+ * 2. MOCK DATA GENERATION (~1,500 Customers, ~6,000 Credit Invoices)
+ * -----------------------------------------------------------------------------
+ */
+const CUSTOMER_GROUPS = [
+  "Warehouse Staff (5000TK)",
+  "Delivery Team (5000TK)",
+  "Sales Executive (10000TK)",
+  "Showroom Staff (5000TK)"
+];
+
+const COLLECTION_ACCOUNTS = ["Cash", "Cash-02", "bKASH", "UCB", "Bank1", "Bank2"];
+
+const NAMES_POOL = [
+  "MD. SELIM HOWLADER", "MD. AL-AMIN", "ABDUR RAHMAN", "MOHAMMED ALI", "KAMAL HOSSAIN", "ANISUR RAHMAN",
+  "KABIR AHMED", "ROBIUL ISLAM", "MST NAZNIN PURNIMA", "SHIKHA AKTER",
+  "MD. EADRISH FAKIR", "SHAMIR MITRA", "MD. AHAD ALI", "DELOWAR HOSSAIN", "FARHANA BEGUM",
+  "TANVIR AHMED", "ZAHID HASAN", "MAMUN KHAN", "JASHIM UDDIN", "TAREK MAHMUD",
+  "ALAMGIR HOSSAIN", "MONIR CHOWDHURY", "RUBEL SARKER", "SUMON BHUIYAN"
+];
+
+// Predefined first 6 customers matching user's CSV samples exactly
+const PREDEFINED_CUSTOMERS = [
+  { code: "FP-2709573", name: "MD. SELIM HOWLADER", phone: "01730344022", id: "2233", group: "Warehouse Staff (5000TK)", limit: 5000 },
+  { code: "FP-2709574", name: "MD. AL-AMIN", phone: "01711223344", id: "2234", group: "Warehouse Staff (5000TK)", limit: 5000 },
+  { code: "FP-2709575", name: "ABDUR RAHMAN", phone: "01730344025", id: "2235", group: "Delivery Team (5000TK)", limit: 5000 },
+  { code: "FP-2709576", name: "MOHAMMED ALI", phone: "01918273645", id: "2236", group: "Warehouse Staff (5000TK)", limit: 5000 },
+  { code: "FP-2709577", name: "KAMAL HOSSAIN", phone: "01819234567", id: "2237", group: "Sales Executive (10000TK)", limit: 10000 },
+  { code: "FP-2709578", name: "ANISUR RAHMAN", phone: "01912345678", id: "2238", group: "Warehouse Staff (5000TK)", limit: 5000 }
+];
+
+const DB = {
+  customers: [],
+  invoices: [],
+  collections: [],
+  returns: []
+};
+
+function generateMockData() {
+  const customerCount = 1500;
+
+  // 1. Generate Customers with 100% unique, sequential partner codes
+  for (let i = 0; i < customerCount; i++) {
+    if (i < PREDEFINED_CUSTOMERS.length) {
+      DB.customers.push({
+        ...PREDEFINED_CUSTOMERS[i],
+        creditDays: 30,
+        createDate: "2025-03-15",
+        totalCreditDue: 0
+      });
+    } else {
+      const grp = CUSTOMER_GROUPS[i % CUSTOMER_GROUPS.length];
+      const limit = grp.includes("10000TK") ? 10000 : 5000;
+      const name = `${randChoice(NAMES_POOL)} ${i}`;
+      const code = `FP-${2709573 + i}`;
+      const phone = `017${randInt(10000000, 99999999)}`;
+      const custId = `${2239 + i}`;
+
+      DB.customers.push({
+        id: custId,
+        code: code,
+        name: name,
+        phone: phone,
+        group: grp,
+        limit: limit,
+        creditDays: 30,
+        createDate: "2025-03-15",
+        totalCreditDue: 0
+      });
+    }
+  }
+
+  // 2. Generate Invoices (~6,000 credit invoices)
+  const totalInvoices = 6000;
+  let invSeq = 11104500;
+
+  for (let i = 0; i < totalInvoices; i++) {
+    invSeq++;
+    const customer = DB.customers[i % customerCount];
+    const invNo = `1326${invSeq}`;
+
+    let saleDate;
+    const isNov = (i % 3 === 0);
+    if (isNov) {
+      const day = randInt(1, 4);
+      saleDate = `2026-11-0${day}`;
+    } else {
+      const day = randInt(1, 31);
+      saleDate = `2026-10-${day < 10 ? '0' + day : day}`;
+    }
+
+    const gross = randFloat(1000, 4000);
+    const discPct = randFloat(0.05, 0.12, 4);
+    const discount = parseFloat((gross * discPct).toFixed(2));
+    const roundOff = 0.00;
+    const netSale = parseFloat((gross - discount + roundOff).toFixed(2));
+
+    const creditSold = parseFloat((netSale * randFloat(0.7, 0.95)).toFixed(2));
+
+    let hasReturn = (i % 10 === 2);
+    let totalReturn = 0;
+    let creditReturned = 0;
+    let returnObj = null;
+
+    if (hasReturn) {
+      if (i % 2 === 0) {
+        totalReturn = randFloat(100, Math.min(300, creditSold));
+        creditReturned = totalReturn;
+      } else {
+        totalReturn = randFloat(100, 250);
+        creditReturned = 0.00;
+      }
+      returnObj = {
+        voucher: `RT-2610${randInt(1000, 9999)}`,
+        invNo: invNo,
+        date: saleDate,
+        amount: totalReturn,
+        creditReturned: creditReturned
+      };
+      DB.returns.push(returnObj);
+    }
+
+    const netCredit = parseFloat((creditSold - creditReturned).toFixed(2));
+
+    let invCollections = [];
+    let totalCollected = 0;
+    const willCollect = (i % 10 < 7);
+
+    if (willCollect && netCredit > 0) {
+      const collCount = (i % 8 === 0) ? 3 : (i % 4 === 0 ? 2 : 1);
+      let remainingToCollect = (i % 5 === 0) ? netCredit : randFloat(200, netCredit);
+
+      for (let cIdx = 0; cIdx < collCount; cIdx++) {
+        let collAmt;
+        if (cIdx === collCount - 1) {
+          collAmt = parseFloat(remainingToCollect.toFixed(2));
+        } else {
+          collAmt = parseFloat((remainingToCollect / (collCount - cIdx)).toFixed(2));
+          remainingToCollect -= collAmt;
+        }
+        if (collAmt <= 0) break;
+
+        let collDate = saleDate;
+        if (saleDate.startsWith("2026-10")) {
+          if (cIdx === 1 || i % 6 === 0) {
+            collDate = `2026-11-0${randInt(1, 4)}`;
+          } else {
+            const day = Math.min(31, parseInt(saleDate.slice(-2)) + randInt(1, 10));
+            collDate = `2026-10-${day < 10 ? '0' + day : day}`;
+          }
+        } else {
+          collDate = saleDate;
+        }
+
+        const account = COLLECTION_ACCOUNTS[(i + cIdx) % COLLECTION_ACCOUNTS.length];
+        const vchNo = (cIdx % 2 === 0) ? `JV-2610${3430 + (i % 50)}` : `CR-2610${randInt(1000, 9999)}`;
+
+        const collRecord = {
+          invNo: invNo,
+          customerCode: customer.code,
+          customerName: customer.name,
+          date: collDate,
+          voucher: vchNo,
+          account: account,
+          amount: collAmt
+        };
+        invCollections.push(collRecord);
+        DB.collections.push(collRecord);
+        totalCollected += collAmt;
+      }
+    }
+
+    totalCollected = parseFloat(totalCollected.toFixed(2));
+    const creditDue = parseFloat((netCredit - totalCollected).toFixed(2));
+    customer.totalCreditDue += creditDue;
+
+    const saleJvNo = `JV-2610${3400 + (i % 100)}`;
+
+    DB.invoices.push({
+      sl: i + 1,
+      invNo: invNo,
+      date: saleDate,
+      customerId: customer.id,
+      customerCode: customer.code,
+      customerName: customer.name,
+      customerPhone: customer.phone,
+      customerGroup: customer.group,
+      gross: gross,
+      discount: discount,
+      discPct: discPct,
+      roundOff: roundOff,
+      netSale: netSale,
+      totalReturn: totalReturn,
+      creditSold: creditSold,
+      creditReturned: creditReturned,
+      netCredit: netCredit,
+      totalCollected: totalCollected,
+      creditDue: creditDue,
+      saleJvNo: saleJvNo,
+      collections: invCollections,
+      returnDetails: returnObj
+    });
+  }
+
+  // Pre-seed exact example rows matching user specifications
+  const inv1 = DB.invoices[0];
+  const cust1 = DB.customers[0];
+  inv1.invNo = "132611104502";
+  inv1.date = "2026-11-01";
+  inv1.gross = 1200;
+  inv1.discount = 100;
+  inv1.discPct = 0.0833;
+  inv1.roundOff = 0;
+  inv1.netSale = 1100;
+  inv1.totalReturn = 200;
+  inv1.creditSold = 800;
+  inv1.creditReturned = 100;
+  inv1.netCredit = 700;
+  inv1.collections = [
+    { invNo: inv1.invNo, customerCode: cust1.code, customerName: cust1.name, date: "2026-11-02", voucher: "JV-23449999", account: "UCB", amount: 100 },
+    { invNo: inv1.invNo, customerCode: cust1.code, customerName: cust1.name, date: "2026-11-04", voucher: "JV-26103434", account: "Bank2", amount: 100 }
+  ];
+  inv1.totalCollected = 200;
+  inv1.creditDue = 500;
+  inv1.saleJvNo = "JV-26103430";
+
+  const inv2 = DB.invoices[4];
+  const cust2 = DB.customers[4];
+  inv2.invNo = "132611104508";
+  inv2.date = "2026-11-02";
+  inv2.gross = 3200;
+  inv2.discount = 300;
+  inv2.discPct = 0.0938;
+  inv2.roundOff = 0;
+  inv2.netSale = 2900;
+  inv2.totalReturn = 400;
+  inv2.creditSold = 2200;
+  inv2.creditReturned = 300;
+  inv2.netCredit = 1900;
+  inv2.collections = [
+    { invNo: inv2.invNo, customerCode: cust2.code, customerName: cust2.name, date: "2026-11-03", voucher: "JV-26103440", account: "UCB", amount: 500 },
+    { invNo: inv2.invNo, customerCode: cust2.code, customerName: cust2.name, date: "2026-11-04", voucher: "JV-26103441", account: "Bank1", amount: 300 },
+    { invNo: inv2.invNo, customerCode: cust2.code, customerName: cust2.name, date: "2026-11-04", voucher: "JV-26103442", account: "Cash", amount: 200 }
+  ];
+  inv2.totalCollected = 1000;
+  inv2.creditDue = 900;
+  inv2.saleJvNo = "JV-26103435";
+}
+
+generateMockData();
+
+/**
+ * -----------------------------------------------------------------------------
+ * 3. APPLICATION STATE
+ * -----------------------------------------------------------------------------
+ */
+const State = {
+  isDetails: false,
+  isCollection: false,
+  isCreditHistory: false,
+
+  savedIsDetails: false,
+  savedIsCollection: false,
+
+  fromDate: "2026-11-01",
+  toDate: "2026-11-04",
+  collFromDate: "2026-11-01",
+  collToDate: "2026-11-04",
+  collSalesFromDate: "",
+  collSalesToDate: "",
+  customerGroup: "ALL",
+  selectedCustomerId: "",
+  selectedCustomer: null,
+
+  pageSize: 50,
+  currentPage: 1,
+  renderedData: null,
+  isReportActive: false
+};
+
+/**
+ * -----------------------------------------------------------------------------
+ * 4. UI EVENT BINDINGS & CALENDAR CONSTRAINTS
+ * -----------------------------------------------------------------------------
+ */
+
+// Constraint: Both Collection From & To must be picked first before Sales dates are enabled.
+// Sales From Date cannot be future than Collection From Date (Sales From max = Collection From).
+// Sales To Date cannot be future than Collection To Date (Sales To max = Collection To).
+function updateSalesDateConstraints() {
+  const collFromVal = document.getElementById("f-coll-from").value;
+  const collToVal = document.getElementById("f-coll-to").value;
+  const salesFromInput = document.getElementById("f-coll-sales-from");
+  const salesToInput = document.getElementById("f-coll-sales-to");
+
+  // Both collection dates must be picked first - disable sales pickers until then
+  const bothCollPicked = !!(collFromVal && collToVal);
+  salesFromInput.disabled = !bothCollPicked;
+  salesToInput.disabled = !bothCollPicked;
+
+  if (!bothCollPicked) {
+    // Clear sales dates when collection dates are not fully set
+    salesFromInput.value = "";
+    salesToInput.value = "";
+    salesFromInput.removeAttribute("min");
+    salesFromInput.removeAttribute("max");
+    salesToInput.removeAttribute("min");
+    salesToInput.removeAttribute("max");
+    return;
+  }
+
+  // Sales From: max = Collection From Date (cannot be future of collection from)
+  // No explicit min constraint on Sales From (can be any past date)
+  salesFromInput.removeAttribute("min");
+  salesFromInput.max = collFromVal;
+
+  // Sales To: max = Collection To Date (cannot be future of collection to)
+  // min = Sales From value if filled, otherwise no min
+  salesToInput.max = collToVal;
+  if (salesFromInput.value) {
+    salesToInput.min = salesFromInput.value;
+  } else {
+    salesToInput.removeAttribute("min");
+  }
+}
+
+// Auto-hide report when any filter or checkbox is modified
+function onFilterCriteriaChange() {
+  if (State.isReportActive) {
+    clearReportArea();
+  }
+}
+
+// Checkbox: Is Details
+document.getElementById("chk-is-details").addEventListener("change", (e) => {
+  State.isDetails = e.target.checked;
+  onFilterCriteriaChange();
+});
+
+// Checkbox: Is Collection
+document.getElementById("chk-is-collection").addEventListener("change", (e) => {
+  State.isCollection = e.target.checked;
+  syncFilterModeFields();
+  updateSalesDateConstraints();
+  onFilterCriteriaChange();
+});
+
+// Checkbox: Is Credit History
+document.getElementById("chk-is-history").addEventListener("change", (e) => {
+  State.isCreditHistory = e.target.checked;
+  if (State.isCreditHistory) {
+    State.savedIsDetails = State.isDetails;
+    State.savedIsCollection = State.isCollection;
+
+    State.isDetails = false;
+    State.isCollection = false;
+    document.getElementById("chk-is-details").checked = false;
+    document.getElementById("chk-is-collection").checked = false;
+  } else {
+    State.isDetails = State.savedIsDetails;
+    State.isCollection = State.savedIsCollection;
+    document.getElementById("chk-is-details").checked = State.isDetails;
+    document.getElementById("chk-is-collection").checked = State.isCollection;
+  }
+  syncFilterModeFields();
+  onFilterCriteriaChange();
+});
+
+// Attach change listeners to all filter inputs so the report disappears until View is clicked again
+document.querySelectorAll(".filter-input").forEach(input => {
+  input.addEventListener("input", () => {
+    updateSalesDateConstraints();
+    onFilterCriteriaChange();
+  });
+  input.addEventListener("change", () => {
+    updateSalesDateConstraints();
+    onFilterCriteriaChange();
+  });
+});
+
+function syncFilterModeFields() {
+  const grpSalesFrom = document.getElementById("grp-sales-from");
+  const grpSalesTo = document.getElementById("grp-sales-to");
+  const grpCollFrom = document.getElementById("grp-coll-from");
+  const grpCollTo = document.getElementById("grp-coll-to");
+  const grpCollSalesFrom = document.getElementById("grp-coll-sales-from");
+  const grpCollSalesTo = document.getElementById("grp-coll-sales-to");
+  const grpCustSearch = document.getElementById("grp-customer-search");
+  const lblIsDetails = document.getElementById("lbl-is-details");
+  const lblIsCollection = document.getElementById("lbl-is-collection");
+
+  if (State.isCreditHistory) {
+    lblIsDetails.style.display = "none";
+    lblIsCollection.style.display = "none";
+    grpSalesFrom.style.display = "";
+    grpSalesTo.style.display = "";
+    grpCollFrom.style.display = "none";
+    grpCollTo.style.display = "none";
+    grpCollSalesFrom.style.display = "none";
+    grpCollSalesTo.style.display = "none";
+    grpCustSearch.style.display = "";
+  } else {
+    lblIsDetails.style.display = "";
+    lblIsCollection.style.display = "";
+    grpCustSearch.style.display = "none";
+
+    if (State.isCollection) {
+      grpSalesFrom.style.display = "none";
+      grpSalesTo.style.display = "none";
+      grpCollFrom.style.display = "";
+      grpCollTo.style.display = "";
+      grpCollSalesFrom.style.display = "";
+      grpCollSalesTo.style.display = "";
+      updateSalesDateConstraints();
+    } else {
+      grpSalesFrom.style.display = "";
+      grpSalesTo.style.display = "";
+      grpCollFrom.style.display = "none";
+      grpCollTo.style.display = "none";
+      grpCollSalesFrom.style.display = "none";
+      grpCollSalesTo.style.display = "none";
+    }
+  }
+}
+
+// Customer Autocomplete (min 3 letters)
+const custInput = document.getElementById("f-cust-input");
+const custDropdown = document.getElementById("cust-autocomplete-list");
+const custHiddenId = document.getElementById("f-cust-id");
+
+custInput.addEventListener("input", (e) => {
+  const val = e.target.value.trim().toLowerCase();
+  clearFieldError("err-cust-id", "f-cust-input");
+
+  if (val.length < 3) {
+    custDropdown.style.display = "none";
+    State.selectedCustomerId = "";
+    State.selectedCustomer = null;
+    custHiddenId.value = "";
+    return;
+  }
+
+  const grpFilter = document.getElementById("f-group-select").value;
+  let matches = DB.customers.filter(c => {
+    if (grpFilter !== "ALL" && c.group !== grpFilter) return false;
+    return c.name.toLowerCase().includes(val) || c.code.toLowerCase().includes(val) || c.phone.includes(val);
+  }).slice(0, 10);
+
+  if (matches.length === 0) {
+    custDropdown.innerHTML = `<div class="autocomplete-item" style="color:#94a3b8;">No matching customer</div>`;
+    custDropdown.style.display = "block";
+    return;
+  }
+
+  custDropdown.innerHTML = matches.map(c => `
+    <div class="autocomplete-item" onclick="selectCustomer('${c.id}')">
+      <strong>${c.name}</strong> (${c.code}) - ${c.phone}<br>
+      <span style="font-size:10px; color:#64748b;">${c.group} | Cr Limit: ${formatMoney(c.limit)}</span>
+    </div>
+  `).join('');
+  custDropdown.style.display = "block";
+});
+
+function selectCustomer(id) {
+  const c = DB.customers.find(item => item.id === id);
+  if (!c) return;
+  State.selectedCustomerId = c.id;
+  State.selectedCustomer = c;
+  custHiddenId.value = c.id;
+  custInput.value = `${c.name} (${c.code})`;
+  custDropdown.style.display = "none";
+  clearFieldError("err-cust-id", "f-cust-input");
+  onFilterCriteriaChange();
+}
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".autocomplete-container")) {
+    custDropdown.style.display = "none";
+  }
+});
+
+/**
+ * -----------------------------------------------------------------------------
+ * 5. VALIDATION ENGINE (Runs every time View is clicked)
+ * -----------------------------------------------------------------------------
+ */
+function validateFilters() {
+  let isValid = true;
+  clearAllErrors();
+
+  if (State.isCreditHistory) {
+    const fromVal = document.getElementById("f-from-date").value;
+    const toVal = document.getElementById("f-to-date").value;
+
+    if (!fromVal) {
+      showFieldError("err-from-date", "f-from-date", "From Date is required");
+      isValid = false;
+    }
+    if (!toVal) {
+      showFieldError("err-to-date", "f-to-date", "To Date is required");
+      isValid = false;
+    }
+    if (fromVal && toVal && fromVal > toVal) {
+      showFieldError("err-to-date", "f-to-date", "To Date cannot be before From Date");
+      isValid = false;
+    }
+    if (!State.selectedCustomerId) {
+      showFieldError("err-cust-id", "f-cust-input", "Please select a customer (min 3 chars)");
+      isValid = false;
+    }
+  } else if (State.isCollection) {
+    const collFromVal = document.getElementById("f-coll-from").value;
+    const collToVal = document.getElementById("f-coll-to").value;
+    const salesFromVal = document.getElementById("f-coll-sales-from").value;
+    const salesToVal = document.getElementById("f-coll-sales-to").value;
+
+    if (!collFromVal) {
+      showFieldError("err-coll-from", "f-coll-from", "Collection From Date is required");
+      isValid = false;
+    }
+    if (!collToVal) {
+      showFieldError("err-coll-to", "f-coll-to", "Collection To Date is required");
+      isValid = false;
+    }
+    if (collFromVal && collToVal && collFromVal > collToVal) {
+      showFieldError("err-coll-to", "f-coll-to", "Collection To Date cannot be before From Date");
+      isValid = false;
+    }
+
+    if (salesFromVal && !salesToVal) {
+      showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To Date is required when Sales From is set");
+      isValid = false;
+    }
+    if (!salesFromVal && salesToVal) {
+      showFieldError("err-coll-sales-from", "f-coll-sales-from", "Sales From Date is required when Sales To is set");
+      isValid = false;
+    }
+    if (salesFromVal && salesToVal) {
+      if (salesFromVal > salesToVal) {
+        showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To Date cannot be before Sales From Date");
+        isValid = false;
+      }
+      // Sales From cannot be future than Collection From Date
+      if (collFromVal && salesFromVal > collFromVal) {
+        showFieldError("err-coll-sales-from", "f-coll-sales-from", "Sales From date cannot be future than Collection From Date");
+        isValid = false;
+      }
+      // Sales To cannot be greater than Collection To Date
+      if (collToVal && salesToVal > collToVal) {
+        showFieldError("err-coll-sales-to", "f-coll-sales-to", "Sales To date cannot be greater than Collection To Date");
+        isValid = false;
+      }
+    }
+  } else {
+    const fromVal = document.getElementById("f-from-date").value;
+    const toVal = document.getElementById("f-to-date").value;
+
+    if (!fromVal) {
+      showFieldError("err-from-date", "f-from-date", "From Date is required");
+      isValid = false;
+    }
+    if (!toVal) {
+      showFieldError("err-to-date", "f-to-date", "To Date is required");
+      isValid = false;
+    }
+    if (fromVal && toVal && fromVal > toVal) {
+      showFieldError("err-to-date", "f-to-date", "To Date cannot be before From Date");
+      isValid = false;
+    }
+  }
+
+  return isValid;
+}
+
+function showFieldError(msgId, inputId, text) {
+  const el = document.getElementById(msgId);
+  const inp = document.getElementById(inputId);
+  if (el) {
+    el.textContent = text;
+    el.classList.add("visible");
+  }
+  if (inp) {
+    inp.classList.add("input-error");
+  }
+}
+
+function clearFieldError(msgId, inputId) {
+  const el = document.getElementById(msgId);
+  const inp = document.getElementById(inputId);
+  if (el) el.classList.remove("visible");
+  if (inp) inp.classList.remove("input-error");
+}
+
+function clearAllErrors() {
+  document.querySelectorAll(".field-error-msg").forEach(el => el.classList.remove("visible"));
+  document.querySelectorAll(".form-control").forEach(inp => inp.classList.remove("input-error"));
+}
+
+/**
+ * -----------------------------------------------------------------------------
+ * 6. VIEW CONTROLLER & DATA EXTRACTION
+ * -----------------------------------------------------------------------------
+ */
+document.getElementById("btn-view").addEventListener("click", () => {
+  executeViewAction();
+});
+
+function executeViewAction() {
+  if (!validateFilters()) {
+    clearReportArea();
+    return;
+  }
+
+  State.fromDate = document.getElementById("f-from-date").value;
+  State.toDate = document.getElementById("f-to-date").value;
+  State.collFromDate = document.getElementById("f-coll-from").value;
+  State.collToDate = document.getElementById("f-coll-to").value;
+  State.collSalesFromDate = document.getElementById("f-coll-sales-from").value;
+  State.collSalesToDate = document.getElementById("f-coll-sales-to").value;
+  State.customerGroup = document.getElementById("f-group-select").value;
+
+  State.currentPage = 1;
+  renderActiveReport();
+}
+
+function clearReportArea() {
+  State.isReportActive = false;
+  State.renderedData = null;
+  document.getElementById("report-header-block").style.display = "none";
+  document.getElementById("btn-excel").disabled = true;
+  document.getElementById("btn-print").disabled = true;
+  document.getElementById("report-output-root").innerHTML = `
+    <div class="blank-report-state">
+      <div class="blank-icon">📋</div>
+      <div style="font-size:13px; font-weight:600; color:#334155;">Ready to Generate Report</div>
+      <p style="margin-top:4px;">Criteria modified. Click <strong>View</strong> to display the Credit Analysis Report.</p>
+    </div>
+  `;
+}
+
+function renderActiveReport() {
+  State.isReportActive = true;
+  document.getElementById("btn-excel").disabled = false;
+  document.getElementById("btn-print").disabled = false;
+  document.getElementById("report-header-block").style.display = "block";
+
+  const titleEl = document.getElementById("r-mode-title");
+  const rangesEl = document.getElementById("r-ranges-text");
+
+  if (State.isCreditHistory) {
+    titleEl.textContent = "Credit Analysis Report - Customer Credit History";
+    rangesEl.textContent = `From: ${formatDateDMY(State.fromDate)}  To: ${formatDateDMY(State.toDate)}`;
+    renderCustomerCreditHistoryView();
+  } else if (State.isCollection) {
+    if (State.isDetails) {
+      titleEl.textContent = "Credit Analysis Report - Collection Details";
+    } else {
+      titleEl.textContent = "Credit Analysis Report - Collection Summary";
+    }
+    let rangeStr = `Collection Date Range: From: ${formatDateDMY(State.collFromDate)} To: ${formatDateDMY(State.collToDate)}`;
+    if (State.collSalesFromDate && State.collSalesToDate) {
+      rangeStr += `  |  Sales Date Range: From: ${formatDateDMY(State.collSalesFromDate)} To: ${formatDateDMY(State.collSalesToDate)}`;
+    }
+    rangesEl.textContent = rangeStr;
+
+    if (State.isDetails) {
+      renderDetailsReportView(true);
+    } else {
+      renderSummaryReportView(true);
+    }
+  } else {
+    // Default Mode
+    if (State.isDetails) {
+      titleEl.textContent = "Credit Analysis Report - Sales Details";
+      renderDetailsReportView(false);
+    } else {
+      titleEl.textContent = "Credit Analysis Report - Sales Summary";
+      renderSummaryReportView(false);
+    }
+    rangesEl.textContent = `From: ${formatDateDMY(State.fromDate)}  To: ${formatDateDMY(State.toDate)}`;
+  }
+}
+
+/**
+ * -----------------------------------------------------------------------------
+ * 7. REPORT RENDERERS
+ * -----------------------------------------------------------------------------
+ */
+
+// -----------------------------------------------------------------------------
+// 7.1 SUMMARY VIEW (Default & Is Collection Summary)
+// -----------------------------------------------------------------------------
+function renderSummaryReportView(isCollectionMode) {
+  const root = document.getElementById("report-output-root");
+
+  let candidateInvoices = [];
+
+  if (isCollectionMode) {
+    candidateInvoices = DB.invoices.filter(inv => {
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      if (State.collSalesFromDate && State.collSalesToDate) {
+        if (inv.date < State.collSalesFromDate || inv.date > State.collSalesToDate) return false;
+      }
+      return inv.collections.some(c => c.date >= State.collFromDate && c.date <= State.collToDate);
+    });
+  } else {
+    candidateInvoices = DB.invoices.filter(inv => {
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      return inv.date >= State.fromDate && inv.date <= State.toDate;
+    });
+  }
+
+  // Aggregate by Customer
+  const customerMap = {};
+  const activeAccountsSet = new Set();
+
+  candidateInvoices.forEach(inv => {
+    if (!customerMap[inv.customerCode]) {
+      const cust = DB.customers.find(c => c.code === inv.customerCode) || {
+        code: inv.customerCode,
+        name: inv.customerName,
+        phone: inv.customerPhone,
+        group: inv.customerGroup,
+        id: inv.customerId || '2233',
+        limit: 5000,
+        totalCreditDue: 0
+      };
+
+      customerMap[inv.customerCode] = {
+        partnerCode: cust.code,
+        customerName: cust.name,
+        phone: cust.phone,
+        group: cust.group,
+        customerId: cust.id,
+        limit: cust.limit,
+        invoiceCount: 0,
+        gross: 0,
+        discount: 0,
+        roundOff: 0,
+        netSale: 0,
+        totalReturn: 0,
+        creditSold: 0,
+        creditReturned: 0,
+        netCredit: 0,
+        accountColls: {},
+        totalCollected: 0,
+        creditDue: 0
+      };
+      COLLECTION_ACCOUNTS.forEach(acc => {
+        customerMap[inv.customerCode].accountColls[acc] = 0;
+      });
+    }
+
+    const agg = customerMap[inv.customerCode];
+    agg.invoiceCount++;
+    agg.gross += inv.gross;
+    agg.discount += inv.discount;
+    agg.roundOff += inv.roundOff;
+    agg.netSale += inv.netSale;
+    agg.totalReturn += inv.totalReturn;
+    agg.creditSold += inv.creditSold;
+    agg.creditReturned += inv.creditReturned;
+    agg.netCredit += inv.netCredit;
+
+    let relevantCollections = inv.collections;
+    if (isCollectionMode) {
+      relevantCollections = inv.collections.filter(c => c.date >= State.collFromDate && c.date <= State.collToDate);
+    }
+
+    let invCollSum = 0;
+    relevantCollections.forEach(c => {
+      agg.accountColls[c.account] = (agg.accountColls[c.account] || 0) + c.amount;
+      invCollSum += c.amount;
+      if (c.amount > 0) activeAccountsSet.add(c.account);
+    });
+
+    agg.totalCollected += invCollSum;
+  });
+
+  const customersList = Object.values(customerMap);
+  customersList.forEach(c => {
+    c.creditDue = parseFloat((c.netCredit - c.totalCollected).toFixed(2));
+    const custRef = DB.customers.find(item => item.code === c.partnerCode);
+    const overallDue = custRef ? custRef.totalCreditDue : c.creditDue;
+    c.remainingBalance = Math.max(0, parseFloat((c.limit - overallDue).toFixed(2)));
+  });
+
+  customersList.sort((a, b) => a.partnerCode.localeCompare(b.partnerCode));
+
+  const activeAccounts = COLLECTION_ACCOUNTS.filter(acc => activeAccountsSet.has(acc));
+
+  const grandTotal = {
+    invoiceCount: 0, gross: 0, discount: 0, roundOff: 0, netSale: 0, totalReturn: 0,
+    creditSold: 0, creditReturned: 0, netCredit: 0, accountColls: {}, totalCollected: 0,
+    creditDue: 0, remainingBalance: 0, limit: 0
+  };
+  activeAccounts.forEach(acc => grandTotal.accountColls[acc] = 0);
+
+  customersList.forEach(c => {
+    grandTotal.invoiceCount += c.invoiceCount;
+    grandTotal.gross += c.gross;
+    grandTotal.discount += c.discount;
+    grandTotal.roundOff += c.roundOff;
+    grandTotal.netSale += c.netSale;
+    grandTotal.totalReturn += c.totalReturn;
+    grandTotal.creditSold += c.creditSold;
+    grandTotal.creditReturned += c.creditReturned;
+    grandTotal.netCredit += c.netCredit;
+    activeAccounts.forEach(acc => {
+      grandTotal.accountColls[acc] += (c.accountColls[acc] || 0);
+    });
+    grandTotal.totalCollected += c.totalCollected;
+    grandTotal.creditDue += c.creditDue;
+    grandTotal.remainingBalance += c.remainingBalance;
+    grandTotal.limit += c.limit;
+  });
+
+  const totalRows = customersList.length;
+  const totalPages = Math.ceil(totalRows / State.pageSize) || 1;
+  const startIdx = (State.currentPage - 1) * State.pageSize;
+  const endIdx = Math.min(startIdx + State.pageSize, totalRows);
+  const pagedList = customersList.slice(startIdx, endIdx);
+
+  State.renderedData = {
+    type: 'summary',
+    customers: customersList,
+    grandTotal: grandTotal,
+    activeAccounts: activeAccounts
+  };
+
+  const collColsCount = activeAccounts.length + 1;
+  // Compute grand discount percentage
+  const grandDiscPctFormatted = grandTotal.gross > 0 ? (grandTotal.discount / grandTotal.gross).toFixed(4) : "0.0000";
+
+  root.innerHTML = `
+    <div class="table-container">
+      <table class="report-table" id="report-main-table">
+        <thead>
+          <tr>
+            <th class="base-hdr" rowspan="2">SL</th>
+            <th class="base-hdr" rowspan="2">Partner Code</th>
+            <th class="base-hdr" rowspan="2">Customer Name</th>
+            <th class="base-hdr" rowspan="2">Phone</th>
+            <th class="base-hdr" rowspan="2">Customer Group</th>
+            <th class="base-hdr" rowspan="2">Invoice Count</th>
+
+            <th class="band-hdr band-sales" colspan="6">Sales Band</th>
+            <th class="band-hdr band-credit" colspan="3">Credit Band</th>
+            <th class="band-hdr band-coll" colspan="${collColsCount}">Collection Band</th>
+
+            <th class="base-hdr" rowspan="2" data-calc-tip>Credit Due<span class="calc-tooltip"><strong>Credit Due</strong> = Net Credit − Total Collected<br>The outstanding credit amount yet to be collected from the customer.</span></th>
+            <th class="base-hdr" rowspan="2" data-calc-tip>Remaining Cr Balance<span class="calc-tooltip"><strong>Remaining Cr Balance</strong> = Cr Limit − Customer's Total Current Credit Due<br>How much more credit this customer can still take.</span></th>
+            <th class="base-hdr" rowspan="2">Cr Limit</th>
+          </tr>
+
+          <tr>
+            <th class="band-sub-hdr sub-sales">Gross Sale</th>
+            <th class="band-sub-hdr sub-sales">Discount</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Disc %<span class="calc-tooltip"><strong>Disc %</strong> = Discount ÷ Gross Sale<br>Shows what percentage of the gross sale was given as discount.</span></th>
+            <th class="band-sub-hdr sub-sales">Round Off</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount ± Round Off<br>Total Return is shown separately and is NOT subtracted from Net Sale.</span></th>
+            <th class="band-sub-hdr sub-sales">Total Return</th>
+
+            <th class="band-sub-hdr sub-credit">Credit Sold</th>
+            <th class="band-sub-hdr sub-credit">Credit Returned</th>
+            <th class="band-sub-hdr sub-credit" data-calc-tip>Net Credit<span class="calc-tooltip"><strong>Net Credit</strong> = Credit Sold − Credit Returned<br>The actual credit obligation after accounting for returned credit.</span></th>
+
+            ${activeAccounts.map(acc => `<th class="band-sub-hdr sub-coll">${acc}</th>`).join('')}
+            <th class="band-sub-hdr sub-coll">Total Collected</th>
+          </tr>
+
+          <tr class="grand-total-row">
+            <td class="center" colspan="5">Grand Total (${totalRows.toLocaleString()} Customers)</td>
+            <td class="center">${grandTotal.invoiceCount}</td>
+
+            <td class="num">${formatMoney(grandTotal.gross)}</td>
+            <td class="num">${formatMoney(grandTotal.discount)}</td>
+            <!-- Display calculated discount percentage on the Grand Total line -->
+            <td class="center">${grandDiscPctFormatted}</td>
+            <td class="num">${formatMoney(grandTotal.roundOff)}</td>
+            <td class="num">${formatMoney(grandTotal.netSale)}</td>
+            <td class="num">${formatMoney(grandTotal.totalReturn)}</td>
+
+            <td class="num">${formatMoney(grandTotal.creditSold)}</td>
+            <td class="num">${formatMoney(grandTotal.creditReturned)}</td>
+            <td class="num">${formatMoney(grandTotal.netCredit)}</td>
+
+            ${activeAccounts.map(acc => `<td class="num">${formatMoney(grandTotal.accountColls[acc])}</td>`).join('')}
+            <td class="num">${formatMoney(grandTotal.totalCollected)}</td>
+
+            <td class="num">${formatMoney(grandTotal.creditDue)}</td>
+            <td class="num">${formatMoney(grandTotal.remainingBalance)}</td>
+            <td class="num">${formatMoney(grandTotal.limit)}</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${pagedList.length === 0 ? `
+            <tr><td colspan="${15 + collColsCount}" style="text-align:center; padding:30px; color:#64748b;">No data found for the selected criteria.</td></tr>
+          ` : pagedList.map((c, idx) => {
+            const sl = startIdx + idx + 1;
+            const discPctFormatted = c.gross > 0 ? (c.discount / c.gross).toFixed(4) : "0.0000";
+
+            return `
+              <tr>
+                <td class="center">${sl}</td>
+                <!-- Partner Code is a clickable hyperlink that opens the invoices modal -->
+                <td>
+                  <a class="cust-link" onclick="openCustomerInvoicesModal('${c.partnerCode}')" title="Click to view filtered invoices for ${c.partnerCode}">${c.partnerCode}</a>
+                </td>
+                <!-- Customer Name is plain unclickable text -->
+                <td>${c.customerName}</td>
+                <td>${c.phone}</td>
+                <td>${c.group}</td>
+                <td class="center">${c.invoiceCount}</td>
+
+                <td class="num">${formatMoney(c.gross)}</td>
+                <td class="num">${formatMoney(c.discount)}</td>
+                <td class="center">${discPctFormatted}</td>
+                <td class="num">${formatMoney(c.roundOff)}</td>
+                <td class="num" style="font-weight:600;">${formatMoney(c.netSale)}</td>
+                <td class="num" style="color:#be185d;">${formatMoney(c.totalReturn)}</td>
+
+                <td class="num">${formatMoney(c.creditSold)}</td>
+                <td class="num" style="color:#be185d;">${formatMoney(c.creditReturned)}</td>
+                <td class="num" style="font-weight:700; color:#3730a3;">${formatMoney(c.netCredit)}</td>
+
+                ${activeAccounts.map(acc => `<td class="num">${formatMoney(c.accountColls[acc] || 0)}</td>`).join('')}
+                <td class="num" style="font-weight:700; color:#047857;">${formatMoney(c.totalCollected)}</td>
+
+                <td class="num" style="font-weight:700; color:#b91c1c;">${formatMoney(c.creditDue)}</td>
+                <td class="num">${formatMoney(c.remainingBalance)}</td>
+                <td class="num">${formatMoney(c.limit)}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    ${renderPaginationControls(totalRows, totalPages)}
+  `;
+}
+
+// -----------------------------------------------------------------------------
+// 7.2 DETAILS VIEW (Is Details Mode & Is Collection + Is Details Mode)
+// -----------------------------------------------------------------------------
+function renderDetailsReportView(isCollectionMode) {
+  const root = document.getElementById("report-output-root");
+
+  let candidateInvoices = [];
+
+  if (isCollectionMode) {
+    candidateInvoices = DB.invoices.filter(inv => {
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      if (State.collSalesFromDate && State.collSalesToDate) {
+        if (inv.date < State.collSalesFromDate || inv.date > State.collSalesToDate) return false;
+      }
+      return inv.collections.some(c => c.date >= State.collFromDate && c.date <= State.collToDate);
+    });
+  } else {
+    candidateInvoices = DB.invoices.filter(inv => {
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      return inv.date >= State.fromDate && inv.date <= State.toDate;
+    });
+  }
+
+  candidateInvoices.sort((a, b) => {
+    const codeCmp = a.customerCode.localeCompare(b.customerCode);
+    if (codeCmp !== 0) return codeCmp;
+    return a.date.localeCompare(b.date);
+  });
+
+  const activeAccountsSet = new Set();
+  const invoiceBlocks = [];
+
+  let grandGross = 0, grandDisc = 0, grandRound = 0, grandNetSale = 0, grandReturn = 0;
+  let grandCreditSold = 0, grandCreditRet = 0, grandNetCredit = 0;
+  let grandCollected = 0, grandDue = 0, grandRemaining = 0, grandLimit = 0;
+  let grandAccountColls = {};
+  COLLECTION_ACCOUNTS.forEach(a => grandAccountColls[a] = 0);
+
+  candidateInvoices.forEach((inv, invIdx) => {
+    grandGross += inv.gross;
+    grandDisc += inv.discount;
+    grandRound += inv.roundOff;
+    grandNetSale += inv.netSale;
+    grandReturn += inv.totalReturn;
+    grandCreditSold += inv.creditSold;
+    grandCreditRet += inv.creditReturned;
+    grandNetCredit += inv.netCredit;
+
+    let relevantColls = inv.collections;
+    if (isCollectionMode) {
+      relevantColls = inv.collections.filter(c => c.date >= State.collFromDate && c.date <= State.collToDate);
+    }
+
+    let invCollected = 0;
+    relevantColls.forEach(c => {
+      invCollected += c.amount;
+      grandAccountColls[c.account] = (grandAccountColls[c.account] || 0) + c.amount;
+      if (c.amount > 0) activeAccountsSet.add(c.account);
+    });
+
+    const creditDue = parseFloat((inv.netCredit - invCollected).toFixed(2));
+    const custRef = DB.customers.find(item => item.code === inv.customerCode);
+    const overallDue = custRef ? custRef.totalCreditDue : creditDue;
+    const remainingBalance = Math.max(0, parseFloat(((custRef ? custRef.limit : 5000) - overallDue).toFixed(2)));
+
+    grandCollected += invCollected;
+    grandDue += creditDue;
+    grandRemaining += remainingBalance;
+    grandLimit += (custRef ? custRef.limit : 5000);
+
+    invoiceBlocks.push({
+      sl: invIdx + 1,
+      inv: inv,
+      cust: custRef,
+      collections: relevantColls,
+      invCollected: invCollected,
+      creditDue: creditDue,
+      remainingBalance: remainingBalance
+    });
+  });
+
+  const activeAccounts = COLLECTION_ACCOUNTS.filter(acc => activeAccountsSet.has(acc));
+
+  const totalBlocks = invoiceBlocks.length;
+  const totalPages = Math.ceil(totalBlocks / State.pageSize) || 1;
+  const startIdx = (State.currentPage - 1) * State.pageSize;
+  const endIdx = Math.min(startIdx + State.pageSize, totalBlocks);
+  const pagedBlocks = invoiceBlocks.slice(startIdx, endIdx);
+
+  State.renderedData = {
+    type: 'details',
+    blocks: invoiceBlocks,
+    grandTotal: {
+      gross: grandGross, discount: grandDisc, roundOff: grandRound, netSale: grandNetSale, totalReturn: grandReturn,
+      creditSold: grandCreditSold, creditReturned: grandCreditRet, netCredit: grandNetCredit,
+      accountColls: grandAccountColls, totalCollected: grandCollected, creditDue: grandDue,
+      remainingBalance: grandRemaining, limit: grandLimit
+    },
+    activeAccounts: activeAccounts
+  };
+
+  const collColsCount = activeAccounts.length + 1;
+  const grandDiscPctFormatted = grandGross > 0 ? (grandDisc / grandGross).toFixed(4) : "0.0000";
+
+  root.innerHTML = `
+    <div class="table-container">
+      <table class="report-table" id="report-main-table">
+        <thead>
+          <tr>
+            <th class="base-hdr" rowspan="2">SL</th>
+            <th class="base-hdr" rowspan="2">Partner Code</th>
+            <th class="base-hdr" rowspan="2">Customer Name</th>
+            <th class="base-hdr" rowspan="2">ID</th>
+            <th class="base-hdr" rowspan="2">Phone</th>
+            <th class="base-hdr" rowspan="2">Customer Group</th>
+            <th class="base-hdr" rowspan="2">Invoice Date</th>
+            <th class="base-hdr" rowspan="2">Invoice No</th>
+            <th class="base-hdr" rowspan="2">Sales JV No</th>
+
+            <th class="band-hdr band-sales" colspan="6">Sales Band</th>
+            <th class="band-hdr band-credit" colspan="3">Credit Band</th>
+            <th class="base-hdr" rowspan="2">Collection Date</th>
+            <th class="base-hdr" rowspan="2">JV/Collection Number</th>
+            <th class="band-hdr band-coll" colspan="${collColsCount}">Collection Band</th>
+
+            <th class="base-hdr" rowspan="2" data-calc-tip>Credit Due<span class="calc-tooltip"><strong>Credit Due</strong> = Net Credit − Total Collected<br>The outstanding credit amount yet to be collected from the customer.</span></th>
+            <th class="base-hdr" rowspan="2" data-calc-tip>Remaining Cr Balance<span class="calc-tooltip"><strong>Remaining Cr Balance</strong> = Cr Limit − Customer's Total Current Credit Due<br>How much more credit this customer can still take.</span></th>
+            <th class="base-hdr" rowspan="2">Cr Limit</th>
+          </tr>
+
+          <tr>
+            <th class="band-sub-hdr sub-sales">Gross Sale</th>
+            <th class="band-sub-hdr sub-sales">Discount</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Disc %<span class="calc-tooltip"><strong>Disc %</strong> = Discount ÷ Gross Sale<br>Shows what percentage of the gross sale was given as discount.</span></th>
+            <th class="band-sub-hdr sub-sales">Round Off</th>
+            <th class="band-sub-hdr sub-sales" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount ± Round Off<br>Total Return is shown separately and is NOT subtracted from Net Sale.</span></th>
+            <th class="band-sub-hdr sub-sales">Total Return</th>
+
+            <th class="band-sub-hdr sub-credit">Credit Sold</th>
+            <th class="band-sub-hdr sub-credit">Credit Returned</th>
+            <th class="band-sub-hdr sub-credit" data-calc-tip>Net Credit<span class="calc-tooltip"><strong>Net Credit</strong> = Credit Sold − Credit Returned<br>The actual credit obligation after accounting for returned credit.</span></th>
+
+            ${activeAccounts.map(acc => `<th class="band-sub-hdr sub-coll">${acc}</th>`).join('')}
+            <th class="band-sub-hdr sub-coll">Total Collected</th>
+          </tr>
+
+          <tr class="grand-total-row">
+            <td class="center" colspan="9">Grand Total (${totalBlocks.toLocaleString()} Invoices)</td>
+
+            <td class="num">${formatMoney(grandGross)}</td>
+            <td class="num">${formatMoney(grandDisc)}</td>
+            <td class="center">${grandDiscPctFormatted}</td>
+            <td class="num">${formatMoney(grandRound)}</td>
+            <td class="num">${formatMoney(grandNetSale)}</td>
+            <td class="num">${formatMoney(grandReturn)}</td>
+
+            <td class="num">${formatMoney(grandCreditSold)}</td>
+            <td class="num">${formatMoney(grandCreditRet)}</td>
+            <td class="num">${formatMoney(grandNetCredit)}</td>
+
+            <td class="center">-</td>
+            <td class="center">-</td>
+
+            ${activeAccounts.map(acc => `<td class="num">${formatMoney(grandAccountColls[acc])}</td>`).join('')}
+            <td class="num">${formatMoney(grandCollected)}</td>
+
+            <td class="num">${formatMoney(grandDue)}</td>
+            <td class="num">${formatMoney(grandRemaining)}</td>
+            <td class="num">${formatMoney(grandLimit)}</td>
+          </tr>
+        </thead>
+        <tbody>
+          ${pagedBlocks.length === 0 ? `
+            <tr><td colspan="${20 + collColsCount}" style="text-align:center; padding:30px; color:#64748b;">No data found for the selected criteria.</td></tr>
+          ` : pagedBlocks.map(block => {
+            const inv = block.inv;
+            const cust = block.cust;
+            const colls = block.collections;
+            const rowSpan = Math.max(1, colls.length);
+            const discPctFormatted = inv.gross > 0 ? (inv.discount / inv.gross).toFixed(4) : "0.0000";
+
+            let blockHtml = '';
+            const firstColl = colls.length > 0 ? colls[0] : null;
+
+            blockHtml += `
+              <tr>
+                <td class="center" rowspan="${rowSpan}">${block.sl}</td>
+                <td rowspan="${rowSpan}">${inv.customerCode}</td>
+                <td rowspan="${rowSpan}">
+                  <span style="font-weight:500;">${inv.customerName}</span>
+                </td>
+                <td rowspan="${rowSpan}">${cust ? cust.id : (inv.customerId || '')}</td>
+                <td rowspan="${rowSpan}">${inv.customerPhone}</td>
+                <td rowspan="${rowSpan}">${inv.customerGroup}</td>
+                <td class="center" rowspan="${rowSpan}">${formatDateDMY(inv.date)}</td>
+                <!-- Stopped hyperlink on Invoice No in details view as requested -->
+                <td rowspan="${rowSpan}">${inv.invNo}</td>
+                <!-- Sales JV No cell with link to Journal Modal -->
+                <td rowspan="${rowSpan}">
+                  <a class="jv-link" onclick="openJournalModal('${inv.saleJvNo}')">${inv.saleJvNo}</a>
+                </td>
+
+                <!-- Sales Band (Rowspan) -->
+                <td class="num" rowspan="${rowSpan}">${formatMoney(inv.gross)}</td>
+                <td class="num" rowspan="${rowSpan}">${formatMoney(inv.discount)}</td>
+                <td class="center" rowspan="${rowSpan}">${discPctFormatted}</td>
+                <td class="num" rowspan="${rowSpan}">${formatMoney(inv.roundOff)}</td>
+                <td class="num" style="font-weight:600;" rowspan="${rowSpan}">${formatMoney(inv.netSale)}</td>
+                <td class="num" style="color:#be185d;" rowspan="${rowSpan}">${formatMoney(inv.totalReturn)}</td>
+
+                <!-- Credit Band (Rowspan) -->
+                <td class="num" rowspan="${rowSpan}">${formatMoney(inv.creditSold)}</td>
+                <td class="num" style="color:#be185d;" rowspan="${rowSpan}">${formatMoney(inv.creditReturned)}</td>
+                <td class="num" style="font-weight:700; color:#3730a3;" rowspan="${rowSpan}">${formatMoney(inv.netCredit)}</td>
+
+                <!-- First Collection Row Cells -->
+                <td class="center">${firstColl ? formatDateDMY(firstColl.date) : '-'}</td>
+                <td>
+                  ${firstColl ? `<a class="jv-link" onclick="openJournalModal('${firstColl.voucher}')">${firstColl.voucher}</a>` : '-'}
+                </td>
+                ${activeAccounts.map(acc => {
+                  const amt = (firstColl && firstColl.account === acc) ? firstColl.amount : 0;
+                  return `<td class="num">${firstColl ? formatMoney(amt) : '-'}</td>`;
+                }).join('')}
+                <td class="num" style="font-weight:700; color:#047857;" rowspan="${rowSpan}">${formatMoney(block.invCollected)}</td>
+
+                <!-- Ending Balances (Rowspan) -->
+                <td class="num" style="font-weight:700; color:#b91c1c;" rowspan="${rowSpan}">${formatMoney(block.creditDue)}</td>
+                <td class="num" rowspan="${rowSpan}">${formatMoney(block.remainingBalance)}</td>
+                <td class="num" rowspan="${rowSpan}">${formatMoney(cust ? cust.limit : 5000)}</td>
+              </tr>
+            `;
+
+            for (let cIdx = 1; cIdx < colls.length; cIdx++) {
+              const c = colls[cIdx];
+              blockHtml += `
+                <tr>
+                  <td class="center">${formatDateDMY(c.date)}</td>
+                  <td><a class="jv-link" onclick="openJournalModal('${c.voucher}')">${c.voucher}</a></td>
+                  ${activeAccounts.map(acc => {
+                    const amt = (c.account === acc) ? c.amount : 0;
+                    return `<td class="num">${formatMoney(amt)}</td>`;
+                  }).join('')}
+                </tr>
+              `;
+            }
+
+            return blockHtml;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    ${renderPaginationControls(totalBlocks, totalPages)}
+  `;
+}
+
+// -----------------------------------------------------------------------------
+// 7.3 CUSTOMER CREDIT HISTORY VIEW (Item History Model)
+// -----------------------------------------------------------------------------
+function renderCustomerCreditHistoryView() {
+  const root = document.getElementById("report-output-root");
+  const cust = State.selectedCustomer;
+  if (!cust) return;
+
+  const from = State.fromDate;
+  const to = State.toDate;
+
+  const allCustInvoices = DB.invoices.filter(i => i.customerCode === cust.code);
+  const allCustCollections = DB.collections.filter(c => c.customerCode === cust.code);
+  const allCustReturns = DB.returns.filter(r => {
+    const inv = DB.invoices.find(i => i.invNo === r.invNo);
+    return inv && inv.customerCode === cust.code;
+  });
+
+  let openingCreditSold = 0;
+  let openingCreditReturned = 0;
+  let openingCollected = 0;
+
+  allCustInvoices.forEach(inv => {
+    if (inv.date < from) openingCreditSold += inv.creditSold;
+  });
+  allCustReturns.forEach(ret => {
+    if (ret.date < from) openingCreditReturned += ret.creditReturned;
+  });
+  allCustCollections.forEach(c => {
+    if (c.date < from) openingCollected += c.amount;
+  });
+
+  const openingBalance = parseFloat((openingCreditSold - openingCreditReturned - openingCollected).toFixed(2));
+
+  const rangeInvoices = allCustInvoices.filter(i => i.date >= from && i.date <= to);
+  const rangeReturns = allCustReturns.filter(r => r.date >= from && r.date <= to);
+  const rangeCollections = allCustCollections.filter(c => c.date >= from && c.date <= to);
+
+  let cardCreditSold = 0;
+  let cardCreditReturned = 0;
+  let cardCollected = 0;
+
+  rangeInvoices.forEach(i => cardCreditSold += i.creditSold);
+  rangeReturns.forEach(r => cardCreditReturned += r.creditReturned);
+  rangeCollections.forEach(c => cardCollected += c.amount);
+
+  cardCreditSold = parseFloat(cardCreditSold.toFixed(2));
+  cardCreditReturned = parseFloat(cardCreditReturned.toFixed(2));
+  cardCollected = parseFloat(cardCollected.toFixed(2));
+
+  const closingDueAsOfTo = parseFloat((openingBalance + cardCreditSold - cardCreditReturned - cardCollected).toFixed(2));
+  const remainingCrBalance = Math.max(0, parseFloat((cust.limit - closingDueAsOfTo).toFixed(2)));
+
+  let events = [];
+
+  rangeInvoices.forEach(inv => {
+    events.push({
+      date: inv.date,
+      sortOrder: 1,
+      type: "Credit Sale",
+      ref: inv.invNo,
+      refType: "invoice",
+      jvNo: inv.saleJvNo,
+      method: "-",
+      gross: inv.gross,
+      discount: inv.discount,
+      netSale: inv.netSale,
+      creditSold: inv.creditSold,
+      creditReturned: 0,
+      collected: 0
+    });
+  });
+
+  rangeReturns.forEach(ret => {
+    if (ret.creditReturned > 0) {
+      events.push({
+        date: ret.date,
+        sortOrder: 2,
+        type: "Credit Return",
+        ref: `${ret.voucher} (Inv: ${ret.invNo})`,
+        refType: "return",
+        jvNo: "RT-AUTO",
+        method: "-",
+        gross: 0,
+        discount: 0,
+        netSale: 0,
+        creditSold: 0,
+        creditReturned: ret.creditReturned,
+        collected: 0
+      });
+    }
+  });
+
+  rangeCollections.forEach(c => {
+    events.push({
+      date: c.date,
+      sortOrder: 3,
+      type: "Collection",
+      ref: c.invNo,
+      refType: "collection",
+      jvNo: c.voucher,
+      method: c.account,
+      gross: 0,
+      discount: 0,
+      netSale: 0,
+      creditSold: 0,
+      creditReturned: 0,
+      collected: c.amount
+    });
+  });
+
+  events.sort((a, b) => {
+    if (a.date !== b.date) return a.date.localeCompare(b.date);
+    return a.sortOrder - b.sortOrder;
+  });
+
+  let curBal = openingBalance;
+  events.forEach(evt => {
+    curBal += evt.creditSold;
+    curBal -= evt.creditReturned;
+    curBal -= evt.collected;
+    evt.runningBal = parseFloat(curBal.toFixed(2));
+  });
+
+  let totGross = 0, totDisc = 0, totNetSale = 0;
+  events.forEach(e => {
+    totGross += e.gross;
+    totDisc += e.discount;
+    totNetSale += e.netSale;
+  });
+
+  State.renderedData = {
+    type: 'history',
+    customer: cust,
+    openingBalance: openingBalance,
+    events: events,
+    closingBalance: closingDueAsOfTo,
+    totals: { gross: totGross, discount: totDisc, netSale: totNetSale, creditSold: cardCreditSold, creditReturned: cardCreditReturned, collected: cardCollected }
+  };
+
+  root.innerHTML = `
+    <div class="history-key-value-card">
+      <div class="hist-col">
+        <div class="hist-row"><span class="hist-label">Customer Name</span><span class="hist-val" style="color:var(--primary-blue); font-size:12px;">${cust.name}</span></div>
+        <div class="hist-row"><span class="hist-label">Partner Code</span><span class="hist-val">${cust.code}</span></div>
+        <div class="hist-row"><span class="hist-label">Phone</span><span class="hist-val">${cust.phone}</span></div>
+        <div class="hist-row"><span class="hist-label">Customer Group</span><span class="hist-val">${cust.group}</span></div>
+        <div class="hist-row"><span class="hist-label">Credit Limit</span><span class="hist-val">${formatMoney(cust.limit)} BDT</span></div>
+        <div class="hist-row"><span class="hist-label">Credit Days</span><span class="hist-val">${cust.creditDays} Days</span></div>
+        <div class="hist-row"><span class="hist-label">Created Time</span><span class="hist-val">${cust.createDate}</span></div>
+      </div>
+      <div class="hist-col">
+        <div class="hist-row"><span class="hist-label">Credit Sold</span><span class="hist-val">${formatMoney(cardCreditSold)}</span></div>
+        <div class="hist-row"><span class="hist-label">Credit Returned</span><span class="hist-val" style="color:#be185d;">${formatMoney(cardCreditReturned)}</span></div>
+        <div class="hist-row"><span class="hist-label">Total Collected</span><span class="hist-val" style="color:#047857;">${formatMoney(cardCollected)}</span></div>
+        <div class="hist-row"><span class="hist-label">Closing Due (As of To Date)</span><span class="hist-val" style="color:#b91c1c; font-size:12.5px;">${formatMoney(closingDueAsOfTo)}</span></div>
+        <div class="hist-row">
+          <span class="hist-label">
+            Remaining Cr Balance
+            <span title="Cr Limit - current due" style="cursor:help; font-size:10px;">ℹ️</span>
+          </span>
+          <span class="hist-val">${formatMoney(remainingCrBalance)}</span>
+        </div>
+        <div class="hist-row"><span class="hist-label">Invoice Count</span><span class="hist-val">${rangeInvoices.length}</span></div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="report-table" id="report-main-table">
+        <thead>
+          <tr>
+            <th class="base-hdr">SL</th>
+            <th class="base-hdr">Date</th>
+            <th class="base-hdr">Transaction Type</th>
+            <th class="base-hdr">Reference</th>
+            <th class="base-hdr">JV/Collection No</th>
+            <th class="base-hdr">Account/Method</th>
+            <th class="band-sub-hdr sub-sales">Gross Sale</th>
+            <th class="band-sub-hdr sub-sales">Discount</th>
+            <th class="band-sub-hdr sub-sales">Net Sale</th>
+            <th class="band-sub-hdr sub-credit">Credit Sold</th>
+            <th class="band-sub-hdr sub-credit">Credit Returned</th>
+            <th class="band-sub-hdr sub-coll">Collected</th>
+            <th class="band-sub-hdr sub-due">Balance (Due)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#f1f5f9; font-weight:700;">
+            <td class="center">1</td>
+            <td class="center">${formatDateDMY(from)}</td>
+            <td colspan="4" style="color:#475569;">Opening Balance (Due before ${formatDateDMY(from)})</td>
+            <td class="num">-</td>
+            <td class="num">-</td>
+            <td class="num">-</td>
+            <td class="num">-</td>
+            <td class="num">-</td>
+            <td class="num">-</td>
+            <td class="num" style="font-weight:700; color:#b91c1c;">${formatMoney(openingBalance)}</td>
+          </tr>
+
+          ${events.map((evt, idx) => {
+            const sl = idx + 2;
+            let refHtml = evt.ref;
+            if (evt.refType === "invoice" || evt.refType === "collection") {
+              refHtml = `<span style="font-weight:600;">${evt.ref}</span>`;
+            }
+
+            return `
+              <tr>
+                <td class="center">${sl}</td>
+                <td class="center">${formatDateDMY(evt.date)}</td>
+                <td><strong>${evt.type}</strong></td>
+                <td>${refHtml}</td>
+                <td><a class="jv-link" onclick="openJournalModal('${evt.jvNo}')">${evt.jvNo}</a></td>
+                <td>${evt.method}</td>
+                <td class="num">${evt.gross > 0 ? formatMoney(evt.gross) : '-'}</td>
+                <td class="num">${evt.discount > 0 ? formatMoney(evt.discount) : '-'}</td>
+                <td class="num">${evt.netSale > 0 ? formatMoney(evt.netSale) : '-'}</td>
+                <td class="num" style="font-weight:600;">${evt.creditSold > 0 ? formatMoney(evt.creditSold) : '-'}</td>
+                <td class="num" style="color:#be185d;">${evt.creditReturned > 0 ? formatMoney(evt.creditReturned) : '-'}</td>
+                <td class="num" style="color:#047857; font-weight:600;">${evt.collected > 0 ? formatMoney(evt.collected) : '-'}</td>
+                <td class="num" style="font-weight:700; color:#b91c1c;">${formatMoney(evt.runningBal)}</td>
+              </tr>
+            `;
+          }).join('')}
+
+          <tr style="background:#f1f5f9; font-weight:700; border-top:2px solid #cbd5e1;">
+            <td class="center" colspan="6" style="text-align:right;">Total:</td>
+            <td class="num">${formatMoney(totGross)}</td>
+            <td class="num">${formatMoney(totDisc)}</td>
+            <td class="num">${formatMoney(totNetSale)}</td>
+            <td class="num">${formatMoney(cardCreditSold)}</td>
+            <td class="num" style="color:#be185d;">${formatMoney(cardCreditReturned)}</td>
+            <td class="num" style="color:#047857;">${formatMoney(cardCollected)}</td>
+            <td class="num" style="font-weight:700; color:#b91c1c;">${formatMoney(closingDueAsOfTo)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+// -----------------------------------------------------------------------------
+// Pagination Controls Helper
+// -----------------------------------------------------------------------------
+function renderPaginationControls(totalRows, totalPages) {
+  const current = State.currentPage;
+  return `
+    <div class="pagination-bar">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span>Rows per page:</span>
+        <select class="form-control" id="page-size-select" style="height:22px; padding:0 3px; font-size:10.5px;">
+          <option value="25" ${State.pageSize === 25 ? 'selected' : ''}>25</option>
+          <option value="50" ${State.pageSize === 50 ? 'selected' : ''}>50</option>
+          <option value="100" ${State.pageSize === 100 ? 'selected' : ''}>100</option>
+        </select>
+        <span>Total: <strong>${totalRows.toLocaleString()}</strong> records</span>
+      </div>
+
+      <div class="page-nav-btns">
+        <button class="btn-page" ${current <= 1 ? 'disabled' : ''} onclick="changePage(1)">«</button>
+        <button class="btn-page" ${current <= 1 ? 'disabled' : ''} onclick="changePage(${current - 1})">‹</button>
+        <span style="margin:0 6px; font-weight:600;">Page ${current} of ${totalPages}</span>
+        <button class="btn-page" ${current >= totalPages ? 'disabled' : ''} onclick="changePage(${current + 1})">›</button>
+        <button class="btn-page" ${current >= totalPages ? 'disabled' : ''} onclick="changePage(${totalPages})">»</button>
+      </div>
+    </div>
+  `;
+}
+
+function changePage(p) {
+  State.currentPage = p;
+  renderActiveReport();
+}
+
+document.addEventListener("change", (e) => {
+  if (e.target && e.target.id === "page-size-select") {
+    State.pageSize = parseInt(e.target.value);
+    State.currentPage = 1;
+    renderActiveReport();
+  }
+});
+
+/**
+ * -----------------------------------------------------------------------------
+ * 8. MODAL HANDLERS
+ * -----------------------------------------------------------------------------
+ */
+
+// Global storage for the currently inspected customer invoices in modal
+let currentModalCustomer = null;
+let currentModalInvoices = [];
+
+function openCustomerInvoicesModal(partnerCode) {
+  const cust = DB.customers.find(c => c.code === partnerCode);
+  if (!cust) return;
+
+  // Filter invoices belonging to this customer that match the current active criteria
+  let filtered = [];
+  if (State.isCollection) {
+    filtered = DB.invoices.filter(inv => {
+      if (inv.customerCode !== partnerCode) return false;
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      if (State.collSalesFromDate && State.collSalesToDate) {
+        if (inv.date < State.collSalesFromDate || inv.date > State.collSalesToDate) return false;
+      }
+      return inv.collections.some(c => c.date >= State.collFromDate && c.date <= State.collToDate);
+    });
+  } else {
+    filtered = DB.invoices.filter(inv => {
+      if (inv.customerCode !== partnerCode) return false;
+      if (State.customerGroup !== "ALL" && inv.customerGroup !== State.customerGroup) return false;
+      return inv.date >= State.fromDate && inv.date <= State.toDate;
+    });
+  }
+
+  currentModalCustomer = cust;
+  currentModalInvoices = filtered;
+
+  // Subtitle date range
+  let rangeSubtitle = `From Date: ${formatDateDMY(State.fromDate)}   To Date: ${formatDateDMY(State.toDate)}`;
+  if (State.isCollection) {
+    rangeSubtitle = `Collection Range: ${formatDateDMY(State.collFromDate)} to ${formatDateDMY(State.collToDate)}`;
+    if (State.collSalesFromDate && State.collSalesToDate) {
+      rangeSubtitle += ` | Sales Range: ${formatDateDMY(State.collSalesFromDate)} to ${formatDateDMY(State.collSalesToDate)}`;
+    }
+  }
+  document.getElementById("m-cust-date-range").textContent = rangeSubtitle;
+
+  let totQty = 0, totGross = 0, totRecv = 0, totDue = 0, totNet = 0;
+
+  const tbody = document.getElementById("m-cust-invoices-tbody");
+  tbody.innerHTML = filtered.map((inv, idx) => {
+    const qty = parseFloat((inv.gross / 160).toFixed(2));
+    totQty += qty;
+    totGross += inv.gross;
+    totRecv += inv.totalCollected;
+    totDue += inv.creditDue;
+    totNet += inv.netCredit;
+
+    const firstColl = inv.collections.length > 0 ? inv.collections[0] : null;
+
+    return `
+      <tr>
+        <td class="center">${idx + 1}</td>
+        <td class="center">${formatDateDMY(inv.date)}</td>
+        <td>${inv.invNo}</td>
+        <td>${inv.customerName}</td>
+        <td class="num">${formatMoney(cust.limit)}</td>
+        <td class="num">${qty.toFixed(2)}</td>
+        <td class="center">1</td>
+        <td class="num">${formatMoney(inv.gross)}</td>
+        <td class="center">${firstColl ? formatDateDMY(firstColl.date) : ''}</td>
+        <td class="center">${firstColl ? firstColl.account : ''}</td>
+        <td class="num">${formatMoney(inv.totalCollected)}</td>
+        <td class="num" style="color:#b91c1c; font-weight:600;">${formatMoney(inv.creditDue)}</td>
+        <td class="num">${formatMoney(Math.max(0, cust.limit - cust.totalCreditDue))}</td>
+        <td class="num" style="font-weight:600;">${formatMoney(inv.netCredit)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById("m-cust-tot-qty").textContent = totQty.toFixed(2);
+  document.getElementById("m-cust-tot-count").textContent = filtered.length;
+  document.getElementById("m-cust-tot-gross").textContent = formatMoney(totGross);
+  document.getElementById("m-cust-tot-recv").textContent = formatMoney(totRecv);
+  document.getElementById("m-cust-tot-due").textContent = formatMoney(totDue);
+  document.getElementById("m-cust-tot-rem").textContent = formatMoney(Math.max(0, cust.limit - cust.totalCreditDue));
+  document.getElementById("m-cust-tot-net").textContent = formatMoney(totNet);
+
+  openModal("modal-customer-details");
+}
+
+function exportCustomerDetailsModalToExcel() {
+  if (!currentModalCustomer || currentModalInvoices.length === 0) return;
+  const cust = currentModalCustomer;
+  const fileName = `Customer_Details_${cust.code}_${Date.now()}.xls`;
+
+  let totQty = 0, totGross = 0, totRecv = 0, totDue = 0, totNet = 0;
+
+  let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head>
+    <body>
+      <h2>Customer Details: ${cust.name} (${cust.code})</h2>
+      <p>${document.getElementById("m-cust-date-range").textContent}</p>
+      <table border="1">
+        <thead>
+          <tr style="background:#dceaf7; font-weight:bold;">
+            <th>SL</th><th>Date</th><th>Invoice No.</th><th>Customer Name</th><th>Credit Limit</th><th>Sale Qty</th><th>Invoice Count</th>
+            <th>Gross Amount</th><th>Collection Date</th><th>Collection Type</th><th>Credit Receive Amount</th><th>Due Amount</th><th>Remaining Balance</th><th>Net Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${currentModalInvoices.map((inv, idx) => {
+            const qty = parseFloat((inv.gross / 160).toFixed(2));
+            totQty += qty; totGross += inv.gross; totRecv += inv.totalCollected; totDue += inv.creditDue; totNet += inv.netCredit;
+            const firstColl = inv.collections.length > 0 ? inv.collections[0] : null;
+            return `
+              <tr>
+                <td>${idx + 1}</td><td>${inv.date}</td><td>${inv.invNo}</td><td>${inv.customerName}</td>
+                <td>${cust.limit}</td><td>${qty.toFixed(2)}</td><td>1</td><td>${inv.gross}</td>
+                <td>${firstColl ? firstColl.date : ''}</td><td>${firstColl ? firstColl.account : ''}</td>
+                <td>${inv.totalCollected}</td><td>${inv.creditDue}</td><td>${Math.max(0, cust.limit - cust.totalCreditDue)}</td><td>${inv.netCredit}</td>
+              </tr>
+            `;
+          }).join('')}
+          <tr style="background:#e0f2fe; font-weight:bold;">
+            <td colspan="5">Total</td><td>${totQty.toFixed(2)}</td><td>${currentModalInvoices.length}</td><td>${totGross.toFixed(2)}</td>
+            <td></td><td></td><td>${totRecv.toFixed(2)}</td><td>${totDue.toFixed(2)}</td><td>${Math.max(0, cust.limit - cust.totalCreditDue)}</td><td>${totNet.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </body></html>
+  `;
+
+  const blob = new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("Customer invoices exported to Excel");
+}
+
+function openJournalModal(vchNo) {
+  document.getElementById("m-jv-title").textContent = `Account Journal Details: ${vchNo}`;
+  document.getElementById("m-jv-meta").innerHTML = `
+    <strong>Voucher No:</strong> ${vchNo} | <strong>Office:</strong> FairPrice (Gazipur) | <strong>Status:</strong> Posted
+  `;
+
+  let lines = [];
+  if (vchNo.startsWith("CR-")) {
+    lines = [
+      { sl: 1, coa: "100101", name: "Cash in Hand / Bank", customer: "FairPrice Store", remarks: "Collection received", debit: 500, credit: 0 },
+      { sl: 2, coa: "100201", name: "Accounts Receivable - Credit Customer", customer: "Customer Subledger", remarks: `Due settled against ${vchNo}`, debit: 0, credit: 500 }
+    ];
+  } else {
+    lines = [
+      { sl: 1, coa: "100201", name: "Accounts Receivable - Credit Customer", customer: "Customer Subledger", remarks: "POS Credit Invoice posting", debit: 800, credit: 0 },
+      { sl: 2, coa: "400101", name: "POS Sales Revenue", customer: "FairPrice Store", remarks: "Sales merchandise", debit: 0, credit: 800 }
+    ];
+  }
+
+  let totD = 0, totC = 0;
+  document.getElementById("m-jv-tbody").innerHTML = lines.map(l => {
+    totD += l.debit; totC += l.credit;
+    return `
+      <tr>
+        <td class="center">${l.sl}</td>
+        <td><strong>${l.coa}</strong></td>
+        <td>${l.name}</td>
+        <td>${l.customer}</td>
+        <td>${l.remarks}</td>
+        <td class="num">${formatMoney(l.debit)}</td>
+        <td class="num">${formatMoney(l.credit)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById("m-jv-tot-debit").textContent = formatMoney(totD);
+  document.getElementById("m-jv-tot-credit").textContent = formatMoney(totC);
+
+  openModal("modal-journal");
+}
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+document.querySelectorAll(".modal-overlay").forEach(o => {
+  o.addEventListener("click", (e) => { if (e.target === o) o.classList.remove("open"); });
+});
+
+/**
+ * -----------------------------------------------------------------------------
+ * 9. EXCEL EXPORT (.xls HTML Blob)
+ * -----------------------------------------------------------------------------
+ */
+document.getElementById("btn-excel").addEventListener("click", () => {
+  if (!State.renderedData) return;
+  exportReportToExcel();
+});
+
+function exportReportToExcel() {
+  const data = State.renderedData;
+  const fileName = `Managerium_Credit_Analysis_Report_${Date.now()}.xls`;
+
+  let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+      <style>
+        .hdr { background-color: #dceaf7; font-weight: bold; }
+        .band-sales { background-color: #d97706; color: #ffffff; font-weight: bold; }
+        .band-credit { background-color: #4f46e5; color: #ffffff; font-weight: bold; }
+        .band-coll { background-color: #059669; color: #ffffff; font-weight: bold; }
+        .grand { background-color: #004d40; color: #ffffff; font-weight: bold; }
+        .num { text-align: right; }
+      </style>
+    </head>
+    <body>
+      <h2>FairPrice - Karol, Surichala, Kaliakoir, Gazipur</h2>
+      <h3>${document.getElementById("r-mode-title").textContent}</h3>
+      <p>${document.getElementById("r-ranges-text").textContent}</p>
+      <br/>
+  `;
+
+  if (data.type === 'summary') {
+    html += `
+      <table border="1">
+        <thead>
+          <tr class="hdr">
+            <th>SL</th><th>Partner Code</th><th>Customer Name</th><th>Phone</th><th>Customer Group</th><th>Invoice Count</th>
+            <th>Gross Sale</th><th>Discount</th><th>Disc %</th><th>Round Off</th><th>Net Sale</th><th>Total Return</th>
+            <th>Credit Sold</th><th>Credit Returned</th><th>Net Credit</th>
+            ${data.activeAccounts.map(a => `<th>${a}</th>`).join('')}
+            <th>Total Collected</th><th>Credit Due</th><th>Remaining Cr Balance</th><th>Cr Limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.customers.map((c, i) => `
+            <tr>
+              <td>${i + 1}</td><td>${c.partnerCode}</td><td>${c.customerName}</td><td>${c.phone}</td><td>${c.group}</td><td>${c.invoiceCount}</td>
+              <td class="num">${c.gross}</td><td class="num">${c.discount}</td><td>${(c.discount / (c.gross || 1)).toFixed(4)}</td>
+              <td class="num">${c.roundOff}</td><td class="num">${c.netSale}</td><td class="num">${c.totalReturn}</td>
+              <td class="num">${c.creditSold}</td><td class="num">${c.creditReturned}</td><td class="num">${c.netCredit}</td>
+              ${data.activeAccounts.map(a => `<td class="num">${c.accountColls[a] || 0}</td>`).join('')}
+              <td class="num">${c.totalCollected}</td><td class="num">${c.creditDue}</td><td class="num">${c.remainingBalance}</td><td class="num">${c.limit}</td>
+            </tr>
+          `).join('')}
+          <tr class="grand">
+            <td colspan="5">Grand Total</td><td>${data.grandTotal.invoiceCount}</td>
+            <td class="num">${data.grandTotal.gross}</td><td class="num">${data.grandTotal.discount}</td>
+            <td>${data.grandTotal.gross > 0 ? (data.grandTotal.discount / data.grandTotal.gross).toFixed(4) : "0.0000"}</td>
+            <td class="num">${data.grandTotal.roundOff}</td><td class="num">${data.grandTotal.netSale}</td><td class="num">${data.grandTotal.totalReturn}</td>
+            <td class="num">${data.grandTotal.creditSold}</td><td class="num">${data.grandTotal.creditReturned}</td><td class="num">${data.grandTotal.netCredit}</td>
+            ${data.activeAccounts.map(a => `<td class="num">${data.grandTotal.accountColls[a]}</td>`).join('')}
+            <td class="num">${data.grandTotal.totalCollected}</td><td class="num">${data.grandTotal.creditDue}</td>
+            <td class="num">${data.grandTotal.remainingBalance}</td><td class="num">${data.grandTotal.limit}</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  } else if (data.type === 'details') {
+    html += `
+      <table border="1">
+        <thead>
+          <tr class="hdr">
+            <th>SL</th><th>Partner Code</th><th>Customer Name</th><th>ID</th><th>Phone</th><th>Customer Group</th><th>Invoice Date</th><th>Invoice No</th><th>Sales JV No</th>
+            <th>Gross Sale</th><th>Discount</th><th>Disc %</th><th>Round Off</th><th>Net Sale</th><th>Total Return</th>
+            <th>Credit Sold</th><th>Credit Returned</th><th>Net Credit</th>
+            <th>Collection Date</th><th>JV/Collection Number</th>
+            ${data.activeAccounts.map(a => `<th>${a}</th>`).join('')}
+            <th>Total Collected</th><th>Credit Due</th><th>Remaining Cr Balance</th><th>Cr Limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.blocks.map(b => {
+            const inv = b.inv;
+            const colls = b.collections.length > 0 ? b.collections : [null];
+
+            return colls.map((c, cIdx) => `
+              <tr>
+                <td>${b.sl}</td>
+                <td>${inv.customerCode}</td>
+                <td>${inv.customerName}</td>
+                <td>${b.cust ? b.cust.id : (inv.customerId || '')}</td>
+                <td>${inv.customerPhone}</td>
+                <td>${inv.customerGroup}</td>
+                <td>${inv.date}</td>
+                <td>${inv.invNo}</td>
+                <td>${inv.saleJvNo}</td>
+
+                <td class="num">${cIdx === 0 ? inv.gross : ''}</td>
+                <td class="num">${cIdx === 0 ? inv.discount : ''}</td>
+                <td>${cIdx === 0 ? (inv.discount / (inv.gross || 1)).toFixed(4) : ''}</td>
+                <td class="num">${cIdx === 0 ? inv.roundOff : ''}</td>
+                <td class="num">${cIdx === 0 ? inv.netSale : ''}</td>
+                <td class="num">${cIdx === 0 ? inv.totalReturn : ''}</td>
+
+                <td class="num">${cIdx === 0 ? inv.creditSold : ''}</td>
+                <td class="num">${cIdx === 0 ? inv.creditReturned : ''}</td>
+                <td class="num">${cIdx === 0 ? inv.netCredit : ''}</td>
+
+                <td>${c ? c.date : '-'}</td>
+                <td>${c ? c.voucher : '-'}</td>
+
+                ${data.activeAccounts.map(a => `<td class="num">${(c && c.account === a) ? c.amount : 0}</td>`).join('')}
+                <td class="num">${cIdx === 0 ? b.invCollected : ''}</td>
+                <td class="num">${cIdx === 0 ? b.creditDue : ''}</td>
+                <td class="num">${cIdx === 0 ? b.remainingBalance : ''}</td>
+                <td class="num">${cIdx === 0 ? (b.cust ? b.cust.limit : 5000) : ''}</td>
+              </tr>
+            `).join('');
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  } else if (data.type === 'history') {
+    html += `
+      <table border="1">
+        <thead>
+          <tr class="hdr">
+            <th>SL</th><th>Date</th><th>Transaction Type</th><th>Reference</th><th>JV/Collection No</th><th>Account/Method</th>
+            <th>Gross Sale</th><th>Discount</th><th>Net Sale</th><th>Credit Sold</th><th>Credit Returned</th><th>Collected</th><th>Balance (Due)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td>${State.fromDate}</td><td colspan="4">Opening Balance</td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td class="num">${data.openingBalance}</td>
+          </tr>
+          ${data.events.map((e, idx) => `
+            <tr>
+              <td>${idx + 2}</td><td>${e.date}</td><td>${e.type}</td><td>${e.ref}</td><td>${e.jvNo}</td><td>${e.method}</td>
+              <td class="num">${e.gross || ''}</td><td class="num">${e.discount || ''}</td><td class="num">${e.netSale || ''}</td>
+              <td class="num">${e.creditSold || ''}</td><td class="num">${e.creditReturned || ''}</td><td class="num">${e.collected || ''}</td>
+              <td class="num">${e.runningBal}</td>
+            </tr>
+          `).join('')}
+          <tr class="grand">
+            <td colspan="6">Total:</td>
+            <td class="num">${data.totals.gross}</td><td class="num">${data.totals.discount}</td><td class="num">${data.totals.netSale}</td>
+            <td class="num">${data.totals.creditSold}</td><td class="num">${data.totals.creditReturned}</td><td class="num">${data.totals.collected}</td>
+            <td class="num">${data.closingBalance}</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+
+  html += `</body></html>`;
+
+  const blob = new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast("Excel exported successfully");
+}
+
+/**
+ * -----------------------------------------------------------------------------
+ * 10. PRINT / PDF SUPPORT
+ * -----------------------------------------------------------------------------
+ */
+document.getElementById("btn-print").addEventListener("click", () => {
+  if (!State.renderedData) return;
+  window.print();
+});
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+document.getElementById("sidebar-toggle").addEventListener("click", () => {
+  const sb = document.getElementById("sidebar");
+  sb.style.display = sb.style.display === "none" ? "flex" : "none";
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  syncFilterModeFields();
+  updateSalesDateConstraints();
+});
+</script>
+</body>
+</html>
