@@ -1087,9 +1087,10 @@
   .freeze-partner {
     position: sticky;
     left: 44px;
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
+    width: 105px;
+    min-width: 105px;
+    max-width: 105px;
+    text-align: center;
     border-right: 1px solid var(--grand-total-border) !important;
     box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.12);
   }
@@ -1202,7 +1203,34 @@
   }
 
   [data-calc-tip] { cursor: help; position: relative; }
+  
+  /* Dynamic Global Floating Tooltip (Requirement 2) */
+  .global-calc-tooltip {
+    position: fixed;
+    display: none;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 7px 11px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: normal;
+    max-width: 270px;
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    z-index: 999999;
+    pointer-events: none;
+  }
+  .global-calc-tooltip strong {
+    color: #93c5fd;
+    font-weight: 700;
+  }
   .calc-tooltip {
+    display: none !important;
+  }
+
+  .calc-tooltip-legacy {
     display: none;
     position: absolute;
     bottom: calc(100% + 5px);
@@ -1626,6 +1654,28 @@
             <div class="field-error-msg" id="err-search-inv">Enter at least 5 characters</div>
           </div>
 
+          <!-- 5. Customer Search Multi-Select (Summary & Details views) -->
+          <div class="filter-group ddl-multi-group" id="grp-customer-ddl" style="min-width: 200px;">
+            <label class="filter-label" for="ddl-customer-control">Customer Search</label>
+            <div class="ddl-multi-control" id="ddl-customer-control" tabindex="0">
+              <div class="ddl-chips-area" id="ddl-customer-chips"></div>
+              <div class="ddl-arrow">▼</div>
+            </div>
+            <div class="ddl-dropdown-panel" id="ddl-customer-panel" style="display:none; min-width: 290px;">
+              <div class="ddl-search-wrap">
+                <input type="text" class="ddl-search-input" id="ddl-customer-search" placeholder="Search phone, name, or code...">
+              </div>
+              <div class="ddl-all-row">
+                <label class="ddl-item-label">
+                  <input type="checkbox" id="ddl-customer-all-chk">
+                  <span><strong>ALL Customers</strong></span>
+                </label>
+              </div>
+              <div class="ddl-options-list" id="ddl-customer-list" style="max-height: 220px; overflow-y: auto;"></div>
+            </div>
+          </div>
+
+
           <!-- Customer Autocomplete (Credit History Mode Only) -->
           <div class="filter-group" id="grp-customer-search" style="display:none; position:relative;">
             <label class="filter-label" for="f-cust-input">Customer <span class="req">*</span></label>
@@ -1659,13 +1709,13 @@
           </div>
 
           <div class="filter-group" id="grp-filter-min" style="display:none; min-width:110px;">
-            <label class="filter-label" for="f-filter-min">Min Amount</label>
+            <label class="filter-label" id="lbl-filter-min" for="f-filter-min">Min Amount</label>
             <input type="number" step="0.01" class="form-control" id="f-filter-min" placeholder="0.00">
             <div class="field-error-msg" id="err-filter-min">Invalid min</div>
           </div>
 
           <div class="filter-group" id="grp-filter-max" style="display:none; min-width:110px;">
-            <label class="filter-label" for="f-filter-max">Max Amount</label>
+            <label class="filter-label" id="lbl-filter-max" for="f-filter-max">Max Amount</label>
             <input type="number" step="0.01" class="form-control" id="f-filter-max" placeholder="0.00">
             <div class="field-error-msg" id="err-filter-max">Min cannot exceed Max</div>
           </div>
@@ -1891,6 +1941,7 @@
 </div>
 
 <div id="toast">Notice</div>
+<div id="global-calc-tooltip" class="global-calc-tooltip"></div>
 
 <script>
 
@@ -2255,6 +2306,7 @@ function generateMockData() {
 const State = {
   selectedOffices: ["FairPrice"],
   selectedGroups: ["ALL"],
+  selectedCustomers: ["ALL"],
 
   fromDate: "2026-11-01",
   toDate: "2026-11-04",
@@ -2302,6 +2354,7 @@ const State = {
 function initMultiDropdowns() {
   renderOfficeDdl();
   renderGroupDdl();
+  renderCustomerDdl();
 
   document.addEventListener("click", (e) => {
     const officePanel = document.getElementById("ddl-office-panel");
@@ -2313,6 +2366,13 @@ function initMultiDropdowns() {
 
     const groupPanel = document.getElementById("ddl-group-panel");
     const groupCtrl = document.getElementById("ddl-group-control");
+    const custPanel = document.getElementById("ddl-customer-panel");
+    const custCtrl = document.getElementById("ddl-customer-control");
+    if (custPanel && !custCtrl.contains(e.target) && !custPanel.contains(e.target)) {
+      custPanel.style.display = "none";
+      custCtrl.classList.remove("open");
+    }
+
     if (groupPanel && !groupCtrl.contains(e.target) && !groupPanel.contains(e.target)) {
       groupPanel.style.display = "none";
       groupCtrl.classList.remove("open");
@@ -2325,6 +2385,9 @@ function initMultiDropdowns() {
       const groupPanel = document.getElementById("ddl-group-panel");
       if (officePanel) officePanel.style.display = "none";
       if (groupPanel) groupPanel.style.display = "none";
+      const custPanel = document.getElementById("ddl-customer-panel");
+      if (custPanel) custPanel.style.display = "none";
+
       document.querySelectorAll(".ddl-multi-control").forEach(c => c.classList.remove("open"));
     }
   });
@@ -2358,10 +2421,32 @@ function initMultiDropdowns() {
   document.getElementById("ddl-office-search").addEventListener("input", () => filterDdlList("office"));
   document.getElementById("ddl-group-search").addEventListener("input", () => filterDdlList("group"));
 
+  document.getElementById("ddl-customer-control").addEventListener("click", (e) => {
+    if (e.target.closest(".chip-remove")) return;
+    const panel = document.getElementById("ddl-customer-panel");
+    const isOpen = (panel.style.display === "block");
+    panel.style.display = isOpen ? "none" : "block";
+    e.currentTarget.classList.toggle("open", !isOpen);
+    if (!isOpen) {
+      document.getElementById("ddl-customer-search").value = "";
+      filterDdlList("customer");
+      document.getElementById("ddl-customer-search").focus();
+    }
+  });
+
+  document.getElementById("ddl-customer-search").addEventListener("input", () => filterDdlList("customer"));
+  document.getElementById("ddl-customer-all-chk").addEventListener("change", (e) => {
+    State.selectedCustomers = e.target.checked ? ["ALL"] : [];
+    renderCustomerDdl();
+    onFilterCriteriaChange();
+  });
+
+
   document.getElementById("ddl-office-all-chk").addEventListener("change", (e) => {
     State.selectedOffices = e.target.checked ? ["ALL"] : [];
     renderOfficeDdl();
     checkOfficeWiseVisibility();
+  initDynamicTooltips();
     onFilterCriteriaChange();
   });
 
@@ -2398,6 +2483,41 @@ function renderOfficeDdl() {
     return '<label class="ddl-item-label" data-name="' + off.name.toLowerCase() + '">' +
       '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleDdlOption(\'office\', \'' + off.name + '\')">' +
       '<span>' + off.name + '</span>' +
+    '</label>';
+  }).join('');
+}
+
+
+function renderCustomerDdl() {
+  const chipsWrap = document.getElementById("ddl-customer-chips");
+  const listWrap = document.getElementById("ddl-customer-list");
+  const allChk = document.getElementById("ddl-customer-all-chk");
+  if (!chipsWrap || !listWrap) return;
+
+  const selected = State.selectedCustomers || ["ALL"];
+  const isAll = selected.includes("ALL");
+
+  if (allChk) allChk.checked = isAll || (selected.length === DB.customers.length);
+
+  if (selected.length === 0) {
+    chipsWrap.innerHTML = '<span class="ddl-placeholder">All Customers (Optional)</span>';
+  } else if (isAll) {
+    chipsWrap.innerHTML = '<span class="ddl-chip">ALL <span class="chip-remove" onclick="removeDdlItem(\'customer\', \'ALL\')">✕</span></span>';
+  } else {
+    const first = selected[0];
+    const more = selected.length - 1;
+    let html = '<span class="ddl-chip">' + first + ' <span class="chip-remove" onclick="removeDdlItem(\'customer\', \'' + first + '\')">✕</span></span>';
+    if (more > 0) html += '<span class="ddl-more-badge">+' + more + ' more</span>';
+    chipsWrap.innerHTML = html;
+  }
+
+  const listToRender = DB.customers.slice(0, 300);
+  listWrap.innerHTML = listToRender.map(c => {
+    const checked = isAll || selected.includes(c.phone) || selected.includes(c.code);
+    const searchKey = (c.phone + ' ' + c.name + ' ' + c.code).toLowerCase();
+    return '<label class="ddl-item-label" data-name="' + searchKey + '">' +
+      '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleDdlOption(\'customer\', \'' + c.phone + '\')">' +
+      '<span>' + c.phone + ' - ' + c.name + ' (' + c.code + ')</span>' +
     '</label>';
   }).join('');
 }
@@ -2441,6 +2561,13 @@ function removeDdlItem(type, item) {
     }
     renderOfficeDdl();
     checkOfficeWiseVisibility();
+  } else if (type === "customer") {
+    if (item === "ALL") {
+      State.selectedCustomers = [];
+    } else {
+      State.selectedCustomers = State.selectedCustomers.filter(c => c !== item && c !== "ALL");
+    }
+    renderCustomerDdl();
   } else {
     if (item === "ALL") {
       State.selectedGroups = [];
@@ -2468,7 +2595,21 @@ function toggleDdlOption(type, name) {
     State.selectedOffices = list;
     renderOfficeDdl();
     checkOfficeWiseVisibility();
-  } else {
+  } else if (type === "customer") {
+    let list = State.selectedCustomers;
+    if (list.includes("ALL")) {
+      list = DB.customers.map(c => c.phone).filter(p => p !== name);
+    } else {
+      if (list.includes(name)) {
+        list = list.filter(p => p !== name);
+      } else {
+        list.push(name);
+        if (list.length === DB.customers.length) list = ["ALL"];
+      }
+    }
+    State.selectedCustomers = list;
+    renderCustomerDdl();
+  } else if (type === "group") {
     let list = State.selectedGroups;
     if (list.includes("ALL")) {
       list = CUSTOMER_GROUPS.filter(g => g !== name);
@@ -2578,7 +2719,7 @@ function syncFilterModeFields() {
 
   const historyHiddenIds = [
     "lbl-is-details", "lbl-is-collection", "lbl-is-office-wise",
-    "grp-hide-cluster", "grp-search-inv", "grp-more-filters-bar", "more-filters-body"
+    "grp-hide-cluster", "grp-search-inv", "grp-customer-ddl", "grp-more-filters-bar"
   ];
   historyHiddenIds.forEach(id => {
     const el = document.getElementById(id);
@@ -2611,16 +2752,26 @@ function syncFilterModeFields() {
     document.getElementById("grp-coll-sales-to").style.display = "none";
   }
 
-  const filterByVal = document.getElementById("f-filter-by").value;
+const filterByVal = document.getElementById("f-filter-by").value;
   const showMinMax = (filterByVal !== "none");
   document.getElementById("grp-filter-min").style.display = showMinMax ? "flex" : "none";
   document.getElementById("grp-filter-max").style.display = showMinMax ? "flex" : "none";
+
+  const lblMin = document.getElementById("lbl-filter-min");
+  const lblMax = document.getElementById("lbl-filter-max");
+  const inMin = document.getElementById("f-filter-min");
+  const inMax = document.getElementById("f-filter-max");
+
   if (filterByVal === "creditDays") {
-    document.getElementById("f-filter-min").placeholder = "Min Days";
-    document.getElementById("f-filter-max").placeholder = "Max Days";
+    if (lblMin) lblMin.textContent = "Min Days";
+    if (lblMax) lblMax.textContent = "Max Days";
+    if (inMin) inMin.placeholder = "Min Days";
+    if (inMax) inMax.placeholder = "Max Days";
   } else {
-    document.getElementById("f-filter-min").placeholder = "0.00";
-    document.getElementById("f-filter-max").placeholder = "0.00";
+    if (lblMin) lblMin.textContent = "Min Amount";
+    if (lblMax) lblMax.textContent = "Max Amount";
+    if (inMin) inMin.placeholder = "0.00";
+    if (inMax) inMax.placeholder = "0.00";
   }
 }
 
@@ -2826,6 +2977,14 @@ function executeViewAction() {
 
   State.sortBy = document.getElementById("f-sort-by").value;
 
+  
+  // Collapse more-filters on View execution if expanded
+  const moreFiltersBody = document.getElementById("more-filters-body");
+  const moreFiltersArrow = document.getElementById("more-filters-arrow");
+  if (moreFiltersBody && moreFiltersBody.style.display !== "none") {
+    moreFiltersBody.style.display = "none";
+    if (moreFiltersArrow) moreFiltersArrow.textContent = "▾";
+  }
   State.currentPage = 1;
   renderActiveReport();
 
@@ -2899,6 +3058,9 @@ function buildReportHeaderHTML(officeInfo, isOfficeTable = false) {
   }
 
   const groupsStr = State.selectedGroups.includes("ALL") ? "ALL Customer Groups" : State.selectedGroups.join(", ");
+  const custParamStr = (State.selectedCustomers && !State.selectedCustomers.includes("ALL") && State.selectedCustomers.length > 0) ?
+    (State.selectedCustomers.length === 1 ? ("Mobile: " + State.selectedCustomers[0]) : (State.selectedCustomers.length + " Customers")) :
+    "ALL Customers";
   const searchStr = State.searchInvoiceNo ? ('"' + State.searchInvoiceNo + '"') : "None";
 
   let filterByStr = "None";
@@ -2940,6 +3102,7 @@ function buildReportHeaderHTML(officeInfo, isOfficeTable = false) {
       '<div class="r-param-item"><strong>Mode:</strong> <span>' + modes.join(", ") + '</span></div>' +
       '<div class="r-param-item"><strong>Date Range(s):</strong> <span>' + dateRangeStr + '</span></div>' +
       '<div class="r-param-item"><strong>Customer Group:</strong> <span>' + groupsStr + '</span></div>' +
+      '<div class="r-param-item"><strong>Customer Filter:</strong> <span>' + custParamStr + '</span></div>' +
       '<div class="r-param-item"><strong>Invoice Search:</strong> <span>' + searchStr + '</span></div>' +
       '<div class="r-param-item"><strong>Filter By:</strong> <span>' + filterByStr + '</span></div>' +
       '<div class="r-param-item"><strong>Sort By:</strong> <span>' + sortByStr + '</span></div>' +
@@ -3360,16 +3523,28 @@ function updateDashboard() {
  * =============================================================================
  */
 function extractCandidateInvoices(isCollectionMode) {
+  let candidateInvoices = [];
   const effectiveOffices = getEffectiveOffices();
   const effectiveGroups = getEffectiveGroups();
 
   if (State.searchInvoiceNo) {
     const q = State.searchInvoiceNo.toLowerCase();
-    return DB.invoices.filter(inv => {
+    candidateInvoices = DB.invoices.filter(inv => {
       if (!effectiveOffices.includes(inv.office)) return false;
       if (!effectiveGroups.includes(inv.customerGroup)) return false;
       return inv.invNo.toLowerCase().includes(q);
     });
+
+  // Customer selection filter (ALL, single phone, or multiselect)
+  if (State.selectedCustomers && State.selectedCustomers.length > 0 && !State.selectedCustomers.includes("ALL")) {
+    candidateInvoices = candidateInvoices.filter(inv => {
+      return State.selectedCustomers.includes(inv.customerPhone) ||
+             State.selectedCustomers.includes(inv.customerCode) ||
+             State.selectedCustomers.includes(inv.customerName);
+    });
+  }
+
+    return candidateInvoices;
   }
 
   if (isCollectionMode) {
@@ -3378,7 +3553,7 @@ function extractCandidateInvoices(isCollectionMode) {
     const sFrom = State.collSalesFromDate;
     const sTo = State.collSalesToDate;
 
-    return DB.invoices.filter(inv => {
+    candidateInvoices = DB.invoices.filter(inv => {
       if (!effectiveOffices.includes(inv.office)) return false;
       if (!effectiveGroups.includes(inv.customerGroup)) return false;
 
@@ -3390,15 +3565,37 @@ function extractCandidateInvoices(isCollectionMode) {
       }
       return true;
     });
+
+  // Customer selection filter (ALL, single phone, or multiselect)
+  if (State.selectedCustomers && State.selectedCustomers.length > 0 && !State.selectedCustomers.includes("ALL")) {
+    candidateInvoices = candidateInvoices.filter(inv => {
+      return State.selectedCustomers.includes(inv.customerPhone) ||
+             State.selectedCustomers.includes(inv.customerCode) ||
+             State.selectedCustomers.includes(inv.customerName);
+    });
+  }
+
+    return candidateInvoices;
   }
 
   const from = State.fromDate;
   const to = State.toDate;
-  return DB.invoices.filter(inv => {
+  candidateInvoices = DB.invoices.filter(inv => {
     if (!effectiveOffices.includes(inv.office)) return false;
     if (!effectiveGroups.includes(inv.customerGroup)) return false;
     return (inv.date >= from && inv.date <= to);
   });
+
+  // Customer selection filter (ALL, single phone, or multiselect)
+  if (State.selectedCustomers && State.selectedCustomers.length > 0 && !State.selectedCustomers.includes("ALL")) {
+    candidateInvoices = candidateInvoices.filter(inv => {
+      return State.selectedCustomers.includes(inv.customerPhone) ||
+             State.selectedCustomers.includes(inv.customerCode) ||
+             State.selectedCustomers.includes(inv.customerName);
+    });
+  }
+
+  return candidateInvoices;
 }
 
 function applyCustomerFilterBy(customersList) {
@@ -3483,6 +3680,7 @@ function renderSummaryReportView(isCollectionMode) {
     '<div class="table-toolbar">' +
       '<div class="table-toolbar-left">' +
         '<span>Summary Data (' + totalRows.toLocaleString() + ' Customers)</span>' +
+        '<input type="text" class="form-control" placeholder="🔍 Quick search table by phone, name..." style="width:230px; height:28px; font-size:12px; padding:2px 8px; margin-left:12px;" oninput="filterTableRowsByCustomer(this.value)">' +
       '</div>' +
       '<div class="table-toolbar-right">' +
         '<button class="btn btn-outline-blue" onclick="exportReportToExcel()">📊 EXCEL</button>' +
@@ -3650,10 +3848,10 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
       // Row 1: Non-band columns have rowspan=2; Band columns have band names with colspan
       '<tr class="band-header-row">' +
         '<th class="band-cust col-cust-start freeze-sl" rowspan="2">SL</th>' +
-        '<th class="band-cust freeze-partner" rowspan="2">Partner<br>Code</th>' +
+        '<th class="band-cust freeze-partner" rowspan="2">Mobile<br>No</th>' +
         (!hideCust ? (
           '<th class="band-cust" rowspan="2">Customer Name</th>' +
-          '<th class="band-cust" rowspan="2">Phone</th>' +
+          '<th class="band-cust" rowspan="2">Partner<br>Code</th>' +
           '<th class="band-cust" rowspan="2">Customer Group</th>' +
           (showOfficeCol ? '<th class="band-cust" rowspan="2">Office</th>' : '')
         ) : '') +
@@ -3674,9 +3872,9 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
 
       // Row 2: Sub-headers ONLY for multi-column bands
       '<tr class="sub-header-row">' +
-        '<th class="sub-sales col-sales-start">Gross Sale</th>' +
+        (!hideSales ? '<th class="sub-sales col-sales-start">Gross Sale</th>' : '') +
         (!hideSales ? '<th class="sub-sales">Discount</th>' : '') +
-        (!hideSales ? '<th class="sub-sales" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount</span></th>' : '') +
+        '<th class="sub-sales ' + (hideSales ? 'col-sales-start' : '') + '" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount</span></th>' +
         '<th class="sub-sales">Total Return</th>' +
 
         '<th class="sub-credit col-credit-start">Credit Sale</th>' +
@@ -3703,9 +3901,9 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
         ) : '') +
         '<td class="center highlight-bold">' + grandTotal.invoiceCount + (hideCust ? (' (' + totalRows + ' Customers)') : '') + '</td>' +
 
-        '<td class="num col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' +
+        (!hideSales ? '<td class="num col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' : '') +
         (!hideSales ? '<td class="num">' + formatMoney(grandTotal.discount) + '</td>' : '') +
-        (!hideSales ? '<td class="num">' + formatMoney(grandTotal.netSale) + '</td>' : '') +
+        '<td class="num ' + (hideSales ? 'col-sales-start ' : '') + 'highlight-bold">' + formatMoney(grandTotal.netSale) + '</td>' +
         '<td class="num ' + (grandTotal.totalReturn > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.totalReturn) + '</td>' +
 
         '<td class="num col-credit-start">' + formatMoney(grandTotal.creditSold) + '</td>' +
@@ -4021,11 +4219,11 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
       // Row 1: Non-band columns have rowspan=2; Band columns have band names with colspan
       '<tr class="band-header-row">' +
         '<th class="band-cust col-cust-start freeze-sl" rowspan="2">SL</th>' +
-        '<th class="band-cust freeze-partner" rowspan="2">Partner<br>Code</th>' +
+        '<th class="band-cust freeze-partner" rowspan="2">Mobile<br>No</th>' +
         (!hideCust ? (
           '<th class="band-cust" rowspan="2">Customer Name</th>' +
           '<th class="band-cust" rowspan="2">ID</th>' +
-          '<th class="band-cust" rowspan="2">Phone</th>' +
+          '<th class="band-cust" rowspan="2">Partner<br>Code</th>' +
           '<th class="band-cust" rowspan="2">Customer Group</th>' +
           (showOfficeCol ? '<th class="band-cust" rowspan="2">Office</th>' : '')
         ) : '') +
@@ -4046,9 +4244,9 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
 
       // Row 2: Sub-headers ONLY for multi-column bands (NO duplicates)
       '<tr class="sub-header-row">' +
-        '<th class="sub-sales col-sales-start">Gross Sale</th>' +
+        (!hideSales ? '<th class="sub-sales col-sales-start">Gross Sale</th>' : '') +
         (!hideSales ? '<th class="sub-sales">Discount</th>' : '') +
-        (!hideSales ? '<th class="sub-sales">Net Sale</th>' : '') +
+        '<th class="sub-sales ' + (hideSales ? 'col-sales-start' : '') + '" data-calc-tip>Net Sale</th>' +
         '<th class="sub-sales">Total Return</th>' +
 
         '<th class="sub-credit col-credit-start">Credit Sale</th>' +
@@ -4083,9 +4281,9 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
         '<td>-</td>' +
         '<td>-</td>' +
 
-        '<td class="num col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' +
+        (!hideSales ? '<td class="num col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' : '') +
         (!hideSales ? '<td class="num">' + formatMoney(grandTotal.discount) + '</td>' : '') +
-        (!hideSales ? '<td class="num">' + formatMoney(grandTotal.netSale) + '</td>' : '') +
+        '<td class="num ' + (hideSales ? 'col-sales-start ' : '') + 'highlight-bold">' + formatMoney(grandTotal.netSale) + '</td>' +
         '<td class="num ' + (grandTotal.totalReturn > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.totalReturn) + '</td>' +
 
         '<td class="num col-credit-start">' + formatMoney(grandTotal.creditSold) + '</td>' +
@@ -4813,6 +5011,65 @@ function printSingleOffice(officeName) {
   sec.style.display = "block";
   window.print();
   document.querySelectorAll(".office-section").forEach(s => s.style.display = "block");
+}
+
+
+function filterTableRowsByCustomer(query) {
+  const q = query.trim().toLowerCase();
+  const rows = document.querySelectorAll(".report-table tbody tr");
+  rows.forEach(r => {
+    if (r.classList.contains("grand-total-row") || r.classList.contains("empty-row")) return;
+    if (!q) {
+      r.style.display = "";
+    } else {
+      const match = r.textContent.toLowerCase().includes(q);
+      r.style.display = match ? "" : "none";
+    }
+  });
+}
+
+// Global Dynamic Floating Tooltip Listener (Requirement 2)
+function initDynamicTooltips() {
+  const globalTip = document.getElementById("global-calc-tooltip");
+  if (!globalTip) return;
+
+  document.addEventListener("mouseover", (e) => {
+    const tipCell = e.target.closest("[data-calc-tip]");
+    if (!tipCell) return;
+
+    const inner = tipCell.querySelector(".calc-tooltip");
+    const tipHtml = inner ? inner.innerHTML : tipCell.getAttribute("data-tip-content");
+    if (!tipHtml) return;
+
+    globalTip.innerHTML = tipHtml;
+    globalTip.style.display = "block";
+
+    const rect = tipCell.getBoundingClientRect();
+    const tipW = globalTip.offsetWidth;
+    const tipH = globalTip.offsetHeight;
+
+    let top = rect.top - tipH - 8;
+    if (top < 8) {
+      top = rect.bottom + 8;
+    }
+
+    let left = rect.left + (rect.width / 2) - (tipW / 2);
+    if (left < 10) left = 10;
+    if (left + tipW > window.innerWidth - 10) left = window.innerWidth - tipW - 10;
+
+    globalTip.style.top = top + "px";
+    globalTip.style.left = left + "px";
+  });
+
+  document.addEventListener("mouseout", (e) => {
+    const tipCell = e.target.closest("[data-calc-tip]");
+    if (tipCell) {
+      const related = e.relatedTarget;
+      if (!tipCell.contains(related)) {
+        globalTip.style.display = "none";
+      }
+    }
+  });
 }
 
 function showToast(msg) {
