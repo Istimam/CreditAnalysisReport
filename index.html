@@ -3650,14 +3650,14 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
       // Row 1: Non-band columns have rowspan=2; Band columns have band names with colspan
       '<tr class="band-header-row">' +
         '<th class="band-cust col-cust-start freeze-sl" rowspan="2">SL</th>' +
-        '<th class="band-cust freeze-partner" rowspan="2">Partner Code</th>' +
+        '<th class="band-cust freeze-partner" rowspan="2">Partner<br>Code</th>' +
         (!hideCust ? (
           '<th class="band-cust" rowspan="2">Customer Name</th>' +
           '<th class="band-cust" rowspan="2">Phone</th>' +
           '<th class="band-cust" rowspan="2">Customer Group</th>' +
           (showOfficeCol ? '<th class="band-cust" rowspan="2">Office</th>' : '')
         ) : '') +
-        '<th class="band-cust" rowspan="2">Invoice Count</th>' +
+        '<th class="band-cust" rowspan="2">Invoice<br>Count</th>' +
 
         '<th class="band-sales col-sales-start" colspan="' + salesColspan + '">Sales Band</th>' +
         '<th class="band-credit col-credit-start" colspan="3">Credit Band</th>' +
@@ -4021,7 +4021,7 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
       // Row 1: Non-band columns have rowspan=2; Band columns have band names with colspan
       '<tr class="band-header-row">' +
         '<th class="band-cust col-cust-start freeze-sl" rowspan="2">SL</th>' +
-        '<th class="band-cust freeze-partner" rowspan="2">Partner Code</th>' +
+        '<th class="band-cust freeze-partner" rowspan="2">Partner<br>Code</th>' +
         (!hideCust ? (
           '<th class="band-cust" rowspan="2">Customer Name</th>' +
           '<th class="band-cust" rowspan="2">ID</th>' +
@@ -4144,7 +4144,7 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
               (showOfficeCol ? '<td rowspan="' + rSpan + '">' + cust.office + '</td>' : '')
             ) : '') +
             '<td class="center" rowspan="' + rSpan + '">' + formatDateDMY(inv.date) + '</td>' +
-            '<td class="center" rowspan="' + rSpan + '"><strong>' + inv.invNo + '</strong></td>' +
+            '<td class="center" rowspan="' + rSpan + '">' + inv.invNo + '</td>' +
             '<td class="center" rowspan="' + rSpan + '"><a class="jv-link" onclick="openJournalModal(\'' + inv.saleJvNo + '\', \'Credit Sale\')">' + inv.saleJvNo + '</a></td>' +
 
             '<td class="num col-sales-start" rowspan="' + rSpan + '">' + formatDataNum(inv.gross) + '</td>' +
