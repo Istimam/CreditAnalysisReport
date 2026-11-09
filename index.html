@@ -16,61 +16,39 @@
     --topbar-bg: #ffffff;
     --topbar-border: #e2e8f0;
     --content-bg: #f8fafc;
-    --text-main: #111827;
-    --text-muted: #4b5563;
+    --text-main: #1f2937;
+    --text-muted: #64748b;
+    --text-zero: #9aa5b1;
     --border-color: #c3cddb;
     --border-light: #e2e8f0;
-    --danger-red: #dc2626;
+    --danger-red: #b42318;
+    --link-blue: #1a56db;
 
-    /* Real Managerium Soft Pastel Column Bands (3 Tints per band with Dark Bold Text) */
-    /* 1. Customer Details */
-    --band-cust-hdr: #cfe6cc;
-    --band-cust-sub: #e4f2e1;
-    --band-cust-total: #d3e9cf;
-    --band-cust-text: #13381a;
-    --band-cust-border: #4a8a43;
+    /* CHANGE REQUEST 5: Soft, quiet pastel tints (Separates bands, never loud) */
+    --band-cust-hdr: #eef3ec;
+    --band-cust-line: #86efac;
 
-    /* 2. Sales */
-    --band-sales-hdr: #bcd9f3;
-    --band-sales-sub: #dcecf9;
-    --band-sales-total: #c6def5;
-    --band-sales-text: #0a294d;
-    --band-sales-border: #3b82f6;
+    --band-sales-hdr: #e9f0f7;
+    --band-sales-line: #93c5fd;
 
-    /* 3. Credit */
-    --band-credit-hdr: #d2c5ec;
-    --band-credit-sub: #e8e0f6;
-    --band-credit-total: #d9cef0;
-    --band-credit-text: #2b1754;
-    --band-credit-border: #7c3aed;
+    --band-credit-hdr: #efebf6;
+    --band-credit-line: #c4b5fd;
 
-    /* 4. Collection */
-    --band-coll-hdr: #f9d6b3;
-    --band-coll-sub: #fdebd8;
-    --band-coll-total: #fadcc0;
-    --band-coll-text: #543100;
-    --band-coll-border: #ea580c;
+    --band-coll-hdr: #fbf1e6;
+    --band-coll-line: #fdba74;
 
-    /* 5. Net Due */
-    --band-due-hdr: #f3c1c1;
-    --band-due-sub: #fbe0e0;
-    --band-due-total: #f5cccc;
-    --band-due-text: #5c141d;
-    --band-due-border: #dc2626;
+    --band-due-hdr: #f8ebeb;
+    --band-due-line: #fca5a5;
 
-    /* 6. Current Position */
-    --band-current-hdr: #cfd9e6;
-    --band-current-sub: #e6ecf3;
-    --band-current-total: #d9e1ec;
-    --band-current-text: #16202e;
-    --band-current-border: #475569;
+    --band-current-hdr: #edf0f4;
+    --band-current-line: #cbd5e1;
 
-    --grand-total-bg: #dfeaf6;
-    --grand-total-text: #0f2d4a;
-    --grand-total-border: #1f3b63;
-
-    --table-header-bg: #eaf0f7;
-    --table-row-hover: #e3eefc;
+    --sub-hdr-bg: #f1f4f8;
+    --grand-total-bg: #eef2f7;
+    --grand-total-border: #94a3b8;
+    --grand-total-double: #64748b;
+    --grid-line: #e5e7eb;
+    --band-sep: #b9c4d2;
   }
 
   * {
@@ -81,17 +59,16 @@
 
   body {
     font-family: Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 14.5px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 400;
     color: var(--text-main);
     background-color: var(--content-bg);
-    line-height: 1.45;
+    line-height: 1.4;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
-  /* Full width container, no side margins beyond 16px */
   #app-root {
     display: flex;
     min-height: 100vh;
@@ -100,7 +77,7 @@
   }
 
   /* ==========================================================================
-     SIDEBAR (Clean Managerium Shell)
+     SIDEBAR & TOPBAR (Managerium Shell)
      ========================================================================== */
   #sidebar {
     width: 220px;
@@ -119,7 +96,7 @@
   }
 
   .sidebar-header {
-    height: 52px;
+    height: 50px;
     display: flex;
     align-items: center;
     padding: 0 16px;
@@ -131,7 +108,6 @@
     font-size: 15px;
     font-weight: 700;
     color: #1e3a8a;
-    letter-spacing: 0.5px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -150,12 +126,11 @@
     justify-content: space-between;
     padding: 8px 12px;
     border-radius: 6px;
-    margin-bottom: 3px;
-    font-size: 14px;
+    margin-bottom: 2px;
+    font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
     color: #1f2937;
-    transition: background 0.15s ease;
   }
 
   .sidebar-item:hover {
@@ -169,8 +144,8 @@
   }
 
   .sidebar-item-icon {
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
     stroke: currentColor;
     stroke-width: 2;
     fill: none;
@@ -185,11 +160,11 @@
   }
 
   .sidebar-subitem {
-    padding: 6px 12px;
-    font-size: 13.5px;
+    padding: 5px 10px;
+    font-size: 13px;
     font-weight: 600;
     color: #4b5563;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     margin-bottom: 2px;
     display: flex;
@@ -209,9 +184,6 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 
-  /* ==========================================================================
-     MAIN PANEL & TOP NAVBAR
-     ========================================================================== */
   #main-panel {
     flex: 1;
     display: flex;
@@ -221,7 +193,7 @@
   }
 
   #top-navbar {
-    height: 52px;
+    height: 50px;
     background-color: var(--topbar-bg);
     border-bottom: 1px solid var(--topbar-border);
     display: flex;
@@ -236,46 +208,39 @@
   .nav-left {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
 
   .nav-toggle-btn {
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     color: #475569;
-    padding: 4px 6px;
-    border-radius: 4px;
-  }
-
-  .nav-toggle-btn:hover {
-    background: #f1f5f9;
+    padding: 4px;
   }
 
   .brand-logo-wrap {
     display: flex;
     align-items: center;
     gap: 8px;
-    text-decoration: none;
   }
 
   .brand-m-box {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     background-color: #1e3a8a;
     color: #ffffff;
     font-weight: 900;
-    font-size: 16px;
+    font-size: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    letter-spacing: -0.5px;
   }
 
   .brand-name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.5px;
     color: #1e3a8a;
@@ -283,51 +248,50 @@
 
   .nav-search {
     position: relative;
-    width: 260px;
+    width: 250px;
   }
 
   .nav-search input {
     width: 100%;
-    height: 34px;
+    height: 32px;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    padding: 0 10px 0 32px;
-    font-size: 13.5px;
+    border-radius: 5px;
+    padding: 0 10px 0 30px;
+    font-size: 13px;
     background-color: #f8fafc;
   }
 
   .nav-search-icon {
     position: absolute;
-    left: 10px;
-    top: 9px;
-    font-size: 13px;
+    left: 9px;
+    top: 8px;
+    font-size: 12px;
     color: #94a3b8;
   }
 
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
 
   .nav-icon-btn {
     background: none;
     border: none;
-    font-size: 16px;
+    font-size: 15px;
     color: #64748b;
     cursor: pointer;
-    padding: 6px;
-    border-radius: 4px;
+    padding: 4px;
   }
 
   .branch-select-badge {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 13.5px;
+    border-radius: 5px;
+    font-size: 13px;
     font-weight: 600;
     color: #334155;
     background: #ffffff;
@@ -335,98 +299,87 @@
   }
 
   .branch-avatar {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background: #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: 9px;
     color: #475569;
     font-weight: 700;
   }
 
   .user-avatar-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background-color: #3b82f6;
     color: #ffffff;
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
   }
 
-  /* ==========================================================================
-     PAGE HEADER, TITLE & TABS
-     ========================================================================== */
   .page-header {
-    padding: 12px 16px 0 16px;
+    padding: 10px 16px 0 16px;
     background: #ffffff;
     border-bottom: 1px solid #e2e8f0;
   }
 
   .page-title {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     color: #111827;
-    margin-bottom: 8px;
-    letter-spacing: -0.3px;
+    margin-bottom: 6px;
   }
 
   .report-tabs {
     display: flex;
-    gap: 20px;
+    gap: 18px;
     list-style: none;
-    margin-top: 4px;
+    margin-top: 2px;
     overflow-x: auto;
   }
 
   .report-tab-item {
-    padding: 6px 4px 10px 4px;
-    font-size: 13.5px;
+    padding: 5px 3px 8px 3px;
+    font-size: 13px;
     font-weight: 700;
     color: #64748b;
     cursor: pointer;
     border-bottom: 2px solid transparent;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     white-space: nowrap;
   }
 
-  .report-tab-item:hover {
-    color: var(--primary-blue);
-  }
-
+  .report-tab-item:hover { color: var(--primary-blue); }
   .report-tab-item.active {
     color: var(--primary-blue);
     border-bottom-color: var(--primary-blue);
   }
 
-  /* Page Content (Full width, 16px side margins) */
   .page-content {
-    padding: 14px 16px 30px 16px;
+    padding: 12px 16px 28px 16px;
     flex: 1;
   }
 
-  /* ==========================================================================
-     BUTTONS (15px weight 600)
-     ========================================================================== */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    font-size: 15px;
+    gap: 5px;
+    font-size: 14px;
     font-weight: 600;
     border-radius: 4px;
     cursor: pointer;
-    height: 38px;
-    padding: 0 16px;
+    height: 36px;
+    padding: 0 14px;
     transition: all 0.15s ease;
     border: 1px solid transparent;
     user-select: none;
@@ -437,38 +390,26 @@
     background-color: var(--primary-blue);
     color: #ffffff;
   }
-
-  .btn-primary:hover {
-    background-color: var(--primary-blue-hover);
-  }
+  .btn-primary:hover { background-color: var(--primary-blue-hover); }
 
   .btn-outline-blue {
     background-color: #ffffff;
     border-color: var(--primary-blue);
     color: var(--primary-blue);
   }
-
-  .btn-outline-blue:hover:not(:disabled) {
-    background-color: #eff6ff;
-  }
-
-  .btn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    border-color: #cbd5e1;
-    color: #94a3b8;
-  }
+  .btn-outline-blue:hover:not(:disabled) { background-color: #eff6ff; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; border-color: #cbd5e1; color: #94a3b8; }
 
   /* ==========================================================================
-     COMPACT FILTER BLOCK (38px fields, 12px gaps)
+     FILTER BLOCK (Unchanged, compact 38px)
      ========================================================================== */
   .filter-panel {
     background: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   }
 
   .filter-row {
@@ -476,18 +417,18 @@
     flex-wrap: wrap;
     align-items: flex-start;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
     position: relative;
   }
 
   .filter-label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #1e293b;
     display: flex;
@@ -495,35 +436,31 @@
     gap: 2px;
   }
 
-  .filter-label .req {
-    color: var(--danger-red);
-    font-weight: 700;
-  }
+  .filter-label .req { color: var(--danger-red); font-weight: 700; }
 
   .form-control {
-    height: 38px;
-    min-height: 38px;
+    height: 36px;
+    min-height: 36px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    padding: 0 10px;
-    font-size: 15px;
+    padding: 0 8px;
+    font-size: 13.5px;
     font-weight: 500;
     color: var(--text-main);
     background-color: #ffffff;
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   .form-control:focus {
     border-color: var(--primary-blue);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
   }
 
   .field-error-msg {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 600;
     color: var(--danger-red);
-    margin-top: 2px;
+    margin-top: 1px;
     display: none;
   }
 
@@ -532,20 +469,16 @@
     border-color: var(--danger-red) !important;
     background-color: #fef2f2;
   }
+  .field-error .field-error-msg { display: block; }
 
-  .field-error .field-error-msg {
-    display: block;
-  }
-
-  /* Multi-Select Dropdowns (Managerium DDL component) */
   .ddl-multi-group {
-    min-width: 220px;
+    min-width: 200px;
     position: relative;
   }
 
   .ddl-multi-control {
-    height: 38px;
-    min-height: 38px;
+    height: 36px;
+    min-height: 36px;
     display: flex;
     align-items: center;
     border: 1px solid var(--border-color);
@@ -556,11 +489,6 @@
     user-select: none;
     position: relative;
     overflow: hidden;
-  }
-
-  .ddl-multi-control:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
 
   .ddl-chips-area {
@@ -575,28 +503,23 @@
   .ddl-chip {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
     background: #e0f2fe;
     color: #0369a1;
     border: 1px solid #bae6fd;
     border-radius: 3px;
-    padding: 2px 6px;
-    font-size: 13px;
+    padding: 1px 5px;
+    font-size: 12px;
     font-weight: 600;
-    line-height: 1.2;
   }
 
   .ddl-chip .chip-remove {
     cursor: pointer;
     color: #0284c7;
     font-weight: bold;
-    font-size: 11px;
-    padding: 0 1px;
+    font-size: 10px;
   }
-
-  .ddl-chip .chip-remove:hover {
-    color: var(--danger-red);
-  }
+  .ddl-chip .chip-remove:hover { color: var(--danger-red); }
 
   .ddl-more-badge {
     display: inline-flex;
@@ -605,102 +528,76 @@
     color: #475569;
     border: 1px solid #cbd5e1;
     border-radius: 3px;
-    padding: 2px 5px;
-    font-size: 12px;
+    padding: 1px 4px;
+    font-size: 11.5px;
     font-weight: 700;
-    white-space: nowrap;
   }
 
-  .ddl-placeholder {
-    color: #94a3b8;
-    font-size: 14.5px;
-  }
-
-  .ddl-arrow {
-    font-size: 10px;
-    color: #64748b;
-    margin-left: 6px;
-    transition: transform 0.2s;
-  }
-
-  .ddl-multi-control.open .ddl-arrow {
-    transform: rotate(180deg);
-  }
+  .ddl-placeholder { color: #94a3b8; font-size: 13px; }
+  .ddl-arrow { font-size: 9px; color: #64748b; margin-left: 6px; transition: transform 0.2s; }
+  .ddl-multi-control.open .ddl-arrow { transform: rotate(180deg); }
 
   .ddl-dropdown-panel {
     position: absolute;
-    top: calc(100% + 4px);
+    top: calc(100% + 3px);
     left: 0;
     width: 100%;
-    min-width: 260px;
+    min-width: 250px;
     background: #ffffff;
     border: 1px solid #94a3b8;
     border-radius: 4px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     padding: 6px;
   }
 
-  .ddl-search-wrap {
-    margin-bottom: 6px;
-  }
-
+  .ddl-search-wrap { margin-bottom: 5px; }
   .ddl-search-input {
     width: 100%;
-    height: 32px;
+    height: 30px;
     border: 1px solid #cbd5e1;
     border-radius: 3px;
     padding: 0 8px;
-    font-size: 13.5px;
+    font-size: 12.5px;
   }
 
   .ddl-all-row {
-    padding: 5px 6px;
+    padding: 4px 6px;
     border-bottom: 1px solid #e2e8f0;
     margin-bottom: 4px;
   }
 
   .ddl-options-list {
-    max-height: 200px;
+    max-height: 190px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
   }
 
   .ddl-item-label {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 5px 6px;
+    padding: 4px 6px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     color: #1e293b;
   }
+  .ddl-item-label:hover { background: #f1f5f9; }
 
-  .ddl-item-label:hover {
-    background: #f1f5f9;
-  }
-
-  /* Row 2: Collapsible More Filters */
-  .more-filters-bar {
-    display: flex;
-    align-items: center;
-    margin: 8px 0;
-  }
-
+  .more-filters-bar { display: flex; align-items: center; margin: 6px 0; }
   .more-filters-toggle {
     background: none;
     border: none;
     color: var(--primary-blue);
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 0;
+    gap: 5px;
   }
 
   .filter-count-badge {
@@ -709,43 +606,40 @@
     font-size: 11px;
     font-weight: 700;
     border-radius: 10px;
-    padding: 1px 6px;
-    min-width: 18px;
-    text-align: center;
+    padding: 1px 5px;
   }
 
   .more-filters-body {
     display: none;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 12px;
-    padding: 10px 12px;
+    gap: 10px;
+    padding: 8px 10px;
     background: #f8fafc;
     border: 1px dashed #cbd5e1;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    border-radius: 5px;
+    margin-bottom: 8px;
   }
 
-  /* Row 3: Checkboxes & View Button */
   .checkbox-group-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 18px;
+    gap: 16px;
     border-top: 1px solid var(--border-light);
-    padding-top: 10px;
-    margin-top: 4px;
+    padding-top: 8px;
+    margin-top: 2px;
   }
 
   .cb-cluster {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
   }
 
   .cb-cluster-title {
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: 700;
     color: #475569;
     text-transform: uppercase;
@@ -755,21 +649,20 @@
   .checkbox-label {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-size: 14.5px;
-    font-weight: 600;
+    gap: 5px;
+    font-size: 13.5px;
+    font-weight: 500;
     color: #334155;
     cursor: pointer;
   }
 
   .checkbox-label input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     cursor: pointer;
     accent-color: var(--primary-blue);
   }
 
-  /* Active Invoice Search Chip */
   .search-notice-chip {
     display: inline-flex;
     align-items: center;
@@ -778,118 +671,105 @@
     color: #1e40af;
     border: 1px solid #bfdbfe;
     border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 14px;
+    padding: 5px 10px;
+    font-size: 13px;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
-  .search-notice-chip .chip-close {
-    cursor: pointer;
-    font-weight: bold;
-    color: #dc2626;
+  .search-notice-chip .chip-close { cursor: pointer; color: var(--danger-red); font-weight: bold; }
+
+  /* Developer Self-Check Banner (Shown only on mismatch) */
+  #totals-mismatch-banner {
+    display: none;
+    background: #fef2f2;
+    border: 1px solid #f87171;
+    color: #b91c1c;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 10px;
   }
 
   /* ==========================================================================
      DASHBOARD (5 KPI Cards in 1 row + Donut)
      ========================================================================== */
-  .dashboard-wrapper {
-    margin-bottom: 14px;
-  }
-
-  .dashboard-toggle-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 6px;
-  }
-
+  .dashboard-wrapper { margin-bottom: 12px; }
+  .dashboard-toggle-bar { display: flex; justify-content: flex-end; margin-bottom: 4px; }
   .btn-dashboard-toggle {
     background: none;
     border: none;
     color: #64748b;
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
   }
 
-  .btn-dashboard-toggle:hover {
-    color: var(--primary-blue);
-  }
-
   .kpi-cards-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 10px;
   }
 
   .kpi-card {
     background: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    border-radius: 5px;
+    padding: 10px 12px;
     position: relative;
-    border-left: 4px solid var(--primary-blue);
+    border-left: 3px solid var(--primary-blue);
   }
 
-  .kpi-card.card-sales { border-left-color: var(--band-sales-border); }
-  .kpi-card.card-credit { border-left-color: var(--band-credit-border); }
-  .kpi-card.card-coll { border-left-color: var(--band-coll-border); }
-  .kpi-card.card-due { border-left-color: var(--band-due-border); }
-  .kpi-card.card-oldest { border-left-color: #8b5cf6; }
+  .kpi-card.card-sales { border-left-color: #9db8d3; }
+  .kpi-card.card-credit { border-left-color: #b7a9d6; }
+  .kpi-card.card-coll { border-left-color: #dcb98f; }
+  .kpi-card.card-due { border-left-color: #d9a3a3; }
+  .kpi-card.card-oldest { border-left-color: #a9b4c2; }
 
   .kpi-card-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: #475569;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
   }
 
   .kpi-card-value {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 800;
     color: #0f172a;
     font-variant-numeric: tabular-nums;
     line-height: 1.15;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
-  .kpi-card-sub {
-    font-size: 14px;
-    font-weight: 500;
-    color: #64748b;
-  }
+  .kpi-card-sub { font-size: 12.5px; font-weight: 500; color: #64748b; }
 
   .donut-card {
     background: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 12px 16px;
-    margin-bottom: 12px;
+    border-radius: 5px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
   }
 
   .donut-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
-  .donut-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #1e293b;
-  }
-
+  .donut-title { font-size: 14px; font-weight: 700; color: #1e293b; }
   .donut-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 13.5px;
+    gap: 10px;
+    font-size: 13px;
     font-weight: 600;
     color: #475569;
   }
@@ -898,76 +778,90 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px;
+    gap: 24px;
     position: relative;
-    padding: 4px 0;
+    padding: 2px 0;
   }
 
   .donut-svg-wrap {
     position: relative;
-    width: 320px;
-    height: 320px;
+    width: 290px;
+    height: 290px;
   }
 
   .donut-tooltip {
     position: absolute;
     background: rgba(15, 23, 42, 0.95);
     color: #ffffff;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 4px;
-    font-size: 13px;
+    font-size: 12px;
     pointer-events: none;
     z-index: 100;
     display: none;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   }
 
-  .donut-legend {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 18px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #1e293b;
-    max-width: 480px;
+  /* Compact 3-Column Chart Mini Table (Month | Unpaid | Invoices) */
+  .chart-table-wrap {
+    min-width: 320px;
+    max-width: 360px;
   }
 
-  .donut-legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .chart-mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
   }
 
-  .legend-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    flex-shrink: 0;
+  .chart-mini-table th,
+  .chart-mini-table td {
+    padding: 3px 6px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+
+  .chart-mini-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 700;
+  }
+
+  .chart-mini-table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chart-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
   }
 
   /* ==========================================================================
-     REUSABLE REPORT HEADER BLOCK (Parameters Card)
+     REUSABLE REPORT PARAMETERS HEADER CARD
      ========================================================================== */
   .report-header-card {
     background: #f0f4f9;
     border: 1px solid #c3cddb;
-    border-radius: 6px;
-    padding: 14px 20px;
-    margin-bottom: 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    border-radius: 5px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
   }
 
   .report-header-card .r-title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #111827;
     text-align: center;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .report-header-card .r-company {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: #1e293b;
     text-align: center;
@@ -975,28 +869,28 @@
   }
 
   .report-header-card .r-address {
-    font-size: 15px;
+    font-size: 13.5px;
     font-weight: 500;
     color: #475569;
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .report-header-card .r-selected-offices {
-    font-size: 14.5px;
+    font-size: 13px;
     font-weight: 600;
     color: #2563eb;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .report-header-card .r-param-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px 16px;
+    gap: 4px 14px;
     border-top: 1px solid #cbd5e1;
-    padding-top: 10px;
-    font-size: 14.5px;
+    padding-top: 8px;
+    font-size: 13px;
     color: #1f2937;
   }
 
@@ -1005,17 +899,16 @@
     font-weight: 700;
   }
 
-  /* Collapsible Accounting Definitions & Worked Example */
   .how-to-read-box {
-    margin-top: 10px;
+    margin-top: 8px;
     border: 1px solid #cbd5e1;
     border-radius: 4px;
     background: #ffffff;
   }
 
   .how-to-read-header {
-    padding: 6px 12px;
-    font-size: 13.5px;
+    padding: 5px 10px;
+    font-size: 12.5px;
     font-weight: 700;
     color: #1e40af;
     background: #eef5ff;
@@ -1028,8 +921,8 @@
 
   .how-to-read-body {
     display: none;
-    padding: 10px 14px;
-    font-size: 13.5px;
+    padding: 8px 12px;
+    font-size: 12.5px;
     color: #334155;
     border-top: 1px solid #cbd5e1;
   }
@@ -1037,34 +930,33 @@
   .how-to-read-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px 16px;
-    margin-bottom: 8px;
+    gap: 6px 14px;
+    margin-bottom: 6px;
   }
 
   .example-callout {
     background: #f8fafc;
     border-left: 3px solid var(--primary-blue);
-    padding: 6px 10px;
-    font-size: 13px;
+    padding: 5px 8px;
+    font-size: 12px;
     color: #1e293b;
-    border-radius: 0 4px 4px 0;
   }
 
   /* ==========================================================================
-     TABLE TOOLBAR, CONTAINER & GRID STYLING
+     REPORT TABLE: COMPACT, CALM, HIGH-DENSITY (SALES ANALYSIS STYLE)
      ========================================================================== */
   .table-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .table-toolbar-left {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 15px;
+    gap: 6px;
+    font-size: 14px;
     font-weight: 700;
     color: #1e293b;
   }
@@ -1072,44 +964,57 @@
   .table-toolbar-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 
-  /* Table Scroll Container (fits viewport) */
   .table-scroll-container {
     width: 100%;
-    max-height: calc(100vh - 240px);
+    max-height: calc(100vh - 220px);
     overflow: auto;
-    border: 1px solid var(--border-color);
+    border: 1px solid #c3cddb;
     border-radius: 4px;
     background: #ffffff;
     position: relative;
+    padding: 0;
   }
 
   .report-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-size: 14.5px;
-    font-weight: 500;
-    color: #111827;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-main);
+    table-layout: auto;
   }
 
-  /* Full grid: 1px solid #c3cddb on all cells */
+  /* 1px soft grid lines */
   .report-table th,
   .report-table td {
-    border-right: 1px solid #c3cddb;
-    border-bottom: 1px solid #c3cddb;
-    padding: 8px 12px;
+    border-right: 1px solid var(--grid-line);
+    border-bottom: 1px solid var(--grid-line);
+    padding: 5px 8px;
     white-space: nowrap;
-    height: 40px;
-    min-height: 40px;
+    line-height: 1.35;
+  }
+
+  /* Summary Row height 30px */
+  .report-table.table-summary td {
+    height: 30px;
+    min-height: 30px;
+  }
+
+  /* Details collection row height 28px */
+  .report-table.table-details td {
+    height: 28px;
+    min-height: 28px;
   }
 
   .report-table th {
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 12.5px;
+    font-weight: 600;
     text-align: center;
+    color: var(--text-main);
   }
 
   .report-table td.num {
@@ -1121,64 +1026,75 @@
     text-align: center;
   }
 
-  /* Band header row (Row 1): 14px 800 uppercase */
+  /* Band header row (Row 1): 12px 700 uppercase */
   tr.band-header-row th {
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    height: 38px;
+    height: 26px;
     position: sticky;
     top: 0;
     z-index: 12;
   }
 
-  /* Column sub-header row (Row 2): 14px 700 */
+  /* Sub-header row (Row 2): 12.5px 600 */
   tr.sub-header-row th {
-    font-size: 14px;
-    font-weight: 700;
-    height: 38px;
+    font-size: 12.5px;
+    font-weight: 600;
+    height: 28px;
     position: sticky;
-    top: 38px;
+    top: 26px;
     z-index: 12;
+    background-color: var(--sub-hdr-bg);
   }
 
-  /* Grand Total row (Row 3): 16px 800, min 52px, 2px borders */
+  /* Non-band header cells with rowspan=2 take full sticky top: 0 */
+  tr.band-header-row th[rowspan="2"] {
+    top: 0;
+    z-index: 13;
+  }
+
+  /* Grand Total row (Row 3): 13.5px 700, 36px height, ONE neutral color */
   tr.grand-total-row {
-    height: 52px;
-    min-height: 52px;
+    height: 36px;
+    min-height: 36px;
     position: sticky;
-    top: 76px;
+    top: 54px;
     z-index: 11;
   }
 
   tr.grand-total-row td {
-    height: 52px;
-    font-size: 16px !important;
-    font-weight: 800 !important;
+    height: 36px;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    background-color: var(--grand-total-bg) !important;
+    color: #0f172a !important;
     border-top: 2px solid var(--grand-total-border) !important;
-    border-bottom: 2px solid var(--grand-total-border) !important;
+    border-bottom: 3px double var(--grand-total-double) !important;
   }
 
-  /* Frozen columns: SL (left 0) and Partner Code (left 55px) */
+  /* Frozen columns: SL (left: 0, width: 44px) and Partner Code (left: 44px, width: 100px) */
   .freeze-sl {
     position: sticky;
     left: 0;
-    width: 55px;
-    min-width: 55px;
-    max-width: 55px;
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
     text-align: center;
   }
 
   .freeze-partner {
     position: sticky;
-    left: 55px;
-    width: 125px;
-    min-width: 125px;
-    border-right: 2px solid #8da2bd !important;
-    box-shadow: 2px 0 5px -1px rgba(0, 0, 0, 0.18);
+    left: 44px;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    border-right: 1px solid var(--grand-total-border) !important;
+    box-shadow: 2px 0 4px -1px rgba(0, 0, 0, 0.12);
   }
 
+  /* Layering of sticky elements */
   tr.band-header-row th.freeze-sl,
   tr.sub-header-row th.freeze-sl,
   tr.band-header-row th.freeze-partner,
@@ -1189,213 +1105,186 @@
   tr.grand-total-row td.freeze-sl,
   tr.grand-total-row td.freeze-partner {
     z-index: 24 !important;
+    background-color: var(--grand-total-bg) !important;
   }
 
   tbody td.freeze-sl,
   tbody td.freeze-partner {
     z-index: 5 !important;
-  }
-
-  /* Band header colors (Tint 1) */
-  th.band-cust { background-color: var(--band-cust-hdr) !important; color: var(--band-cust-text) !important; }
-  th.band-sales { background-color: var(--band-sales-hdr) !important; color: var(--band-sales-text) !important; }
-  th.band-credit { background-color: var(--band-credit-hdr) !important; color: var(--band-credit-text) !important; }
-  th.band-coll { background-color: var(--band-coll-hdr) !important; color: var(--band-coll-text) !important; }
-  th.band-due { background-color: var(--band-due-hdr) !important; color: var(--band-due-text) !important; }
-  th.band-current { background-color: var(--band-current-hdr) !important; color: var(--band-current-text) !important; }
-
-  /* Column sub-header colors (Tint 2) */
-  th.sub-cust { background-color: var(--band-cust-sub) !important; color: var(--band-cust-text) !important; }
-  th.sub-sales { background-color: var(--band-sales-sub) !important; color: var(--band-sales-text) !important; }
-  th.sub-credit { background-color: var(--band-credit-sub) !important; color: var(--band-credit-text) !important; }
-  th.sub-coll { background-color: var(--band-coll-sub) !important; color: var(--band-coll-text) !important; }
-  th.sub-due { background-color: var(--band-due-sub) !important; color: var(--band-due-text) !important; }
-  th.sub-current { background-color: var(--band-current-sub) !important; color: var(--band-current-text) !important; }
-
-  /* Grand Total row colors (Tint 3) */
-  td.grand-cust { background-color: var(--band-cust-total) !important; color: var(--band-cust-text) !important; }
-  td.grand-sales { background-color: var(--band-sales-total) !important; color: var(--band-sales-text) !important; }
-  td.grand-credit { background-color: var(--band-credit-total) !important; color: var(--band-credit-text) !important; }
-  td.grand-coll { background-color: var(--band-coll-total) !important; color: var(--band-coll-text) !important; }
-  td.grand-due { background-color: var(--band-due-total) !important; color: var(--band-due-text) !important; }
-  td.grand-current { background-color: var(--band-current-total) !important; color: var(--band-current-text) !important; }
-
-  /* 2px Band Separator Borders on left edge */
-  .col-cust-start { border-left: 2px solid var(--band-cust-border) !important; }
-  .col-sales-start { border-left: 2px solid var(--band-sales-border) !important; }
-  .col-credit-start { border-left: 2px solid var(--band-credit-border) !important; }
-  .col-coll-start { border-left: 2px solid var(--band-coll-border) !important; }
-  .col-due-start { border-left: 2px solid var(--band-due-border) !important; }
-  .col-current-start { border-left: 2px solid var(--band-current-border) !important; }
-
-  /* Summary Row Styling & Zebra Striping */
-  tbody tr {
-    background-color: #ffffff;
-  }
-  tbody tr:nth-child(even) td {
-    background-color: #f6f9fd;
-  }
-  tbody tr:nth-child(odd) td {
     background-color: #ffffff;
   }
 
-  /* Summary Row Hover */
+  tbody tr:nth-child(even) td.freeze-sl,
+  tbody tr:nth-child(even) td.freeze-partner {
+    background-color: #fafbfd;
+  }
+
+  tbody tr:hover td.freeze-sl,
+  tbody tr:hover td.freeze-partner,
+  tbody tr.inv-block-hover td.freeze-sl,
+  tbody tr.inv-block-hover td.freeze-partner {
+    background-color: #eef4fb !important;
+  }
+
+  /* Band header colors (Quiet, soft tints) */
+  th.band-cust { background-color: var(--band-cust-hdr) !important; color: #1f2937 !important; }
+  th.band-sales { background-color: var(--band-sales-hdr) !important; color: #1f2937 !important; }
+  th.band-credit { background-color: var(--band-credit-hdr) !important; color: #1f2937 !important; }
+  th.band-coll { background-color: var(--band-coll-hdr) !important; color: #1f2937 !important; }
+  th.band-due { background-color: var(--band-due-hdr) !important; color: #1f2937 !important; }
+  th.band-current { background-color: var(--band-current-hdr) !important; color: #1f2937 !important; }
+
+  /* Sub-header 2px top border lines (Identifies band quietly) */
+  th.sub-cust { border-bottom: 2px solid var(--band-cust-line) !important; }
+  th.sub-sales { border-bottom: 2px solid var(--band-sales-line) !important; }
+  th.sub-credit { border-bottom: 2px solid var(--band-credit-line) !important; }
+  th.sub-coll { border-bottom: 2px solid var(--band-coll-line) !important; }
+  th.sub-due { border-bottom: 2px solid var(--band-due-line) !important; }
+  th.sub-current { border-bottom: 2px solid var(--band-current-line) !important; }
+
+  /* Band separator: 1px #b9c4d2 vertical line */
+  .col-cust-start { border-left: 1px solid var(--band-sep) !important; }
+  .col-sales-start { border-left: 1px solid var(--band-sep) !important; }
+  .col-credit-start { border-left: 1px solid var(--band-sep) !important; }
+  .col-coll-start { border-left: 1px solid var(--band-sep) !important; }
+  .col-due-start { border-left: 1px solid var(--band-sep) !important; }
+  .col-current-start { border-left: 1px solid var(--band-sep) !important; }
+
+  /* Body Rows & Zebra */
+  tbody tr { background-color: #ffffff; }
+  .table-summary tbody tr:nth-child(even) td { background-color: #fafbfd; }
+
+  /* Hover effect: #eef4fb with 2px left accent #7aa2d6 */
   tbody tr:hover td {
-    background-color: #e3eefc !important;
+    background-color: #eef4fb !important;
   }
   tbody tr:hover td:first-child {
-    border-left: 3px solid #2563eb !important;
+    border-left: 2px solid #7aa2d6 !important;
   }
 
-  /* Details Invoice Block Styling */
-  tr.inv-block-first td {
-    border-top: 2px solid #8da2bd !important;
-  }
-  tr.inv-block-last td {
-    border-bottom: 2px solid #8da2bd !important;
-  }
-  tr.zebra-block td {
-    background-color: #f6f9fd !important;
-  }
+  /* Details Invoice Blocks */
+  tr.inv-block-first td { border-top: 1px solid #b8c3d1 !important; }
+  tr.inv-block-last td { border-bottom: 1px solid #b8c3d1 !important; }
+  tr.inv-sub-row td { border-bottom: 1px solid #e5eaf0 !important; }
 
-  /* Details Invoice Block Hover (whole block highlights) */
+  /* Details entire block hover */
   tr.inv-block-hover td {
-    background-color: #e3eefc !important;
+    background-color: #eef4fb !important;
   }
   tr.inv-block-hover td:first-child {
-    border-left: 3px solid #2563eb !important;
+    border-left: 2px solid #7aa2d6 !important;
   }
 
-  /* Data styling */
-  .cust-link {
-    color: var(--primary-blue);
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
+  /* Text & Data Colours */
+  .zero-val {
+    color: var(--text-zero) !important;
   }
-
-  .jv-link {
-    color: #0284c7;
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 13.5px;
+  .highlight-bold {
+    font-weight: 600 !important;
   }
-
-  .muted-txt {
-    color: #4b5563 !important;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .over-limit {
+  .highlight-red {
     color: var(--danger-red) !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
+  }
+  .cust-link {
+    color: var(--link-blue);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .jv-link {
+    color: var(--link-blue);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12.5px;
+  }
+  .muted-txt {
+    color: #64748b;
   }
 
-  /* Calculation Tooltips on Column Headers */
-  [data-calc-tip] {
-    cursor: help;
-    position: relative;
-  }
-
+  [data-calc-tip] { cursor: help; position: relative; }
   .calc-tooltip {
     display: none;
     position: absolute;
-    bottom: calc(100% + 6px);
+    bottom: calc(100% + 5px);
     left: 50%;
     transform: translateX(-50%);
     background: #0f172a;
     color: #ffffff;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 4px;
-    font-size: 13.5px;
+    font-size: 12px;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.35;
     white-space: normal;
-    width: 240px;
+    width: 220px;
     text-align: left;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     z-index: 200;
   }
-
-  [data-calc-tip]:hover .calc-tooltip {
-    display: block;
-  }
+  [data-calc-tip]:hover .calc-tooltip { display: block; }
 
   .info-marker {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background: #2563eb;
     color: #ffffff;
     border-radius: 50%;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    margin-left: 4px;
+    margin-left: 3px;
     cursor: help;
     position: relative;
   }
-
-  .info-marker:hover .info-tooltip {
-    display: block;
-  }
-
+  .info-marker:hover .info-tooltip { display: block; }
   .info-tooltip {
     display: none;
     position: absolute;
-    bottom: 22px;
+    bottom: 20px;
     right: 0;
     background: #0f172a;
     color: #ffffff;
-    padding: 6px 10px;
+    padding: 5px 8px;
     border-radius: 4px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
     z-index: 300;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   }
 
-  /* Pagination Bar */
   .pagination-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 14px;
+    padding: 8px 12px;
     background: #ffffff;
     border: 1px solid var(--border-color);
     border-top: none;
     border-radius: 0 0 4px 4px;
-    font-size: 14px;
+    font-size: 13px;
     color: #475569;
   }
 
-  .pagination-btns {
-    display: flex;
-    gap: 4px;
-  }
-
+  .pagination-btns { display: flex; gap: 3px; }
   .page-btn {
-    min-width: 32px;
-    height: 32px;
+    min-width: 28px;
+    height: 28px;
     border: 1px solid var(--border-color);
     background: #ffffff;
-    border-radius: 4px;
-    font-size: 13.5px;
+    border-radius: 3px;
+    font-size: 12.5px;
     font-weight: 600;
     cursor: pointer;
   }
-
   .page-btn.active {
     background: var(--primary-blue);
     color: #ffffff;
     border-color: var(--primary-blue);
   }
 
-  /* Focus Mode (Fullscreen focus report) */
+  /* Fullscreen Focus Mode */
   body.focus-mode #sidebar,
   body.focus-mode #top-navbar,
   body.focus-mode .page-header,
@@ -1403,65 +1292,49 @@
   body.focus-mode #dashboard-wrapper {
     display: none !important;
   }
+  body.focus-mode .page-content { padding: 6px 10px !important; }
+  body.focus-mode .table-scroll-container { max-height: calc(100vh - 70px) !important; }
 
-  body.focus-mode .page-content {
-    padding: 8px 12px !important;
-  }
-
-  body.focus-mode .table-scroll-container {
-    max-height: calc(100vh - 80px) !important;
-  }
-
-  /* Office-Wise Tables Section */
-  .office-section {
-    margin-bottom: 28px;
+  .office-section { margin-bottom: 24px; }
+  .empty-office-msg {
+    padding: 24px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #dfe5ec;
+    border-radius: 4px;
+    color: #64748b;
+    font-size: 13.5px;
+    margin-bottom: 16px;
   }
 
   /* Customer Credit History Card & Ledger */
   .hist-card {
     background: #ffffff;
     border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 16px 20px;
-    margin-bottom: 14px;
+    border-radius: 5px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 20px;
   }
 
-  .hist-col {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
+  .hist-col { display: flex; flex-direction: column; gap: 5px; }
   .hist-row {
     display: flex;
     justify-content: space-between;
-    font-size: 14.5px;
-    padding: 3px 0;
+    font-size: 13.5px;
+    padding: 2px 0;
     border-bottom: 1px dashed #e2e8f0;
   }
-
-  .hist-label {
-    font-weight: 600;
-    color: #475569;
-  }
-
-  .hist-val {
-    font-weight: 700;
-    color: #0f172a;
-    font-variant-numeric: tabular-nums;
-  }
+  .hist-label { font-weight: 600; color: #475569; }
+  .hist-val { font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; }
 
   /* Modals */
   .modal-overlay {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(15, 23, 42, 0.6);
     z-index: 2000;
     align-items: center;
@@ -1470,113 +1343,57 @@
 
   .modal-box {
     background: #ffffff;
-    border-radius: 6px;
+    border-radius: 5px;
     width: 90%;
     max-width: 950px;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   }
-
-  .modal-box.modal-wide {
-    max-width: 1200px;
-  }
+  .modal-box.modal-wide { max-width: 1200px; }
 
   .modal-header {
-    padding: 10px 16px;
+    padding: 8px 14px;
     background: #1e3a8a;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
+  .modal-title { font-size: 15px; font-weight: 700; }
+  .modal-close-btn { background: none; border: none; color: #ffffff; font-size: 16px; cursor: pointer; }
 
-  .modal-title {
-    font-size: 16px;
-    font-weight: 700;
-  }
+  .modal-body { padding: 12px 14px; overflow: auto; flex: 1; }
+  .mini-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .mini-table th, .mini-table td { border: 1px solid #cbd5e1; padding: 5px 8px; }
+  .mini-table th { background: #eaf0f7; font-weight: 700; text-align: center; }
+  .mini-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 
-  .modal-close-btn {
-    background: none;
-    border: none;
-    color: #ffffff;
-    font-size: 18px;
-    cursor: pointer;
-  }
-
-  .modal-body {
-    padding: 14px 16px;
-    overflow: auto;
-    flex: 1;
-  }
-
-  .mini-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
-  }
-
-  .mini-table th,
-  .mini-table td {
-    border: 1px solid #cbd5e1;
-    padding: 6px 10px;
-  }
-
-  .mini-table th {
-    background: #eaf0f7;
-    font-weight: 700;
-    text-align: center;
-  }
-
-  .mini-table td.num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Print Styles */
+  /* Print */
   @media print {
     #sidebar, #top-navbar, .page-header, #filter-block, #dashboard-wrapper, .table-toolbar-right, .pagination-bar {
       display: none !important;
     }
-    body {
-      background: #ffffff;
-      color: #000000;
-      font-size: 12px;
-    }
-    .table-scroll-container {
-      max-height: none !important;
-      overflow: visible !important;
-      border: none !important;
-    }
-    .report-table th, .report-table td {
-      border: 1px solid #333333 !important;
-      padding: 4px 6px !important;
-      height: auto !important;
-    }
-    .office-section {
-      page-break-before: always;
-    }
-    .office-section:first-child {
-      page-break-before: auto;
-    }
+    body { background: #ffffff; color: #000000; font-size: 11px; }
+    .table-scroll-container { max-height: none !important; overflow: visible !important; border: none !important; }
+    .report-table th, .report-table td { border: 1px solid #444444 !important; padding: 3px 5px !important; }
+    .office-section { page-break-before: always; }
+    .office-section:first-child { page-break-before: auto; }
   }
 
-  /* Toast */
   #toast {
     position: fixed;
     bottom: 20px;
     right: 20px;
     background: #0f172a;
     color: #ffffff;
-    padding: 10px 18px;
+    padding: 8px 14px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     display: none;
     z-index: 3000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   }
 
   </style>
@@ -1841,13 +1658,13 @@
             </select>
           </div>
 
-          <div class="filter-group" id="grp-filter-min" style="display:none; min-width:120px;">
+          <div class="filter-group" id="grp-filter-min" style="display:none; min-width:110px;">
             <label class="filter-label" for="f-filter-min">Min Amount</label>
             <input type="number" step="0.01" class="form-control" id="f-filter-min" placeholder="0.00">
             <div class="field-error-msg" id="err-filter-min">Invalid min</div>
           </div>
 
-          <div class="filter-group" id="grp-filter-max" style="display:none; min-width:120px;">
+          <div class="filter-group" id="grp-filter-max" style="display:none; min-width:110px;">
             <label class="filter-label" for="f-filter-max">Max Amount</label>
             <input type="number" step="0.01" class="form-control" id="f-filter-max" placeholder="0.00">
             <div class="field-error-msg" id="err-filter-max">Min cannot exceed Max</div>
@@ -1864,7 +1681,7 @@
                 <option value="netDue">Net Due</option>
                 <option value="outstandingDue">Outstanding Due</option>
               </select>
-              <button type="button" class="btn btn-outline-blue" id="btn-sort-dir" title="Toggle Ascending / Descending" style="padding:0 10px; height:38px;">
+              <button type="button" class="btn btn-outline-blue" id="btn-sort-dir" title="Toggle Ascending / Descending" style="padding:0 8px; height:36px;">
                 <span id="sort-dir-icon">▼</span>
               </button>
             </div>
@@ -1914,9 +1731,12 @@
             </label>
           </div>
 
-          <button class="btn btn-primary" id="btn-view" style="margin-left:auto; padding:0 26px;">View</button>
+          <button class="btn btn-primary" id="btn-view" style="margin-left:auto; padding:0 24px;">View</button>
         </div>
       </div>
+
+      <!-- Developer Self-Check Banner (Shown only on mismatch) -->
+      <div id="totals-mismatch-banner"></div>
 
       <!-- Invoice Search Notice Chip -->
       <div id="invoice-search-chip-wrap" style="display:none;"></div>
@@ -1930,19 +1750,19 @@
           <!-- 5 KPI Cards in 1 Row -->
           <div class="kpi-cards-grid" id="kpi-cards-grid"></div>
 
-          <!-- Monthly Donut Chart (~300px with 2-column legend) -->
+          <!-- Monthly Donut Chart (~290px with 3-column table legend) -->
           <div class="donut-card">
             <div class="donut-header">
               <div class="donut-title">Unpaid Credit by Month</div>
               <div class="donut-controls">
                 <label>Year:
-                  <select id="pie-year-select" class="form-control" style="height:30px; padding:0 6px; font-size:13px; display:inline-block; width:auto;">
+                  <select id="pie-year-select" class="form-control" style="height:28px; padding:0 4px; font-size:12px; display:inline-block; width:auto;">
                     <option value="2026" selected>2026</option>
                     <option value="2025">2025</option>
                   </select>
                 </label>
                 <label>Slice by:
-                  <select id="pie-metric-select" class="form-control" style="height:30px; padding:0 6px; font-size:13px; display:inline-block; width:auto;">
+                  <select id="pie-metric-select" class="form-control" style="height:28px; padding:0 4px; font-size:12px; display:inline-block; width:auto;">
                     <option value="amount" selected>Unpaid Amount</option>
                     <option value="invoices">Invoices Unpaid</option>
                   </select>
@@ -1951,10 +1771,10 @@
             </div>
             <div class="donut-body">
               <div class="donut-svg-wrap">
-                <svg width="320" height="320" viewBox="0 0 360 360" id="monthly-donut-svg"></svg>
+                <svg width="290" height="290" viewBox="0 0 340 340" id="monthly-donut-svg"></svg>
                 <div class="donut-tooltip" id="donut-tooltip"></div>
               </div>
-              <div class="donut-legend" id="donut-legend"></div>
+              <div class="chart-table-wrap" id="donut-legend-table-wrap"></div>
             </div>
           </div>
         </div>
@@ -1965,10 +1785,10 @@
 
       <!-- Report Output Container -->
       <div id="report-output-root">
-        <div style="background:#ffffff; border:1px dashed #cbd5e1; border-radius:6px; padding:60px 20px; text-align:center; color:#64748b;">
-          <div style="font-size:36px; margin-bottom:10px;">📋</div>
-          <div style="font-size:18px; font-weight:700; color:#1e293b; margin-bottom:4px;">Ready to Generate Report</div>
-          <div style="font-size:14.5px;">Select your criteria and click <strong>View</strong> to display the Credit Analysis Report.</div>
+        <div style="background:#ffffff; border:1px dashed #cbd5e1; border-radius:5px; padding:50px 20px; text-align:center; color:#64748b;">
+          <div style="font-size:32px; margin-bottom:8px;">📋</div>
+          <div style="font-size:16px; font-weight:700; color:#1e293b; margin-bottom:3px;">Ready to Generate Report</div>
+          <div style="font-size:13.5px;">Select your criteria and click <strong>View</strong> to display the Credit Analysis Report.</div>
         </div>
       </div>
 
@@ -1980,7 +1800,7 @@
      MODALS
      ========================================================================== -->
 
-<!-- 1. Customer Details (Invoices Filtered in Invoice Count) Modal -->
+<!-- 1. Customer Details Modal -->
 <div class="modal-overlay" id="modal-customer-details">
   <div class="modal-box modal-wide">
     <div class="modal-header">
@@ -1990,7 +1810,7 @@
         <button class="modal-close-btn" onclick="closeModal('modal-customer-details')">✕</button>
       </div>
     </div>
-    <div style="padding: 8px 16px; background: #f8fafc; border-bottom: 1px solid var(--border-light); font-size: 14px; font-weight: 600; color: #475569;" id="m-cust-date-range">
+    <div style="padding: 6px 14px; background: #f8fafc; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 600; color: #475569;" id="m-cust-date-range">
       From Date: 01-11-2026   To Date: 04-11-2026
     </div>
     <div class="modal-body">
@@ -2030,7 +1850,7 @@
         </tfoot>
       </table>
     </div>
-    <div style="padding: 10px 16px; background: #ffffff; border-top: 1px solid var(--border-light); text-align: right;">
+    <div style="padding: 8px 14px; background: #ffffff; border-top: 1px solid var(--border-light); text-align: right;">
       <button class="btn btn-outline-blue" onclick="closeModal('modal-customer-details')">CLOSE</button>
     </div>
   </div>
@@ -2044,7 +1864,7 @@
       <button class="modal-close-btn" onclick="closeModal('modal-journal')">✕</button>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom:10px; font-size:14px; color:#475569;" id="m-jv-meta"></div>
+      <div style="margin-bottom:8px; font-size:13px; color:#475569;" id="m-jv-meta"></div>
       <table class="mini-table">
         <thead>
           <tr>
@@ -2072,12 +1892,11 @@
 
 <div id="toast">Notice</div>
 
-
 <script>
 
 /**
  * =============================================================================
- * CREDIT ANALYSIS REPORT - CLIENT LOGIC (CHANGE REQUEST 4)
+ * CREDIT ANALYSIS REPORT - CLIENT LOGIC (CHANGE REQUEST 5)
  * =============================================================================
  */
 
@@ -2101,8 +1920,16 @@ function formatMoney(num) {
   return Number(num).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+// Format numbers with muted zero values (#9aa5b1)
+function formatDataNum(val, cls = "num") {
+  if (val === null || val === undefined || isNaN(val) || Math.abs(val) < 0.005) {
+    return '<span class="' + cls + ' zero-val">0.00</span>';
+  }
+  return '<span class="' + cls + '">' + formatMoney(val) + '</span>';
+}
+
 function formatDateDMY(dateStr) {
-  if (!dateStr) return "";
+  if (!dateStr || dateStr === "-") return "-";
   const parts = dateStr.split("-");
   if (parts.length === 3) return parts[2] + "-" + parts[1] + "-" + parts[0];
   return dateStr;
@@ -2132,13 +1959,13 @@ const NAMES_POOL = [
   "MD. SELIM HOWLADER", "MOHAMMED ALI", "KAMAL HOSSAIN", "ROBIUL ISLAM", "MD. AHAD ALI",
   "MONIR CHOWDHURY", "MD. EADRISH FAKIR", "SHAMIR MITRA", "SUMON BHUIYAN", "ANISUR RAHMAN",
   "KABIR AHMED", "DELOWAR HOSSAIN", "ZAHID HASAN", "MST NAZNIN PURNIMA", "ABDUR RAHMAN",
-  "SAIFUL ISLAM", "TARIQUL ISLAM", "MEHEDI HASAN", "FARUQ AHMED", "BABUL CHOWDHURY",
-  "SHAHIDUL ISLAM", "NASIR UDDIN", "ASIF IQBAL", "MAMUNUR RASHID", "REAZ AHMED"
+  "SAIFUL ISLAM", "TARIQUL ISLAM", "MEHEDI HASAN", "FARUQ AHMED", "BABUL CHOWDHURY"
 ];
 
+// CHANGE REQUEST 5: Muted, calm 12-color palette (no neon, harmonious)
 const DONUT_COLORS = [
-  "#38bdf8", "#818cf8", "#a78bfa", "#f472b6", "#fb7185", "#f97316",
-  "#fbbf24", "#a3e635", "#4ade80", "#2dd4bf", "#22d3ee", "#60a5fa"
+  "#5b8def", "#60a5fa", "#34d399", "#4ade80", "#a78bfa", "#f472b6",
+  "#fb923c", "#facc15", "#2dd4bf", "#93c5fd", "#c084fc", "#f87171"
 ];
 
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -2196,7 +2023,7 @@ function generateMockData() {
     }
   }
 
-  // Generate Invoices spanning Jan 2025 to Nov 4, 2026
+  // Generate Invoices spanning Jan 2025 to Nov 4, 2026 with realistic, believable amounts
   const months = [];
   for (let y = 2025; y <= 2026; y++) {
     const maxM = (y === 2026) ? 11 : 12;
@@ -2208,7 +2035,7 @@ function generateMockData() {
   let invSeq = 100000;
   months.forEach((mObj, mIdx) => {
     const isNov2026 = (mObj.str === "2026-11");
-    const count = isNov2026 ? 320 : randInt(240, 270);
+    const count = isNov2026 ? 320 : randInt(230, 260);
 
     for (let k = 0; k < count; k++) {
       invSeq++;
@@ -2219,21 +2046,22 @@ function generateMockData() {
       const saleDate = mObj.str + "-" + dayStr;
       const invNo = "1326" + (mObj.year % 100) + (mObj.month < 10 ? '0' + mObj.month : '' + mObj.month) + (invSeq % 1000000);
 
-      const gross = randFloat(1500, 7500);
-      const discount = randFloat(50, 400);
+      // Realistic retail sales amounts (e.g. 1,200 to 6,500 TK)
+      const gross = randFloat(1200, 6500);
+      const discount = randFloat(30, 250);
       const netSale = Math.round((gross - discount) * 100) / 100;
 
-      const hasReturn = (rng() < 0.15);
-      const totalReturn = hasReturn ? randFloat(50, 300) : 0;
-      const creditReturned = hasReturn ? randFloat(30, totalReturn) : 0;
+      const hasReturn = (rng() < 0.12);
+      const totalReturn = hasReturn ? randFloat(40, 200) : 0;
+      const creditReturned = hasReturn ? randFloat(20, totalReturn) : 0;
 
-      const creditPortion = randFloat(0.6, 0.95);
+      const creditPortion = randFloat(0.65, 0.95);
       const creditSold = Math.round(netSale * creditPortion * 100) / 100;
       const netCredit = Math.round((creditSold - creditReturned) * 100) / 100;
 
       let returnObj = null;
       if (hasReturn) {
-        const retDay = Math.min(28, day + randInt(1, 5));
+        const retDay = Math.min(28, day + randInt(1, 4));
         const retDate = mObj.str + "-" + (retDay < 10 ? '0' + retDay : '' + retDay);
         returnObj = {
           voucher: "RT-" + (invSeq % 900000),
@@ -2246,7 +2074,7 @@ function generateMockData() {
       }
 
       // Collections
-      const collCount = (rng() < 0.3) ? 2 : ((rng() < 0.1) ? 3 : 1);
+      const collCount = (rng() < 0.25) ? 2 : 1;
       const collections = [];
       let totalColl = 0;
 
@@ -2254,15 +2082,15 @@ function generateMockData() {
       const targetColl = isFullyPaid ? netCredit : randFloat(0, netCredit * 0.85);
 
       if (targetColl > 0.01) {
-        let remainingToCollect = targetColl;
+        let remaining = targetColl;
         for (let c = 0; c < collCount; c++) {
           const isLast = (c === collCount - 1);
-          let cAmt = isLast ? remainingToCollect : randFloat(10, remainingToCollect * 0.7);
+          let cAmt = isLast ? remaining : randFloat(10, remaining * 0.7);
           cAmt = Math.round(cAmt * 100) / 100;
           if (cAmt <= 0) continue;
-          remainingToCollect -= cAmt;
+          remaining -= cAmt;
 
-          const collDayOffset = randInt(0, 8);
+          const collDayOffset = randInt(0, 6);
           let collDay = Math.min(28, day + collDayOffset);
           let collDate = mObj.str + "-" + (collDay < 10 ? '0' + collDay : '' + collDay);
           if (collDate > TODAY) collDate = TODAY;
@@ -2425,8 +2253,8 @@ function generateMockData() {
  * =============================================================================
  */
 const State = {
-  selectedOffices: ["FairPrice"], // Default: logged-in office
-  selectedGroups: ["ALL"],        // Default: ALL
+  selectedOffices: ["FairPrice"],
+  selectedGroups: ["ALL"],
 
   fromDate: "2026-11-01",
   toDate: "2026-11-04",
@@ -2475,7 +2303,6 @@ function initMultiDropdowns() {
   renderOfficeDdl();
   renderGroupDdl();
 
-  // Document click closes panels
   document.addEventListener("click", (e) => {
     const officePanel = document.getElementById("ddl-office-panel");
     const officeCtrl = document.getElementById("ddl-office-control");
@@ -2492,7 +2319,6 @@ function initMultiDropdowns() {
     }
   });
 
-  // Esc key closes open panels
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       const officePanel = document.getElementById("ddl-office-panel");
@@ -2503,7 +2329,6 @@ function initMultiDropdowns() {
     }
   });
 
-  // Toggle Office Panel
   document.getElementById("ddl-office-control").addEventListener("click", (e) => {
     if (e.target.closest(".chip-remove")) return;
     const panel = document.getElementById("ddl-office-panel");
@@ -2517,7 +2342,6 @@ function initMultiDropdowns() {
     }
   });
 
-  // Toggle Group Panel
   document.getElementById("ddl-group-control").addEventListener("click", (e) => {
     if (e.target.closest(".chip-remove")) return;
     const panel = document.getElementById("ddl-group-panel");
@@ -2531,28 +2355,18 @@ function initMultiDropdowns() {
     }
   });
 
-  // Search listeners
   document.getElementById("ddl-office-search").addEventListener("input", () => filterDdlList("office"));
   document.getElementById("ddl-group-search").addEventListener("input", () => filterDdlList("group"));
 
-  // ALL Checkbox listeners
   document.getElementById("ddl-office-all-chk").addEventListener("change", (e) => {
-    if (e.target.checked) {
-      State.selectedOffices = ["ALL"];
-    } else {
-      State.selectedOffices = [];
-    }
+    State.selectedOffices = e.target.checked ? ["ALL"] : [];
     renderOfficeDdl();
     checkOfficeWiseVisibility();
     onFilterCriteriaChange();
   });
 
   document.getElementById("ddl-group-all-chk").addEventListener("change", (e) => {
-    if (e.target.checked) {
-      State.selectedGroups = ["ALL"];
-    } else {
-      State.selectedGroups = [];
-    }
+    State.selectedGroups = e.target.checked ? ["ALL"] : [];
     renderGroupDdl();
     onFilterCriteriaChange();
   });
@@ -2567,7 +2381,6 @@ function renderOfficeDdl() {
 
   allChk.checked = isAll || (selected.length === OFFICES.length);
 
-  // Render chips inside single line control
   if (selected.length === 0) {
     chipsWrap.innerHTML = '<span class="ddl-placeholder">Select office...</span>';
   } else if (isAll) {
@@ -2576,13 +2389,10 @@ function renderOfficeDdl() {
     const first = selected[0];
     const more = selected.length - 1;
     let html = '<span class="ddl-chip">' + first + ' <span class="chip-remove" onclick="removeDdlItem(\'office\', \'' + first + '\')">✕</span></span>';
-    if (more > 0) {
-      html += '<span class="ddl-more-badge">+' + more + ' more</span>';
-    }
+    if (more > 0) html += '<span class="ddl-more-badge">+' + more + ' more</span>';
     chipsWrap.innerHTML = html;
   }
 
-  // Render options list
   listWrap.innerHTML = OFFICES.map(off => {
     const checked = isAll || selected.includes(off.name);
     return '<label class="ddl-item-label" data-name="' + off.name.toLowerCase() + '">' +
@@ -2609,9 +2419,7 @@ function renderGroupDdl() {
     const first = selected[0];
     const more = selected.length - 1;
     let html = '<span class="ddl-chip">' + first + ' <span class="chip-remove" onclick="removeDdlItem(\'group\', \'' + first + '\')">✕</span></span>';
-    if (more > 0) {
-      html += '<span class="ddl-more-badge">+' + more + ' more</span>';
-    }
+    if (more > 0) html += '<span class="ddl-more-badge">+' + more + ' more</span>';
     chipsWrap.innerHTML = html;
   }
 
@@ -2768,7 +2576,6 @@ function syncFilterModeFields() {
   const isHistory = document.getElementById("chk-is-history").checked;
   const isColl = document.getElementById("chk-is-collection").checked;
 
-  // Toggle Visibility for Credit History Mode
   const historyHiddenIds = [
     "lbl-is-details", "lbl-is-collection", "lbl-is-office-wise",
     "grp-hide-cluster", "grp-search-inv", "grp-more-filters-bar", "more-filters-body"
@@ -2780,7 +2587,6 @@ function syncFilterModeFields() {
 
   document.getElementById("grp-customer-search").style.display = isHistory ? "flex" : "none";
 
-  // Toggle Date Ranges
   if (isHistory) {
     document.getElementById("grp-sales-from").style.display = "flex";
     document.getElementById("grp-sales-to").style.display = "flex";
@@ -2805,7 +2611,6 @@ function syncFilterModeFields() {
     document.getElementById("grp-coll-sales-to").style.display = "none";
   }
 
-  // Filter By fields
   const filterByVal = document.getElementById("f-filter-by").value;
   const showMinMax = (filterByVal !== "none");
   document.getElementById("grp-filter-min").style.display = showMinMax ? "flex" : "none";
@@ -2844,7 +2649,7 @@ function initCustomerAutocomplete() {
     }).slice(0, 10);
 
     if (matches.length === 0) {
-      list.innerHTML = '<div style="padding:8px 12px; color:#94a3b8; font-size:13px;">No customer found</div>';
+      list.innerHTML = '<div style="padding:6px 10px; color:#94a3b8; font-size:12.5px;">No customer found</div>';
     } else {
       list.innerHTML = matches.map(c => {
         return '<div class="ddl-item-label" onclick="selectCustomer(\'' + c.id + '\')">' +
@@ -2882,13 +2687,11 @@ function validateFilters() {
   clearAllErrors();
   let isValid = true;
 
-  // 1. Office is mandatory in all modes
   if (State.selectedOffices.length === 0) {
     showFieldError("err-office", "Select at least one office");
     isValid = false;
   }
 
-  // 2. Search Invoice No validation
   const searchInv = document.getElementById("f-search-inv").value.trim();
   if (searchInv) {
     if (searchInv.length < 5) {
@@ -2897,7 +2700,6 @@ function validateFilters() {
     }
   }
 
-  // 3. Dates validation (Mandatory unless invoice search is active)
   if (!searchInv) {
     if (State.isCreditHistory) {
       const from = document.getElementById("f-from-date").value;
@@ -2938,13 +2740,11 @@ function validateFilters() {
     }
   }
 
-  // 4. Is Office Wise validation
   if (State.isOfficeWise && getEffectiveOffices().length < 2) {
     showToast("Is Office Wise requires 2 or more offices selected.");
     isValid = false;
   }
 
-  // 5. Filter By Min / Max validation
   const fBy = document.getElementById("f-filter-by").value;
   if (fBy !== "none") {
     const minVal = document.getElementById("f-filter-min").value.trim();
@@ -3000,7 +2800,6 @@ function executeViewAction() {
     return;
   }
 
-  // Snapshot filter state
   State.fromDate = document.getElementById("f-from-date").value;
   State.toDate = document.getElementById("f-to-date").value;
   State.collFromDate = document.getElementById("f-coll-from").value;
@@ -3030,11 +2829,10 @@ function executeViewAction() {
   State.currentPage = 1;
   renderActiveReport();
 
-  // Smooth scroll to top of report
   setTimeout(() => {
     const reportRoot = document.getElementById("report-output-root");
     if (reportRoot) reportRoot.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
+  }, 80);
 }
 
 function clearReportArea() {
@@ -3045,12 +2843,13 @@ function clearReportArea() {
   document.getElementById("report-header-block").style.display = "none";
   document.getElementById("dashboard-wrapper").style.display = "none";
   document.getElementById("invoice-search-chip-wrap").style.display = "none";
+  document.getElementById("totals-mismatch-banner").style.display = "none";
 
   document.getElementById("report-output-root").innerHTML =
-    '<div style="background:#ffffff; border:1px dashed #cbd5e1; border-radius:6px; padding:60px 20px; text-align:center; color:#64748b;">' +
-      '<div style="font-size:36px; margin-bottom:10px;">📋</div>' +
-      '<div style="font-size:18px; font-weight:700; color:#1e293b; margin-bottom:4px;">Ready to Generate Report</div>' +
-      '<div style="font-size:14.5px;">Select your criteria and click <strong>View</strong> to display the Credit Analysis Report.</div>' +
+    '<div style="background:#ffffff; border:1px dashed #cbd5e1; border-radius:5px; padding:50px 20px; text-align:center; color:#64748b;">' +
+      '<div style="font-size:32px; margin-bottom:8px;">📋</div>' +
+      '<div style="font-size:16px; font-weight:700; color:#1e293b; margin-bottom:3px;">Ready to Generate Report</div>' +
+      '<div style="font-size:13.5px;">Select your criteria and click <strong>View</strong> to display the Credit Analysis Report.</div>' +
     '</div>';
 }
 
@@ -3061,9 +2860,6 @@ function clearInvoiceSearch() {
   executeViewAction();
 }
 
-/**
- * Reusable Parameter Header Card HTML
- */
 function buildReportHeaderHTML(officeInfo, isOfficeTable = false) {
   let modeTitle = "Credit Analysis Report - ";
   if (State.isCreditHistory) modeTitle += "Customer Credit History";
@@ -3171,7 +2967,6 @@ function renderActiveReport() {
     searchChipWrap.style.display = "none";
   }
 
-  // Dashboard visibility
   if (State.isCreditHistory) {
     document.getElementById("dashboard-wrapper").style.display = "none";
   } else {
@@ -3184,7 +2979,6 @@ function renderActiveReport() {
     officeObj = OFFICES.find(o => o.name === effectiveOffices[0]) || OFFICES[0];
   }
 
-  // Top Combined Header
   const headerContainer = document.getElementById("report-header-block");
   headerContainer.style.display = "block";
   headerContainer.innerHTML = buildReportHeaderHTML(officeObj, false) +
@@ -3230,6 +3024,9 @@ function renderActiveReport() {
   if (!State.isCreditHistory) {
     updateDashboard();
   }
+
+  // Developer Self-Check
+  setTimeout(verifyReportTotals, 50);
 }
 
 function toggleHowToRead() {
@@ -3243,7 +3040,7 @@ function toggleHowToRead() {
 
 /**
  * =============================================================================
- * DASHBOARD COMPUTATION & PURE SVG DONUT
+ * DASHBOARD & PURE SVG DONUT (Compact 3-Column Table Legend)
  * =============================================================================
  */
 function computeDashboardStats(candidateInvoices) {
@@ -3272,7 +3069,6 @@ function computeDashboardStats(candidateInvoices) {
   let creditLast7 = 0;
   let collToday = 0;
   let collLast7 = 0;
-
   const dateLast7 = "2026-10-28";
 
   DB.invoices.forEach(inv => {
@@ -3304,9 +3100,7 @@ function computeDashboardStats(candidateInvoices) {
     if (!effectiveOffices.includes(inv.office)) return;
     if (!effectiveGroups.includes(inv.customerGroup)) return;
     if (inv.creditDue > 0.01) {
-      if (!oldestInv || inv.date < oldestInv.date) {
-        oldestInv = inv;
-      }
+      if (!oldestInv || inv.date < oldestInv.date) oldestInv = inv;
     }
   });
 
@@ -3362,9 +3156,9 @@ function renderCards(stats) {
 
     '<div class="kpi-card card-oldest">' +
       '<div class="kpi-card-title">Oldest Due Invoice</div>' +
-      '<div class="kpi-card-value" style="font-size:22px;">' + (stats.oldestInvoice ? formatDateDMY(stats.oldestInvoice.date) : "None") + '</div>' +
+      '<div class="kpi-card-value" style="font-size:20px;">' + (stats.oldestInvoice ? formatDateDMY(stats.oldestInvoice.date) : "None") + '</div>' +
       '<div class="kpi-card-sub">' +
-        (stats.oldestInvoice ? (stats.oldestDays + " days overdue • " + stats.oldestInvoice.customerName.slice(0, 16)) : "All dues settled") +
+        (stats.oldestInvoice ? (stats.oldestDays + " days overdue • " + stats.oldestInvoice.customerName.slice(0, 15)) : "All dues settled") +
       '</div>' +
     '</div>';
 }
@@ -3376,11 +3170,13 @@ function renderMonthlyPie() {
   const effectiveGroups = getEffectiveGroups();
 
   const svg = document.getElementById("monthly-donut-svg");
-  const legend = document.getElementById("donut-legend");
+  const legendTableWrap = document.getElementById("donut-legend-table-wrap");
   const tooltip = document.getElementById("donut-tooltip");
 
   const monthlyData = [];
   let totalVal = 0;
+  let totalUnpaidSum = 0;
+  let totalInvoicesSum = 0;
 
   for (let m = 1; m <= 12; m++) {
     const mStr = year + "-" + (m < 10 ? '0' + m : m);
@@ -3408,6 +3204,8 @@ function renderMonthlyPie() {
 
     const sliceVal = (metric === "amount") ? unpaidAmt : unpaidInvoicesCount;
     totalVal += sliceVal;
+    totalUnpaidSum += unpaidAmt;
+    totalInvoicesSum += unpaidInvoicesCount;
 
     monthlyData.push({
       monthIndex: m - 1,
@@ -3423,14 +3221,14 @@ function renderMonthlyPie() {
     });
   }
 
-  // 300px outer diameter in 360x360 viewBox
-  const cx = 180, cy = 180, rOut = 145, rIn = 85;
+  // CHANGE REQUEST 5: Thinner ring (~22% thickness). cx=170, cy=170, rOut=135, rIn=105, thickness=30px
+  const cx = 170, cy = 170, rOut = 135, rIn = 105;
   let pathsHtml = '';
   let labelsHtml = '';
 
   if (totalVal <= 0.001) {
-    pathsHtml = '<circle cx="' + cx + '" cy="' + cy + '" r="' + rOut + '" fill="none" stroke="#e2e8f0" stroke-width="60"/>' +
-      '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" dy="5" font-size="14" font-weight="600" fill="#94a3b8">No Unpaid Dues</text>';
+    pathsHtml = '<circle cx="' + cx + '" cy="' + cy + '" r="' + rOut + '" fill="none" stroke="#e2e8f0" stroke-width="30"/>' +
+      '<text x="' + cx + '" y="' + cy + '" text-anchor="middle" dy="4" font-size="13" font-weight="600" fill="#94a3b8">No Unpaid Dues</text>';
   } else {
     let currentAngle = -Math.PI / 2;
     monthlyData.forEach(d => {
@@ -3453,21 +3251,18 @@ function renderMonthlyPie() {
       const largeArc = (sliceAngle > Math.PI) ? 1 : 0;
       const pathD = 'M ' + x1 + ' ' + y1 + ' A ' + rOut + ' ' + rOut + ' 0 ' + largeArc + ' 1 ' + x2 + ' ' + y2 + ' L ' + x3 + ' ' + y3 + ' A ' + rIn + ' ' + rIn + ' 0 ' + largeArc + ' 0 ' + x4 + ' ' + y4 + ' Z';
 
-      pathsHtml += '<path d="' + pathD + '" fill="' + d.color + '" stroke="#ffffff" stroke-width="2" ' +
+      pathsHtml += '<path d="' + pathD + '" fill="' + d.color + '" stroke="#ffffff" stroke-width="1.5" ' +
         'data-m-idx="' + d.monthIndex + '" class="donut-slice" style="transition:all 0.15s ease; cursor:pointer;"/>';
 
-      // Month Label on Slice
       const midAngle = startAngle + sliceAngle / 2;
       if (fraction >= 0.04) {
-        // Label inside slice
         const rMid = (rIn + rOut) / 2;
         const tx = cx + rMid * Math.cos(midAngle);
         const ty = cy + rMid * Math.sin(midAngle);
         labelsHtml += '<text x="' + tx.toFixed(1) + '" y="' + ty.toFixed(1) + '" text-anchor="middle" dominant-baseline="central" ' +
-          'fill="#ffffff" font-size="13" font-weight="800" style="text-shadow: 0 1px 3px rgba(0,0,0,0.85); pointer-events: none;">' +
+          'fill="#ffffff" font-size="11" font-weight="700" style="text-shadow: 0 1px 2px rgba(0,0,0,0.6); pointer-events: none;">' +
           d.monthName + '</text>';
       } else {
-        // Label outside with leader line
         const lx1 = cx + (rOut + 2) * Math.cos(midAngle);
         const ly1 = cy + (rOut + 2) * Math.sin(midAngle);
         const lx2 = cx + (rOut + 14) * Math.cos(midAngle);
@@ -3476,22 +3271,22 @@ function renderMonthlyPie() {
         const ty = cy + (rOut + 18) * Math.sin(midAngle);
         const anchor = (Math.cos(midAngle) > 0.05) ? "start" : ((Math.cos(midAngle) < -0.05) ? "end" : "middle");
 
-        labelsHtml += '<polyline points="' + lx1.toFixed(1) + ',' + ly1.toFixed(1) + ' ' + lx2.toFixed(1) + ',' + ly2.toFixed(1) + '" fill="none" stroke="#64748b" stroke-width="1.2"/>';
+        labelsHtml += '<polyline points="' + lx1.toFixed(1) + ',' + ly1.toFixed(1) + ' ' + lx2.toFixed(1) + ',' + ly2.toFixed(1) + '" fill="none" stroke="#64748b" stroke-width="1"/>';
         labelsHtml += '<text x="' + tx.toFixed(1) + '" y="' + ty.toFixed(1) + '" text-anchor="' + anchor + '" dominant-baseline="central" ' +
-          'fill="#1e293b" font-size="12" font-weight="700">' + d.monthName + '</text>';
+          'fill="#334155" font-size="10.5" font-weight="600">' + d.monthName + '</text>';
       }
     });
 
     pathsHtml += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (rIn - 1) + '" fill="#ffffff"/>' +
-      '<text x="' + cx + '" y="' + (cy - 8) + '" text-anchor="middle" font-size="12" fill="#475569" font-weight="700">TOTAL UNPAID</text>' +
-      '<text x="' + cx + '" y="' + (cy + 16) + '" text-anchor="middle" font-size="15" fill="#0f172a" font-weight="800">' +
+      '<text x="' + cx + '" y="' + (cy - 7) + '" text-anchor="middle" font-size="11" fill="#64748b" font-weight="700">TOTAL UNPAID</text>' +
+      '<text x="' + cx + '" y="' + (cy + 13) + '" text-anchor="middle" font-size="13.5" fill="#0f172a" font-weight="700">' +
         (metric === 'amount' ? formatMoney(totalVal) : (totalVal.toLocaleString() + ' Inv')) +
       '</text>';
   }
 
   svg.innerHTML = pathsHtml + labelsHtml;
 
-  // Slice hover tooltip
+  // Hover Tooltip
   svg.querySelectorAll(".donut-slice").forEach(slice => {
     slice.addEventListener("mouseenter", (e) => {
       const idx = parseInt(e.target.getAttribute("data-m-idx"));
@@ -3499,7 +3294,7 @@ function renderMonthlyPie() {
       e.target.style.opacity = "0.85";
 
       tooltip.innerHTML =
-        '<div style="font-weight:700; color:#93c5fd; margin-bottom:4px; font-size:14px;">' + d.monthName + ' ' + year + '</div>' +
+        '<div style="font-weight:700; color:#93c5fd; margin-bottom:2px; font-size:12.5px;">' + d.monthName + ' ' + year + '</div>' +
         '<div>Net Credit Sale: ' + formatMoney(d.netCredit) + '</div>' +
         '<div>Total Collection: ' + formatMoney(d.collection) + '</div>' +
         '<div>Unpaid as of today: <strong>' + formatMoney(d.unpaidAmt) + '</strong></div>' +
@@ -3522,13 +3317,34 @@ function renderMonthlyPie() {
     });
   });
 
-  // Legend in 2 columns with 15px text
-  legend.innerHTML = monthlyData.map(d => {
-    return '<div class="donut-legend-item">' +
-      '<span class="legend-dot" style="background:' + d.color + ';"></span>' +
-      '<span><strong>' + d.monthName + ':</strong> ' + (metric === 'amount' ? formatMoney(d.unpaidAmt) : (d.unpaidCount + ' inv')) + '</span>' +
-    '</div>';
-  }).join('');
+  // CHANGE REQUEST 5: Compact 3-Column Table Legend (Month | Unpaid | Invoices) with Total row
+  let tableHtml = '<table class="chart-mini-table">' +
+    '<thead>' +
+      '<tr>' +
+        '<th style="text-align:left;">Month</th>' +
+        '<th style="text-align:right;">Unpaid Amount</th>' +
+        '<th style="text-align:right;">Invoices</th>' +
+      '</tr>' +
+    '</thead>' +
+    '<tbody>' +
+      monthlyData.map(d => {
+        return '<tr>' +
+          '<td><span class="chart-dot" style="background:' + d.color + ';"></span><strong>' + d.monthName + '</strong></td>' +
+          '<td class="num">' + (d.unpaidAmt > 0 ? formatMoney(d.unpaidAmt) : '<span class="zero-val">0.00</span>') + '</td>' +
+          '<td class="num">' + (d.unpaidCount > 0 ? d.unpaidCount : '<span class="zero-val">0</span>') + '</td>' +
+        '</tr>';
+      }).join('') +
+    '</tbody>' +
+    '<tfoot>' +
+      '<tr style="font-weight:700; background:#f1f5f9;">' +
+        '<td>Total (' + year + ')</td>' +
+        '<td class="num">' + formatMoney(totalUnpaidSum) + '</td>' +
+        '<td class="num">' + totalInvoicesSum.toLocaleString() + '</td>' +
+      '</tr>' +
+    '</tfoot>' +
+  '</table>';
+
+  legendTableWrap.innerHTML = tableHtml;
 }
 
 function updateDashboard() {
@@ -3540,7 +3356,7 @@ function updateDashboard() {
 
 /**
  * =============================================================================
- * DATA EXTRACTION & FILTERING PIPELINE
+ * DATA EXTRACTION & PIPELINE
  * =============================================================================
  */
 function extractCandidateInvoices(isCollectionMode) {
@@ -3643,9 +3459,12 @@ function renderSummaryReportView(isCollectionMode) {
     return;
   }
 
-  const { customersList, activeAccounts, grandTotal } = aggregateCustomerSummary(candidateInvoices, isCollectionMode);
+  const { customersList, activeAccounts } = aggregateCustomerSummary(candidateInvoices, isCollectionMode);
   let filteredCusts = applyCustomerFilterBy(customersList);
   filteredCusts = sortCustomerList(filteredCusts);
+
+  // Recompute Grand Total strictly from displayed/filtered customer rows
+  const grandTotal = computeSummaryGrandTotal(filteredCusts, activeAccounts);
 
   const totalRows = filteredCusts.length;
   const totalPages = Math.ceil(totalRows / State.pageSize) || 1;
@@ -3675,6 +3494,47 @@ function renderSummaryReportView(isCollectionMode) {
       buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOfficeCol, startIdx, totalRows, isCollectionMode) +
     '</div>' +
     renderPaginationControls(totalRows, totalPages);
+}
+
+function computeSummaryGrandTotal(customers, activeAccounts) {
+  const gt = {
+    invoiceCount: 0,
+    gross: 0,
+    discount: 0,
+    netSale: 0,
+    totalReturn: 0,
+    creditSold: 0,
+    creditReturned: 0,
+    netCredit: 0,
+    accountColls: {},
+    totalCollected: 0,
+    creditDue: 0,
+    outstandingDue: 0,
+    availableCredit: 0,
+    limit: 0
+  };
+  activeAccounts.forEach(acc => gt.accountColls[acc] = 0);
+
+  customers.forEach(c => {
+    gt.invoiceCount += c.invoiceCount;
+    gt.gross += c.gross;
+    gt.discount += c.discount;
+    gt.netSale += c.netSale;
+    gt.totalReturn += c.totalReturn;
+    gt.creditSold += c.creditSold;
+    gt.creditReturned += c.creditReturned;
+    gt.netCredit += c.netCredit;
+    gt.totalCollected += c.totalCollected;
+    gt.creditDue += c.creditDue;
+    gt.outstandingDue += c.outstandingDue;
+    gt.availableCredit += c.availableCredit;
+    gt.limit += c.limit;
+
+    activeAccounts.forEach(acc => {
+      gt.accountColls[acc] += (c.accountColls[acc] || 0);
+    });
+  });
+  return gt;
 }
 
 function aggregateCustomerSummary(candidateInvoices, isCollectionMode) {
@@ -3746,20 +3606,14 @@ function aggregateCustomerSummary(candidateInvoices, isCollectionMode) {
       let allCollsUpToToDate = 0;
 
       inv.collections.forEach(c => {
-        if (c.date <= State.collToDate) {
-          allCollsUpToToDate += c.amount;
-        }
+        if (c.date <= State.collToDate) allCollsUpToToDate += c.amount;
         if (c.date >= State.collFromDate && c.date <= State.collToDate) {
           invCollInRange += c.amount;
           row.accountColls[c.account] = (row.accountColls[c.account] || 0) + c.amount;
           activeAccountsSet.add(c.account);
-          if (!row.latestCollDate || c.date > row.latestCollDate) {
-            row.latestCollDate = c.date;
-          }
+          if (!row.latestCollDate || c.date > row.latestCollDate) row.latestCollDate = c.date;
         }
-        if (c.date < State.collFromDate) {
-          row.priorCollectionsTotal += c.amount;
-        }
+        if (c.date < State.collFromDate) row.priorCollectionsTotal += c.amount;
       });
 
       row.totalCollected += invCollInRange;
@@ -3770,9 +3624,7 @@ function aggregateCustomerSummary(candidateInvoices, isCollectionMode) {
         invAllColls += c.amount;
         row.accountColls[c.account] = (row.accountColls[c.account] || 0) + c.amount;
         activeAccountsSet.add(c.account);
-        if (!row.latestCollDate || c.date > row.latestCollDate) {
-          row.latestCollDate = c.date;
-        }
+        if (!row.latestCollDate || c.date > row.latestCollDate) row.latestCollDate = c.date;
       });
       row.totalCollected += invAllColls;
       row.creditDue += Math.max(0, inv.netCredit - invAllColls);
@@ -3781,46 +3633,7 @@ function aggregateCustomerSummary(candidateInvoices, isCollectionMode) {
 
   const activeAccounts = COLLECTION_ACCOUNTS.filter(acc => activeAccountsSet.has(acc));
   const customersList = Object.values(customerMap);
-
-  const grandTotal = {
-    invoiceCount: 0,
-    gross: 0,
-    discount: 0,
-    netSale: 0,
-    totalReturn: 0,
-    creditSold: 0,
-    creditReturned: 0,
-    netCredit: 0,
-    accountColls: {},
-    totalCollected: 0,
-    creditDue: 0,
-    outstandingDue: 0,
-    availableCredit: 0,
-    limit: 0
-  };
-  activeAccounts.forEach(acc => grandTotal.accountColls[acc] = 0);
-
-  customersList.forEach(c => {
-    grandTotal.invoiceCount += c.invoiceCount;
-    grandTotal.gross += c.gross;
-    grandTotal.discount += c.discount;
-    grandTotal.netSale += c.netSale;
-    grandTotal.totalReturn += c.totalReturn;
-    grandTotal.creditSold += c.creditSold;
-    grandTotal.creditReturned += c.creditReturned;
-    grandTotal.netCredit += c.netCredit;
-    grandTotal.totalCollected += c.totalCollected;
-    grandTotal.creditDue += c.creditDue;
-    grandTotal.outstandingDue += c.outstandingDue;
-    grandTotal.availableCredit += c.availableCredit;
-    grandTotal.limit += c.limit;
-
-    activeAccounts.forEach(acc => {
-      grandTotal.accountColls[acc] += (c.accountColls[acc] || 0);
-    });
-  });
-
-  return { customersList, activeAccounts, grandTotal };
+  return { customersList, activeAccounts };
 }
 
 function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOfficeCol, startIdx, totalRows, isCollectionMode) {
@@ -3828,32 +3641,29 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
   const hideSales = State.hideSalesInfo;
   const hideColl = State.hideCollInfo;
 
-  let custBaseCols = 2; // SL + Partner Code
-  if (!hideCust) {
-    custBaseCols += 3; // Name, Phone, Group
-    if (showOfficeCol) custBaseCols += 1;
-  }
-  custBaseCols += 1; // Invoice Count
-
   const salesColspan = hideSales ? 2 : 4;
   const collColspan = hideColl ? 1 : (activeAccounts.length + 1);
 
-  let html = '<table class="report-table">' +
+  // CHANGE REQUEST 5: Two-row header with single label (rowspan=2 for non-band cols), NO DUPLICATES
+  let html = '<table class="report-table table-summary">' +
     '<thead>' +
-      // Row 1: Band Headers (14px 800 uppercase)
+      // Row 1: Non-band columns have rowspan=2; Band columns have band names with colspan
       '<tr class="band-header-row">' +
-        '<th class="band-cust col-cust-start freeze-sl">SL</th>' +
-        '<th class="band-cust freeze-partner">Partner Code</th>' +
+        '<th class="band-cust col-cust-start freeze-sl" rowspan="2">SL</th>' +
+        '<th class="band-cust freeze-partner" rowspan="2">Partner Code</th>' +
         (!hideCust ? (
-          '<th class="band-cust" colspan="' + (custBaseCols - 3) + '">Customer Details Band</th>'
+          '<th class="band-cust" rowspan="2">Customer Name</th>' +
+          '<th class="band-cust" rowspan="2">Phone</th>' +
+          '<th class="band-cust" rowspan="2">Customer Group</th>' +
+          (showOfficeCol ? '<th class="band-cust" rowspan="2">Office</th>' : '')
         ) : '') +
-        '<th class="band-cust">Invoice Count</th>' +
+        '<th class="band-cust" rowspan="2">Invoice Count</th>' +
 
         '<th class="band-sales col-sales-start" colspan="' + salesColspan + '">Sales Band</th>' +
         '<th class="band-credit col-credit-start" colspan="3">Credit Band</th>' +
         '<th class="band-coll col-coll-start" colspan="' + collColspan + '">Collection Band</th>' +
 
-        '<th class="band-due col-due-start" data-calc-tip>Due on Listed Invoices' +
+        '<th class="band-due col-due-start" rowspan="2" data-calc-tip>Net Due' +
           '<span class="calc-tooltip"><strong>Net Due</strong> = Net Credit Sale − Total Collection<br>What is still unpaid on listed invoices.</span>' +
         '</th>' +
 
@@ -3862,18 +3672,8 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
         '</th>' +
       '</tr>' +
 
-      // Row 2: Column Sub-Headers (14px 700)
+      // Row 2: Sub-headers ONLY for multi-column bands
       '<tr class="sub-header-row">' +
-        '<th class="sub-cust col-cust-start freeze-sl">SL</th>' +
-        '<th class="sub-cust freeze-partner">Partner Code</th>' +
-        (!hideCust ? (
-          '<th class="sub-cust">Customer Name</th>' +
-          '<th class="sub-cust">Phone</th>' +
-          '<th class="sub-cust">Customer Group</th>' +
-          (showOfficeCol ? '<th class="sub-cust">Office</th>' : '')
-        ) : '') +
-        '<th class="sub-cust">Invoice Count</th>' +
-
         '<th class="sub-sales col-sales-start">Gross Sale</th>' +
         (!hideSales ? '<th class="sub-sales">Discount</th>' : '') +
         (!hideSales ? '<th class="sub-sales" data-calc-tip>Net Sale<span class="calc-tooltip"><strong>Net Sale</strong> = Gross Sale − Discount</span></th>' : '') +
@@ -3886,41 +3686,46 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
         (!hideColl ? activeAccounts.map(acc => '<th class="sub-coll ' + (acc === activeAccounts[0] ? 'col-coll-start' : '') + '">' + acc + '</th>').join('') : '') +
         '<th class="sub-coll ' + (hideColl ? 'col-coll-start' : '') + '">Total Collection</th>' +
 
-        '<th class="sub-due col-due-start" data-calc-tip>Net Due<span class="calc-tooltip">What is still unpaid on listed invoices.</span></th>' +
-
         '<th class="sub-current col-current-start" data-calc-tip>Outstanding Due<span class="calc-tooltip">Total unpaid credit across ALL history as of today.</span></th>' +
         '<th class="sub-current" data-calc-tip>Available Credit<span class="calc-tooltip">Credit Limit − Outstanding Due</span></th>' +
         '<th class="sub-current">Credit Limit</th>' +
       '</tr>' +
 
-      // Row 3: Grand Total Row (16px 800, min 52px tall, 2px borders)
+      // Row 3: Grand Total Row - NO COLSPAN on sticky cells!
       '<tr class="grand-total-row">' +
-        '<td class="center grand-cust col-cust-start freeze-sl">Total</td>' +
-        '<td class="grand-cust freeze-partner" colspan="' + (custBaseCols - 1) + '">Grand Total (' + totalRows.toLocaleString() + ' Customers)</td>' +
+        '<td class="center freeze-sl">Total</td>' +
+        '<td class="freeze-partner">Grand Total</td>' +
+        (!hideCust ? (
+          '<td class="highlight-bold">(' + totalRows.toLocaleString() + ' Customers)</td>' +
+          '<td>-</td>' +
+          '<td>-</td>' +
+          (showOfficeCol ? '<td>-</td>' : '')
+        ) : '') +
+        '<td class="center highlight-bold">' + grandTotal.invoiceCount + (hideCust ? (' (' + totalRows + ' Customers)') : '') + '</td>' +
 
-        '<td class="num grand-sales col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' +
-        (!hideSales ? '<td class="num grand-sales">' + formatMoney(grandTotal.discount) + '</td>' : '') +
-        (!hideSales ? '<td class="num grand-sales">' + formatMoney(grandTotal.netSale) + '</td>' : '') +
-        '<td class="num grand-sales">' + formatMoney(grandTotal.totalReturn) + '</td>' +
+        '<td class="num col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' +
+        (!hideSales ? '<td class="num">' + formatMoney(grandTotal.discount) + '</td>' : '') +
+        (!hideSales ? '<td class="num">' + formatMoney(grandTotal.netSale) + '</td>' : '') +
+        '<td class="num ' + (grandTotal.totalReturn > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.totalReturn) + '</td>' +
 
-        '<td class="num grand-credit col-credit-start">' + formatMoney(grandTotal.creditSold) + '</td>' +
-        '<td class="num grand-credit">' + formatMoney(grandTotal.creditReturned) + '</td>' +
-        '<td class="num grand-credit">' + formatMoney(grandTotal.netCredit) + '</td>' +
+        '<td class="num col-credit-start">' + formatMoney(grandTotal.creditSold) + '</td>' +
+        '<td class="num ' + (grandTotal.creditReturned > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.creditReturned) + '</td>' +
+        '<td class="num highlight-bold">' + formatMoney(grandTotal.netCredit) + '</td>' +
 
-        (!hideColl ? activeAccounts.map((acc, idx) => '<td class="num grand-coll ' + (idx === 0 ? 'col-coll-start' : '') + '">' + formatMoney(grandTotal.accountColls[acc]) + '</td>').join('') : '') +
-        '<td class="num grand-coll ' + (hideColl ? 'col-coll-start' : '') + '">' + formatMoney(grandTotal.totalCollected) + '</td>' +
+        (!hideColl ? activeAccounts.map((acc, idx) => '<td class="num ' + (idx === 0 ? 'col-coll-start' : '') + '">' + formatMoney(grandTotal.accountColls[acc]) + '</td>').join('') : '') +
+        '<td class="num ' + (hideColl ? 'col-coll-start' : '') + '">' + formatMoney(grandTotal.totalCollected) + '</td>' +
 
-        '<td class="num grand-due col-due-start">' + formatMoney(grandTotal.creditDue) + '</td>' +
+        '<td class="num col-due-start ' + (grandTotal.creditDue > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.creditDue) + '</td>' +
 
-        '<td class="num grand-current col-current-start">' + formatMoney(grandTotal.outstandingDue) + '</td>' +
-        '<td class="num grand-current ' + (grandTotal.availableCredit < 0 ? 'over-limit' : '') + '">' + formatMoney(grandTotal.availableCredit) + '</td>' +
-        '<td class="num grand-current">' + formatMoney(grandTotal.limit) + '</td>' +
+        '<td class="num col-current-start">' + formatMoney(grandTotal.outstandingDue) + '</td>' +
+        '<td class="num ' + (grandTotal.availableCredit < 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.availableCredit) + '</td>' +
+        '<td class="num">' + formatMoney(grandTotal.limit) + '</td>' +
       '</tr>' +
     '</thead>' +
     '<tbody>';
 
   if (pagedList.length === 0) {
-    html += '<tr><td colspan="30" style="text-align:center; padding:40px; color:#64748b;">No records found for the selected criteria.</td></tr>';
+    html += '<tr><td colspan="30" style="text-align:center; padding:30px; color:#64748b;">No records found for the selected criteria.</td></tr>';
   } else {
     pagedList.forEach((c, idx) => {
       const sl = startIdx + idx + 1;
@@ -3928,7 +3733,7 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
 
       html += '<tr>' +
         '<td class="center col-cust-start freeze-sl">' + sl + '</td>' +
-        '<td class="freeze-partner"><a class="cust-link" onclick="openCustomerInvoicesModal(\'' + c.partnerCode + '\')" title="View filtered invoices for ' + c.partnerCode + '">' + c.partnerCode + '</a></td>' +
+        '<td class="freeze-partner"><a class="cust-link" onclick="openCustomerInvoicesModal(\'' + c.partnerCode + '\')">' + c.partnerCode + '</a></td>' +
         (!hideCust ? (
           '<td>' + c.customerName + '</td>' +
           '<td>' + c.phone + '</td>' +
@@ -3937,20 +3742,20 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
         ) : '') +
         '<td class="center">' + c.invoiceCount + '</td>' +
 
-        '<td class="num col-sales-start">' + formatMoney(c.gross) + '</td>' +
-        (!hideSales ? '<td class="num">' + formatMoney(c.discount) + '</td>' : '') +
-        (!hideSales ? '<td class="num" style="font-weight:600;">' + formatMoney(c.netSale) + '</td>' : '') +
-        '<td class="num" style="color:#be185d;">' + formatMoney(c.totalReturn) + '</td>' +
+        '<td class="num col-sales-start">' + formatDataNum(c.gross) + '</td>' +
+        (!hideSales ? '<td class="num">' + formatDataNum(c.discount) + '</td>' : '') +
+        (!hideSales ? '<td class="num">' + formatDataNum(c.netSale) + '</td>' : '') +
+        '<td class="num ' + (c.totalReturn > 0 ? 'highlight-red' : '') + '">' + formatDataNum(c.totalReturn) + '</td>' +
 
-        '<td class="num col-credit-start">' + formatMoney(c.creditSold) + '</td>' +
-        '<td class="num" style="color:#be185d;">' + formatMoney(c.creditReturned) + '</td>' +
-        '<td class="num" style="font-weight:700; color:#3730a3;">' + formatMoney(c.netCredit) + '</td>' +
+        '<td class="num col-credit-start">' + formatDataNum(c.creditSold) + '</td>' +
+        '<td class="num ' + (c.creditReturned > 0 ? 'highlight-red' : '') + '">' + formatDataNum(c.creditReturned) + '</td>' +
+        '<td class="num highlight-bold">' + formatDataNum(c.netCredit) + '</td>' +
 
-        (!hideColl ? activeAccounts.map((acc, aIdx) => '<td class="num ' + (aIdx === 0 ? 'col-coll-start' : '') + '">' + formatMoney(c.accountColls[acc] || 0) + '</td>').join('') : '') +
-        '<td class="num ' + (hideColl ? 'col-coll-start' : '') + '" style="font-weight:700; color:#047857;">' + formatMoney(c.totalCollected) + '</td>' +
+        (!hideColl ? activeAccounts.map((acc, aIdx) => '<td class="num ' + (aIdx === 0 ? 'col-coll-start' : '') + '">' + formatDataNum(c.accountColls[acc] || 0) + '</td>').join('') : '') +
+        '<td class="num ' + (hideColl ? 'col-coll-start' : '') + '">' + formatDataNum(c.totalCollected) + '</td>' +
 
-        '<td class="num col-due-start" style="font-weight:700; color:#b91c1c;">' +
-          formatMoney(c.creditDue) +
+        '<td class="num col-due-start ' + (c.creditDue > 0 ? 'highlight-red' : '') + '">' +
+          formatDataNum(c.creditDue) +
           (isCollectionMode && c.priorCollectionsTotal > 0 ? (
             '<span class="info-marker">i' +
               '<span class="info-tooltip">Includes ' + formatMoney(c.priorCollectionsTotal) + ' collected before this range</span>' +
@@ -3958,9 +3763,9 @@ function buildSummaryTableHTML(pagedList, grandTotal, activeAccounts, showOffice
           ) : '') +
         '</td>' +
 
-        '<td class="num col-current-start muted-txt">' + formatMoney(c.outstandingDue) + '</td>' +
-        '<td class="num ' + (isOverLimit ? 'over-limit' : 'muted-txt') + '">' + formatMoney(c.availableCredit) + '</td>' +
-        '<td class="num muted-txt">' + formatMoney(c.limit) + '</td>' +
+        '<td class="num col-current-start">' + formatDataNum(c.outstandingDue) + '</td>' +
+        '<td class="num ' + (isOverLimit ? 'highlight-red' : '') + '">' + formatDataNum(c.availableCredit) + '</td>' +
+        '<td class="num">' + formatDataNum(c.limit) + '</td>' +
       '</tr>';
     });
   }
@@ -3988,26 +3793,32 @@ function renderOfficeWiseSummary(candidateInvoices, isCollectionMode) {
   effectiveOffices.forEach(officeName => {
     const offObj = OFFICES.find(o => o.name === officeName) || { name: officeName, address: "FairPrice Retail Outlet" };
     const offInvs = candidateInvoices.filter(i => i.office === officeName);
-    const { customersList, activeAccounts, grandTotal } = aggregateCustomerSummary(offInvs, isCollectionMode);
+    const { customersList, activeAccounts } = aggregateCustomerSummary(offInvs, isCollectionMode);
 
     let filtered = applyCustomerFilterBy(customersList);
     filtered = sortCustomerList(filtered);
 
     masterHtml += '<div class="office-section" id="office-section-' + officeName.replace(/\s+/g, '-') + '">' +
-      buildReportHeaderHTML(offObj, true) +
-      '<div class="table-toolbar" style="margin-top:6px;">' +
+      buildReportHeaderHTML(offObj, true);
+
+    // CHANGE REQUEST 5: If zero records, show calm message and NO table header or Grand Total row
+    if (filtered.length === 0) {
+      masterHtml += '<div class="empty-office-msg">No records found for this office</div></div>';
+    } else {
+      const grandTotal = computeSummaryGrandTotal(filtered, activeAccounts);
+      masterHtml += '<div class="table-toolbar" style="margin-top:4px;">' +
         '<div class="table-toolbar-left" style="color:#1e40af;">' +
           '<span>' + officeName + ' Data (' + filtered.length + ' Customers)</span>' +
         '</div>' +
         '<div class="table-toolbar-right">' +
-          '<button class="btn btn-outline-blue" style="height:32px; font-size:13px;" onclick="exportSingleOfficeExcel(\'' + officeName + '\')">📊 Excel (' + officeName + ')</button>' +
-          '<button class="btn btn-outline-blue" style="height:32px; font-size:13px;" onclick="printSingleOffice(\'' + officeName + '\')">🖨️ Print (' + officeName + ')</button>' +
+          '<button class="btn btn-outline-blue" style="height:30px; font-size:12.5px;" onclick="exportSingleOfficeExcel(\'' + officeName + '\')">📊 Excel (' + officeName + ')</button>' +
+          '<button class="btn btn-outline-blue" style="height:30px; font-size:12.5px;" onclick="printSingleOffice(\'' + officeName + '\')">🖨️ Print (' + officeName + ')</button>' +
         '</div>' +
       '</div>' +
       '<div class="table-scroll-container">' +
         buildSummaryTableHTML(filtered, grandTotal, activeAccounts, false, 0, filtered.length, isCollectionMode) +
-      '</div>' +
-    '</div>';
+      '</div></div>';
+    }
   });
 
   State.renderedData = {
@@ -4021,7 +3832,7 @@ function renderOfficeWiseSummary(candidateInvoices, isCollectionMode) {
 
 /**
  * =============================================================================
- * DETAILS REPORT VIEW (Includes Credit Days)
+ * DETAILS REPORT VIEW (Invoice Blocks, Credit Days, Reconciled Totals)
  * =============================================================================
  */
 function renderDetailsReportView(isCollectionMode) {
@@ -4036,7 +3847,7 @@ function renderDetailsReportView(isCollectionMode) {
     return;
   }
 
-  const { invoiceBlocks, activeAccounts, grandTotal } = processDetailsBlocks(candidateInvoices, isCollectionMode);
+  const { invoiceBlocks, activeAccounts } = processDetailsBlocks(candidateInvoices, isCollectionMode);
 
   let filteredBlocks = invoiceBlocks;
   if (State.filterBy !== "none") {
@@ -4062,6 +3873,9 @@ function renderDetailsReportView(isCollectionMode) {
     if (State.sortBy === "outstandingDue") return (a.cust.totalCreditDue - b.cust.totalCreditDue) * dir;
     return a.inv.invNo.localeCompare(b.inv.invNo);
   });
+
+  // Recompute Grand Total strictly from filtered invoice blocks
+  const grandTotal = computeDetailsGrandTotal(filteredBlocks, activeAccounts);
 
   const totalInvoices = filteredBlocks.length;
   const totalPages = Math.ceil(totalInvoices / State.pageSize) || 1;
@@ -4093,11 +3907,8 @@ function renderDetailsReportView(isCollectionMode) {
     renderPaginationControls(totalInvoices, totalPages);
 }
 
-function processDetailsBlocks(candidateInvoices, isCollectionMode) {
-  const activeAccountsSet = new Set();
-  const invoiceBlocks = [];
-
-  const grandTotal = {
+function computeDetailsGrandTotal(blocks, activeAccounts) {
+  const gt = {
     gross: 0,
     discount: 0,
     netSale: 0,
@@ -4109,7 +3920,31 @@ function processDetailsBlocks(candidateInvoices, isCollectionMode) {
     totalCollected: 0,
     creditDue: 0
   };
-  COLLECTION_ACCOUNTS.forEach(a => grandTotal.accountColls[a] = 0);
+  activeAccounts.forEach(a => gt.accountColls[a] = 0);
+
+  blocks.forEach(b => {
+    gt.gross += b.inv.gross;
+    gt.discount += b.inv.discount;
+    gt.netSale += b.inv.netSale;
+    gt.totalReturn += b.inv.totalReturn;
+    gt.creditSold += b.inv.creditSold;
+    gt.creditReturned += b.inv.creditReturned;
+    gt.netCredit += b.inv.netCredit;
+    gt.totalCollected += b.invTotalColl;
+    gt.creditDue += b.netDue;
+
+    b.collections.forEach(c => {
+      if (c.account && gt.accountColls[c.account] !== undefined) {
+        gt.accountColls[c.account] += c.amount;
+      }
+    });
+  });
+  return gt;
+}
+
+function processDetailsBlocks(candidateInvoices, isCollectionMode) {
+  const activeAccountsSet = new Set();
+  const invoiceBlocks = [];
 
   candidateInvoices.forEach(inv => {
     const cust = DB.customers.find(c => c.code === inv.customerCode) || {
@@ -4141,9 +3976,7 @@ function processDetailsBlocks(candidateInvoices, isCollectionMode) {
           activeAccountsSet.add(c.account);
           if (!latestCollDate || c.date > latestCollDate) latestCollDate = c.date;
         }
-        if (c.date < State.collFromDate) {
-          priorCollected += c.amount;
-        }
+        if (c.date < State.collFromDate) priorCollected += c.amount;
       });
       netDue = Math.max(0, inv.netCredit - allCollsUpToToDate);
     } else {
@@ -4157,12 +3990,7 @@ function processDetailsBlocks(candidateInvoices, isCollectionMode) {
     }
 
     if (displayCollections.length === 0) {
-      displayCollections.push({
-        date: "-",
-        voucher: "-",
-        account: "-",
-        amount: 0
-      });
+      displayCollections.push({ date: "-", voucher: "-", account: "-", amount: 0 });
     }
 
     invoiceBlocks.push({
@@ -4174,26 +4002,10 @@ function processDetailsBlocks(candidateInvoices, isCollectionMode) {
       priorCollected: priorCollected,
       latestCollDate: latestCollDate
     });
-
-    grandTotal.gross += inv.gross;
-    grandTotal.discount += inv.discount;
-    grandTotal.netSale += inv.netSale;
-    grandTotal.totalReturn += inv.totalReturn;
-    grandTotal.creditSold += inv.creditSold;
-    grandTotal.creditReturned += inv.creditReturned;
-    grandTotal.netCredit += inv.netCredit;
-    grandTotal.totalCollected += invTotalColl;
-    grandTotal.creditDue += netDue;
-
-    displayCollections.forEach(c => {
-      if (c.account && grandTotal.accountColls[c.account] !== undefined) {
-        grandTotal.accountColls[c.account] += c.amount;
-      }
-    });
   });
 
   const activeAccounts = COLLECTION_ACCOUNTS.filter(a => activeAccountsSet.has(a));
-  return { invoiceBlocks, activeAccounts, grandTotal };
+  return { invoiceBlocks, activeAccounts };
 }
 
 function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOfficeCol, startIdx, totalInvoices, isCollectionMode) {
@@ -4201,57 +4013,39 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
   const hideSales = State.hideSalesInfo;
   const hideColl = State.hideCollInfo;
 
-  let custBaseCols = 2; // SL + Partner Code
-  if (!hideCust) {
-    custBaseCols += 4; // Name, ID, Phone, Group
-    if (showOfficeCol) custBaseCols += 1;
-  }
-  custBaseCols += 3; // Date, Inv No, JV
-
   const salesColspan = hideSales ? 2 : 4;
-  const collColspan = hideColl ? 1 : (activeAccounts.length + 3); // Date + JV + Accounts + Total
+  const collColspan = hideColl ? 1 : (activeAccounts.length + 3);
 
-  let html = '<table class="report-table">' +
+  let html = '<table class="report-table table-details">' +
     '<thead>' +
-      // Row 1: Band Headers (14px 800 uppercase)
+      // Row 1: Non-band columns have rowspan=2; Band columns have band names with colspan
       '<tr class="band-header-row">' +
-        '<th class="band-cust col-cust-start freeze-sl">SL</th>' +
-        '<th class="band-cust freeze-partner">Partner Code</th>' +
+        '<th class="band-cust col-cust-start freeze-sl" rowspan="2">SL</th>' +
+        '<th class="band-cust freeze-partner" rowspan="2">Partner Code</th>' +
         (!hideCust ? (
-          '<th class="band-cust" colspan="' + (custBaseCols - 5) + '">Customer Details Band</th>'
+          '<th class="band-cust" rowspan="2">Customer Name</th>' +
+          '<th class="band-cust" rowspan="2">ID</th>' +
+          '<th class="band-cust" rowspan="2">Phone</th>' +
+          '<th class="band-cust" rowspan="2">Customer Group</th>' +
+          (showOfficeCol ? '<th class="band-cust" rowspan="2">Office</th>' : '')
         ) : '') +
-        '<th class="band-cust">Invoice Date</th>' +
-        '<th class="band-cust">Invoice No</th>' +
-        '<th class="band-cust">JV No</th>' +
+        '<th class="band-cust" rowspan="2">Invoice Date</th>' +
+        '<th class="band-cust" rowspan="2">Invoice No</th>' +
+        '<th class="band-cust" rowspan="2">JV No</th>' +
 
         '<th class="band-sales col-sales-start" colspan="' + salesColspan + '">Sales Band</th>' +
         '<th class="band-credit col-credit-start" colspan="3">Credit Band</th>' +
         '<th class="band-coll col-coll-start" colspan="' + collColspan + '">Collection Band</th>' +
 
-        '<th class="band-due col-due-start" data-calc-tip>Due on Listed Invoices' +
-          '<span class="calc-tooltip"><strong>Net Due</strong> = Net Credit Sale − Total Collection</span>' +
-        '</th>' +
+        '<th class="band-due col-due-start" rowspan="2" data-calc-tip>Net Due</th>' +
 
         '<th class="band-current col-current-start" colspan="4" title="Not affected by filters">' +
           'Current Position (as of today)' +
         '</th>' +
       '</tr>' +
 
-      // Row 2: Sub-Headers (14px 700)
+      // Row 2: Sub-headers ONLY for multi-column bands (NO duplicates)
       '<tr class="sub-header-row">' +
-        '<th class="sub-cust col-cust-start freeze-sl">SL</th>' +
-        '<th class="sub-cust freeze-partner">Partner Code</th>' +
-        (!hideCust ? (
-          '<th class="sub-cust">Customer Name</th>' +
-          '<th class="sub-cust">ID</th>' +
-          '<th class="sub-cust">Phone</th>' +
-          '<th class="sub-cust">Customer Group</th>' +
-          (showOfficeCol ? '<th class="sub-cust">Office</th>' : '')
-        ) : '') +
-        '<th class="sub-cust">Invoice Date</th>' +
-        '<th class="sub-cust">Invoice No</th>' +
-        '<th class="sub-cust">JV No</th>' +
-
         '<th class="sub-sales col-sales-start">Gross Sale</th>' +
         (!hideSales ? '<th class="sub-sales">Discount</th>' : '') +
         (!hideSales ? '<th class="sub-sales">Net Sale</th>' : '') +
@@ -4268,54 +4062,62 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
         ) : '') +
         '<th class="sub-coll ' + (hideColl ? 'col-coll-start' : '') + '">Total Collection</th>' +
 
-        '<th class="sub-due col-due-start">Net Due</th>' +
-
-        '<th class="sub-current col-current-start" data-calc-tip>Outstanding Due<span class="calc-tooltip">Total unpaid credit across ALL history.</span></th>' +
-        '<th class="sub-current" data-calc-tip>Available Credit<span class="calc-tooltip">Credit Limit − Outstanding Due</span></th>' +
+        '<th class="sub-current col-current-start" data-calc-tip>Outstanding Due</th>' +
+        '<th class="sub-current" data-calc-tip>Available Credit</th>' +
         '<th class="sub-current">Credit Limit</th>' +
         '<th class="sub-current">Credit Days</th>' +
       '</tr>' +
 
-      // Row 3: Grand Total Row (16px 800, min 52px tall, 2px borders, blank current position)
+      // Row 3: Grand Total Row - NO COLSPAN on sticky cells!
       '<tr class="grand-total-row">' +
-        '<td class="center grand-cust col-cust-start freeze-sl">Total</td>' +
-        '<td class="grand-cust freeze-partner" colspan="' + (custBaseCols - 1) + '">Grand Total (' + totalInvoices.toLocaleString() + ' Invoices)</td>' +
+        '<td class="center freeze-sl">Total</td>' +
+        '<td class="freeze-partner">Grand Total</td>' +
+        (!hideCust ? (
+          '<td class="highlight-bold">(' + totalInvoices.toLocaleString() + ' Invoices)</td>' +
+          '<td>-</td>' +
+          '<td>-</td>' +
+          '<td>-</td>' +
+          (showOfficeCol ? '<td>-</td>' : '')
+        ) : '') +
+        '<td class="highlight-bold">' + (hideCust ? ('(' + totalInvoices.toLocaleString() + ' Invoices)') : '-') + '</td>' +
+        '<td>-</td>' +
+        '<td>-</td>' +
 
-        '<td class="num grand-sales col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' +
-        (!hideSales ? '<td class="num grand-sales">' + formatMoney(grandTotal.discount) + '</td>' : '') +
-        (!hideSales ? '<td class="num grand-sales">' + formatMoney(grandTotal.netSale) + '</td>' : '') +
-        '<td class="num grand-sales">' + formatMoney(grandTotal.totalReturn) + '</td>' +
+        '<td class="num col-sales-start">' + formatMoney(grandTotal.gross) + '</td>' +
+        (!hideSales ? '<td class="num">' + formatMoney(grandTotal.discount) + '</td>' : '') +
+        (!hideSales ? '<td class="num">' + formatMoney(grandTotal.netSale) + '</td>' : '') +
+        '<td class="num ' + (grandTotal.totalReturn > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.totalReturn) + '</td>' +
 
-        '<td class="num grand-credit col-credit-start">' + formatMoney(grandTotal.creditSold) + '</td>' +
-        '<td class="num grand-credit">' + formatMoney(grandTotal.creditReturned) + '</td>' +
-        '<td class="num grand-credit">' + formatMoney(grandTotal.netCredit) + '</td>' +
+        '<td class="num col-credit-start">' + formatMoney(grandTotal.creditSold) + '</td>' +
+        '<td class="num ' + (grandTotal.creditReturned > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.creditReturned) + '</td>' +
+        '<td class="num highlight-bold">' + formatMoney(grandTotal.netCredit) + '</td>' +
 
         (!hideColl ? (
-          '<td class="center grand-coll col-coll-start">-</td>' +
-          '<td class="center grand-coll">-</td>' +
-          activeAccounts.map(acc => '<td class="num grand-coll">' + formatMoney(grandTotal.accountColls[acc]) + '</td>').join('')
+          '<td class="center col-coll-start">-</td>' +
+          '<td class="center">-</td>' +
+          activeAccounts.map(acc => '<td class="num">' + formatMoney(grandTotal.accountColls[acc]) + '</td>').join('')
         ) : '') +
-        '<td class="num grand-coll ' + (hideColl ? 'col-coll-start' : '') + '">' + formatMoney(grandTotal.totalCollected) + '</td>' +
+        '<td class="num ' + (hideColl ? 'col-coll-start' : '') + '">' + formatMoney(grandTotal.totalCollected) + '</td>' +
 
-        '<td class="num grand-due col-due-start">' + formatMoney(grandTotal.creditDue) + '</td>' +
+        '<td class="num col-due-start ' + (grandTotal.creditDue > 0 ? 'highlight-red' : '') + '">' + formatMoney(grandTotal.creditDue) + '</td>' +
 
-        '<td class="center grand-current col-current-start">-</td>' +
-        '<td class="center grand-current">-</td>' +
-        '<td class="center grand-current">-</td>' +
-        '<td class="center grand-current">-</td>' +
+        // Current Position cells remain BLANK in Details Grand Total to prevent double counting
+        '<td class="center col-current-start">-</td>' +
+        '<td class="center">-</td>' +
+        '<td class="center">-</td>' +
+        '<td class="center">-</td>' +
       '</tr>' +
     '</thead>' +
     '<tbody>';
 
   if (pagedBlocks.length === 0) {
-    html += '<tr><td colspan="35" style="text-align:center; padding:40px; color:#64748b;">No invoices found.</td></tr>';
+    html += '<tr><td colspan="35" style="text-align:center; padding:30px; color:#64748b;">No invoices found.</td></tr>';
   } else {
     pagedBlocks.forEach((block, bIdx) => {
       const sl = startIdx + bIdx + 1;
       const inv = block.inv;
       const cust = block.cust;
       const colls = block.collections;
-      const isZebra = (bIdx % 2 === 1);
       const isOverLimit = (cust.availableCredit < 0);
       const blockId = "inv-" + inv.invNo;
 
@@ -4325,9 +4127,9 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
         const rSpan = (!hideColl) ? colls.length : 1;
 
         let rowClasses = [];
-        if (isZebra) rowClasses.push("zebra-block");
         if (isFirst) rowClasses.push("inv-block-first");
         if (isLast) rowClasses.push("inv-block-last");
+        if (!isFirst) rowClasses.push("inv-sub-row");
 
         html += '<tr class="' + rowClasses.join(' ') + '" data-inv-block="' + blockId + '">';
 
@@ -4345,14 +4147,14 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
             '<td class="center" rowspan="' + rSpan + '"><strong>' + inv.invNo + '</strong></td>' +
             '<td class="center" rowspan="' + rSpan + '"><a class="jv-link" onclick="openJournalModal(\'' + inv.saleJvNo + '\', \'Credit Sale\')">' + inv.saleJvNo + '</a></td>' +
 
-            '<td class="num col-sales-start" rowspan="' + rSpan + '">' + formatMoney(inv.gross) + '</td>' +
-            (!hideSales ? '<td class="num" rowspan="' + rSpan + '">' + formatMoney(inv.discount) + '</td>' : '') +
-            (!hideSales ? '<td class="num" rowspan="' + rSpan + '" style="font-weight:600;">' + formatMoney(inv.netSale) + '</td>' : '') +
-            '<td class="num" rowspan="' + rSpan + '" style="color:#be185d;">' + formatMoney(inv.totalReturn) + '</td>' +
+            '<td class="num col-sales-start" rowspan="' + rSpan + '">' + formatDataNum(inv.gross) + '</td>' +
+            (!hideSales ? '<td class="num" rowspan="' + rSpan + '">' + formatDataNum(inv.discount) + '</td>' : '') +
+            (!hideSales ? '<td class="num" rowspan="' + rSpan + '">' + formatDataNum(inv.netSale) + '</td>' : '') +
+            '<td class="num ' + (inv.totalReturn > 0 ? 'highlight-red' : '') + '" rowspan="' + rSpan + '">' + formatDataNum(inv.totalReturn) + '</td>' +
 
-            '<td class="num col-credit-start" rowspan="' + rSpan + '">' + formatMoney(inv.creditSold) + '</td>' +
-            '<td class="num" rowspan="' + rSpan + '" style="color:#be185d;">' + formatMoney(inv.creditReturned) + '</td>' +
-            '<td class="num" rowspan="' + rSpan + '" style="font-weight:700; color:#3730a3;">' + formatMoney(inv.netCredit) + '</td>';
+            '<td class="num col-credit-start" rowspan="' + rSpan + '">' + formatDataNum(inv.creditSold) + '</td>' +
+            '<td class="num ' + (inv.creditReturned > 0 ? 'highlight-red' : '') + '" rowspan="' + rSpan + '">' + formatDataNum(inv.creditReturned) + '</td>' +
+            '<td class="num highlight-bold" rowspan="' + rSpan + '">' + formatDataNum(inv.netCredit) + '</td>';
         }
 
         if (!hideColl) {
@@ -4360,14 +4162,14 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
             '<td class="center">' + (c.voucher === '-' ? '-' : ('<a class="jv-link" onclick="openJournalModal(\'' + c.voucher + '\', \'Collection\')">' + c.voucher + '</a>')) + '</td>' +
             activeAccounts.map(acc => {
               const val = (c.account === acc) ? c.amount : 0;
-              return '<td class="num">' + (val > 0 ? formatMoney(val) : '-') + '</td>';
+              return '<td class="num">' + formatDataNum(val) + '</td>';
             }).join('');
         }
 
         if (isFirst) {
-          html += '<td class="num ' + (hideColl ? 'col-coll-start' : '') + '" rowspan="' + rSpan + '" style="font-weight:700; color:#047857;">' + formatMoney(block.invTotalColl) + '</td>' +
-            '<td class="num col-due-start" rowspan="' + rSpan + '" style="font-weight:700; color:#b91c1c;">' +
-              formatMoney(block.netDue) +
+          html += '<td class="num ' + (hideColl ? 'col-coll-start' : '') + '" rowspan="' + rSpan + '">' + formatDataNum(block.invTotalColl) + '</td>' +
+            '<td class="num col-due-start ' + (block.netDue > 0 ? 'highlight-red' : '') + '" rowspan="' + rSpan + '">' +
+              formatDataNum(block.netDue) +
               (isCollectionMode && block.priorCollected > 0 ? (
                 '<span class="info-marker">i' +
                   '<span class="info-tooltip">Includes ' + formatMoney(block.priorCollected) + ' collected before this range</span>' +
@@ -4375,10 +4177,10 @@ function buildDetailsTableHTML(pagedBlocks, grandTotal, activeAccounts, showOffi
               ) : '') +
             '</td>' +
 
-            '<td class="num col-current-start muted-txt" rowspan="' + rSpan + '">' + formatMoney(cust.totalCreditDue) + '</td>' +
-            '<td class="num ' + (isOverLimit ? 'over-limit' : 'muted-txt') + '" rowspan="' + rSpan + '">' + formatMoney(cust.availableCredit) + '</td>' +
-            '<td class="num muted-txt" rowspan="' + rSpan + '">' + formatMoney(cust.limit) + '</td>' +
-            '<td class="center muted-txt" rowspan="' + rSpan + '"><strong>' + (cust.creditDays || 30) + '</strong></td>';
+            '<td class="num col-current-start muted-txt" rowspan="' + rSpan + '">' + formatDataNum(cust.totalCreditDue) + '</td>' +
+            '<td class="num ' + (isOverLimit ? 'highlight-red' : 'muted-txt') + '" rowspan="' + rSpan + '">' + formatDataNum(cust.availableCredit) + '</td>' +
+            '<td class="num muted-txt" rowspan="' + rSpan + '">' + formatDataNum(cust.limit) + '</td>' +
+            '<td class="center muted-txt" rowspan="' + rSpan + '">' + (cust.creditDays || 30) + '</td>';
         }
 
         html += '</tr>';
@@ -4409,7 +4211,7 @@ function renderOfficeWiseDetails(candidateInvoices, isCollectionMode) {
   effectiveOffices.forEach(officeName => {
     const offObj = OFFICES.find(o => o.name === officeName) || { name: officeName, address: "FairPrice Retail Outlet" };
     const offInvs = candidateInvoices.filter(i => i.office === officeName);
-    const { invoiceBlocks, activeAccounts, grandTotal } = processDetailsBlocks(offInvs, isCollectionMode);
+    const { invoiceBlocks, activeAccounts } = processDetailsBlocks(offInvs, isCollectionMode);
 
     let filtered = invoiceBlocks;
     if (State.filterBy !== "none") {
@@ -4427,20 +4229,26 @@ function renderOfficeWiseDetails(candidateInvoices, isCollectionMode) {
     }
 
     masterHtml += '<div class="office-section" id="office-section-' + officeName.replace(/\s+/g, '-') + '">' +
-      buildReportHeaderHTML(offObj, true) +
-      '<div class="table-toolbar" style="margin-top:6px;">' +
+      buildReportHeaderHTML(offObj, true);
+
+    // CHANGE REQUEST 5: If zero records, show calm message and NO table header or Grand Total row
+    if (filtered.length === 0) {
+      masterHtml += '<div class="empty-office-msg">No records found for this office</div></div>';
+    } else {
+      const grandTotal = computeDetailsGrandTotal(filtered, activeAccounts);
+      masterHtml += '<div class="table-toolbar" style="margin-top:4px;">' +
         '<div class="table-toolbar-left" style="color:#1e40af;">' +
           '<span>' + officeName + ' Details (' + filtered.length + ' Invoices)</span>' +
         '</div>' +
         '<div class="table-toolbar-right">' +
-          '<button class="btn btn-outline-blue" style="height:32px; font-size:13px;" onclick="exportSingleOfficeExcel(\'' + officeName + '\')">📊 Excel (' + officeName + ')</button>' +
-          '<button class="btn btn-outline-blue" style="height:32px; font-size:13px;" onclick="printSingleOffice(\'' + officeName + '\')">🖨️ Print (' + officeName + ')</button>' +
+          '<button class="btn btn-outline-blue" style="height:30px; font-size:12.5px;" onclick="exportSingleOfficeExcel(\'' + officeName + '\')">📊 Excel (' + officeName + ')</button>' +
+          '<button class="btn btn-outline-blue" style="height:30px; font-size:12.5px;" onclick="printSingleOffice(\'' + officeName + '\')">🖨️ Print (' + officeName + ')</button>' +
         '</div>' +
       '</div>' +
       '<div class="table-scroll-container">' +
         buildDetailsTableHTML(filtered, grandTotal, activeAccounts, false, 0, filtered.length, isCollectionMode) +
-      '</div>' +
-    '</div>';
+      '</div></div>';
+    }
   });
 
   State.renderedData = {
@@ -4463,7 +4271,7 @@ function renderCustomerCreditHistoryView() {
   const cust = DB.customers.find(c => c.id === custId);
 
   if (!cust) {
-    root.innerHTML = '<div style="padding:40px; text-align:center; color:#64748b;">Please select a customer to view credit history.</div>';
+    root.innerHTML = '<div style="padding:30px; text-align:center; color:#64748b;">Please select a customer to view credit history.</div>';
     return;
   }
 
@@ -4477,25 +4285,19 @@ function renderCustomerCreditHistoryView() {
   const from = State.fromDate;
   const to = State.toDate;
 
-  let openGross = 0, openDisc = 0, openNetSale = 0, openRet = 0, openCreditSale = 0, openCreditRet = 0, openColl = 0;
+  let openGross = 0, openDisc = 0, openCreditSale = 0, openCreditRet = 0, openColl = 0;
   allCustInvoices.forEach(i => {
     if (i.date < from) {
       openGross += i.gross;
       openDisc += i.discount;
-      openNetSale += i.netSale;
       openCreditSale += i.creditSold;
     }
   });
   allCustReturns.forEach(r => {
-    if (r.date < from) {
-      openRet += r.amount;
-      openCreditRet += r.creditReturned;
-    }
+    if (r.date < from) openCreditRet += r.creditReturned;
   });
   allCustCollections.forEach(c => {
-    if (c.date < from) {
-      openColl += c.amount;
-    }
+    if (c.date < from) openColl += c.amount;
   });
 
   const openingBalance = Math.max(0, (openCreditSale - openCreditRet) - openColl);
@@ -4595,16 +4397,16 @@ function renderCustomerCreditHistoryView() {
       '<div class="hist-col">' +
         '<div class="hist-row"><span class="hist-label">Credit Sale (In Range)</span><span class="hist-val">' + formatMoney(inRangeCreditSale) + '</span></div>' +
         '<div class="hist-row"><span class="hist-label">Credit Return (In Range)</span><span class="hist-val">' + formatMoney(inRangeCreditRet) + '</span></div>' +
-        '<div class="hist-row"><span class="hist-label">Net Credit Sale</span><span class="hist-val" style="color:#3730a3;">' + formatMoney(inRangeCreditSale - inRangeCreditRet) + '</span></div>' +
-        '<div class="hist-row"><span class="hist-label">Total Collection (In Range)</span><span class="hist-val" style="color:#047857;">' + formatMoney(inRangeColl) + '</span></div>' +
-        '<div class="hist-row"><span class="hist-label">Due at To Date (' + formatDateDMY(to) + ')</span><span class="hist-val" style="color:#b91c1c;">' + formatMoney(dueAtToDate) + '</span></div>' +
-        '<div class="hist-row"><span class="hist-label">Outstanding Due (As of Today)</span><span class="hist-val" style="color:#b91c1c;">' + formatMoney(cust.totalCreditDue) + '</span></div>' +
-        '<div class="hist-row"><span class="hist-label">Available Credit (As of Today)</span><span class="hist-val ' + (cust.availableCredit < 0 ? 'over-limit' : '') + '">' + formatMoney(cust.availableCredit) + '</span></div>' +
+        '<div class="hist-row"><span class="hist-label">Net Credit Sale</span><span class="hist-val highlight-bold">' + formatMoney(inRangeCreditSale - inRangeCreditRet) + '</span></div>' +
+        '<div class="hist-row"><span class="hist-label">Total Collection (In Range)</span><span class="hist-val">' + formatMoney(inRangeColl) + '</span></div>' +
+        '<div class="hist-row"><span class="hist-label">Due at To Date (' + formatDateDMY(to) + ')</span><span class="hist-val highlight-red">' + formatMoney(dueAtToDate) + '</span></div>' +
+        '<div class="hist-row"><span class="hist-label">Outstanding Due (As of Today)</span><span class="hist-val highlight-red">' + formatMoney(cust.totalCreditDue) + '</span></div>' +
+        '<div class="hist-row"><span class="hist-label">Available Credit (As of Today)</span><span class="hist-val ' + (cust.availableCredit < 0 ? 'highlight-red' : '') + '">' + formatMoney(cust.availableCredit) + '</span></div>' +
       '</div>' +
     '</div>' +
 
     '<div class="table-scroll-container" id="report-scroll-container">' +
-      '<table class="report-table">' +
+      '<table class="report-table table-summary">' +
         '<thead>' +
           '<tr class="band-header-row">' +
             '<th class="band-cust freeze-sl">SL</th>' +
@@ -4627,7 +4429,7 @@ function renderCustomerCreditHistoryView() {
             '<td class="center freeze-sl">-</td>' +
             '<td class="center freeze-partner">' + formatDateDMY(from) + '</td>' +
             '<td colspan="10">Opening Balance</td>' +
-            '<td class="num col-due-start" style="color:#b91c1c;">' + formatMoney(openingBalance) + '</td>' +
+            '<td class="num col-due-start highlight-red">' + formatMoney(openingBalance) + '</td>' +
           '</tr>';
 
   txList.forEach((t, idx) => {
@@ -4638,33 +4440,34 @@ function renderCustomerCreditHistoryView() {
       '<td class="center">' + t.docNo + '</td>' +
       '<td class="center">' + (t.jvNo !== '-' ? ('<a class="jv-link" onclick="openJournalModal(\'' + t.jvNo + '\', \'' + t.type + '\')">' + t.jvNo + '</a>') : '-') + '</td>' +
 
-      '<td class="num col-sales-start">' + (t.gross > 0 ? formatMoney(t.gross) : '-') + '</td>' +
-      '<td class="num">' + (t.discount > 0 ? formatMoney(t.discount) : '-') + '</td>' +
-      '<td class="num">' + (t.netSale !== 0 ? formatMoney(t.netSale) : '-') + '</td>' +
+      '<td class="num col-sales-start">' + (t.gross > 0 ? formatMoney(t.gross) : '<span class="zero-val">-</span>') + '</td>' +
+      '<td class="num">' + (t.discount > 0 ? formatMoney(t.discount) : '<span class="zero-val">-</span>') + '</td>' +
+      '<td class="num">' + (t.netSale !== 0 ? formatMoney(t.netSale) : '<span class="zero-val">-</span>') + '</td>' +
 
-      '<td class="num col-credit-start">' + (t.creditSale > 0 ? formatMoney(t.creditSale) : '-') + '</td>' +
-      '<td class="num">' + (t.creditReturn > 0 ? formatMoney(t.creditReturn) : '-') + '</td>' +
+      '<td class="num col-credit-start">' + (t.creditSale > 0 ? formatMoney(t.creditSale) : '<span class="zero-val">-</span>') + '</td>' +
+      '<td class="num ' + (t.creditReturn > 0 ? 'highlight-red' : '') + '">' + (t.creditReturn > 0 ? formatMoney(t.creditReturn) : '<span class="zero-val">-</span>') + '</td>' +
 
       '<td class="center col-coll-start">' + t.account + '</td>' +
-      '<td class="num">' + (t.collection > 0 ? formatMoney(t.collection) : '-') + '</td>' +
+      '<td class="num">' + (t.collection > 0 ? formatMoney(t.collection) : '<span class="zero-val">-</span>') + '</td>' +
 
-      '<td class="num col-due-start" style="font-weight:700; color:#b91c1c;">' + formatMoney(t.balance) + '</td>' +
+      '<td class="num col-due-start highlight-red">' + formatMoney(t.balance) + '</td>' +
     '</tr>';
   });
 
   html += '</tbody>' +
     '<tfoot>' +
       '<tr class="grand-total-row">' +
-        '<td class="center grand-cust freeze-sl">Total</td>' +
-        '<td class="grand-cust freeze-partner" colspan="4">Summary Totals (In Range)</td>' +
-        '<td class="num grand-sales col-sales-start">-</td>' +
-        '<td class="num grand-sales">-</td>' +
-        '<td class="num grand-sales">-</td>' +
-        '<td class="num grand-credit col-credit-start">' + formatMoney(inRangeCreditSale) + '</td>' +
-        '<td class="num grand-credit">' + formatMoney(inRangeCreditRet) + '</td>' +
-        '<td class="center grand-coll col-coll-start">-</td>' +
-        '<td class="num grand-coll">' + formatMoney(inRangeColl) + '</td>' +
-        '<td class="num grand-due col-due-start">' + formatMoney(dueAtToDate) + '</td>' +
+        '<td class="center freeze-sl">Total</td>' +
+        '<td class="freeze-partner">Grand Total</td>' +
+        '<td colspan="3">Summary Totals (In Range)</td>' +
+        '<td class="num col-sales-start">-</td>' +
+        '<td class="num">-</td>' +
+        '<td class="num">-</td>' +
+        '<td class="num col-credit-start">' + formatMoney(inRangeCreditSale) + '</td>' +
+        '<td class="num">' + formatMoney(inRangeCreditRet) + '</td>' +
+        '<td class="center col-coll-start">-</td>' +
+        '<td class="num">' + formatMoney(inRangeColl) + '</td>' +
+        '<td class="num col-due-start highlight-red">' + formatMoney(dueAtToDate) + '</td>' +
       '</tr>' +
     '</tfoot>' +
   '</table></div>';
@@ -4682,6 +4485,72 @@ function renderCustomerCreditHistoryView() {
 
 /**
  * =============================================================================
+ * DEVELOPER SELF-CHECK (Recomputes visible rows & verifies reconciliation)
+ * =============================================================================
+ */
+function verifyReportTotals() {
+  const banner = document.getElementById("totals-mismatch-banner");
+  if (!banner || !State.renderedData || State.isCreditHistory) {
+    if (banner) banner.style.display = "none";
+    return;
+  }
+
+  try {
+    const data = State.renderedData;
+    let expectedGross = 0;
+    let expectedNetCredit = 0;
+    let expectedColl = 0;
+    let expectedDue = 0;
+
+    if (data.type === 'summary') {
+      data.customers.forEach(c => {
+        expectedGross += c.gross;
+        expectedNetCredit += c.netCredit;
+        expectedColl += c.totalCollected;
+        expectedDue += c.creditDue;
+      });
+      const gt = data.grandTotal;
+      const diffGross = Math.abs(expectedGross - gt.gross);
+      const diffCredit = Math.abs(expectedNetCredit - gt.netCredit);
+      const diffColl = Math.abs(expectedColl - gt.totalCollected);
+      const diffDue = Math.abs(expectedDue - gt.creditDue);
+
+      if (diffGross > 0.05 || diffCredit > 0.05 || diffColl > 0.05 || diffDue > 0.05) {
+        banner.style.display = "block";
+        banner.textContent = "Totals mismatch detected: Gross diff=" + diffGross.toFixed(2) + ", NetCredit diff=" + diffCredit.toFixed(2);
+        console.error("Self-check totals mismatch:", { expectedGross, gtGross: gt.gross, expectedDue, gtDue: gt.creditDue });
+        return;
+      }
+    } else if (data.type === 'details') {
+      data.blocks.forEach(b => {
+        expectedGross += b.inv.gross;
+        expectedNetCredit += b.inv.netCredit;
+        expectedColl += b.invTotalColl;
+        expectedDue += b.netDue;
+      });
+      const gt = data.grandTotal;
+      const diffGross = Math.abs(expectedGross - gt.gross);
+      const diffCredit = Math.abs(expectedNetCredit - gt.netCredit);
+      const diffColl = Math.abs(expectedColl - gt.totalCollected);
+      const diffDue = Math.abs(expectedDue - gt.creditDue);
+
+      if (diffGross > 0.05 || diffCredit > 0.05 || diffColl > 0.05 || diffDue > 0.05) {
+        banner.style.display = "block";
+        banner.textContent = "Details totals mismatch detected: Gross diff=" + diffGross.toFixed(2);
+        console.error("Self-check details mismatch:", { expectedGross, gtGross: gt.gross, expectedDue, gtDue: gt.creditDue });
+        return;
+      }
+    }
+
+    // All totals reconciled perfectly!
+    banner.style.display = "none";
+  } catch (err) {
+    console.error("Self-check error:", err);
+  }
+}
+
+/**
+ * =============================================================================
  * PAGINATION & FOCUS MODE
  * =============================================================================
  */
@@ -4693,7 +4562,7 @@ function renderPaginationControls(totalRows, totalPages) {
     if (p === 1 || p === totalPages || (p >= State.currentPage - 2 && p <= State.currentPage + 2)) {
       btns += '<button class="page-btn ' + (p === State.currentPage ? 'active' : '') + '" onclick="changePage(' + p + ')">' + p + '</button>';
     } else if (p === State.currentPage - 3 || p === State.currentPage + 3) {
-      btns += '<span style="padding:0 4px;">...</span>';
+      btns += '<span style="padding:0 2px;">...</span>';
     }
   }
 
@@ -4719,10 +4588,8 @@ function changePage(newPage) {
 function toggleReportFocusMode() {
   const isFocus = document.body.classList.toggle("focus-mode");
   const btn = document.getElementById("btn-expand-report");
-  if (btn) {
-    btn.innerHTML = isFocus ? "⛷ Collapse report" : "⛶ Expand report";
-  }
-  showToast(isFocus ? "Focus mode activated (Press Esc to exit)" : "Focus mode deactivated");
+  if (btn) btn.innerHTML = isFocus ? "⛷ Collapse report" : "⛶ Expand report";
+  showToast(isFocus ? "Focus mode activated (Esc to exit)" : "Focus mode deactivated");
 }
 
 /**
@@ -4762,7 +4629,7 @@ function openCustomerInvoicesModal(partnerCode) {
       '<td class="center">' + (firstColl.date !== '-' ? formatDateDMY(firstColl.date) : '-') + '</td>' +
       '<td class="center">' + (firstColl.account || '-') + '</td>' +
       '<td class="num">' + formatMoney(inv.totalCollected) + '</td>' +
-      '<td class="num">' + formatMoney(inv.creditDue) + '</td>' +
+      '<td class="num ' + (inv.creditDue > 0 ? 'highlight-red' : '') + '">' + formatMoney(inv.creditDue) + '</td>' +
       '<td class="num">' + formatMoney(cust.availableCredit) + '</td>' +
       '<td class="num">' + formatMoney(inv.netSale) + '</td>' +
     '</tr>';
@@ -4843,11 +4710,11 @@ function generateSpreadsheetML(sheets) {
     ' xmlns:html="http://www.w3.org/TR/REC-html40">\n' +
     '<Styles>\n' +
       '<Style ss:ID="Default" ss:Name="Normal"><Font ss:FontName="Calibri" ss:Size="11" ss:Color="#000000"/><Alignment ss:Vertical="Center"/></Style>\n' +
-      '<Style ss:ID="sTitle"><Font ss:FontName="Calibri" ss:Size="16" ss:Bold="1" ss:Color="#111827"/><Alignment ss:Horizontal="Center"/></Style>\n' +
-      '<Style ss:ID="sCompany"><Font ss:FontName="Calibri" ss:Size="13" ss:Bold="1" ss:Color="#1e3a8a"/><Alignment ss:Horizontal="Center"/></Style>\n' +
+      '<Style ss:ID="sTitle"><Font ss:FontName="Calibri" ss:Size="15" ss:Bold="1" ss:Color="#111827"/><Alignment ss:Horizontal="Center"/></Style>\n' +
+      '<Style ss:ID="sCompany"><Font ss:FontName="Calibri" ss:Size="12" ss:Bold="1" ss:Color="#1e3a8a"/><Alignment ss:Horizontal="Center"/></Style>\n' +
       '<Style ss:ID="sParams"><Font ss:FontName="Calibri" ss:Size="10" ss:Color="#475569"/><Alignment ss:Horizontal="Center"/></Style>\n' +
-      '<Style ss:ID="sHeader"><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#1e293b"/><Interior ss:Color="#eaf0f7" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/><Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/><Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/></Borders></Style>\n' +
-      '<Style ss:ID="sGrandTotal"><Font ss:FontName="Calibri" ss:Size="12" ss:Bold="1" ss:Color="#0f2d4a"/><Interior ss:Color="#dfeaf6" ss:Pattern="Solid"/><Borders><Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#1f3b63"/><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#1f3b63"/></Borders></Style>\n' +
+      '<Style ss:ID="sHeader"><Font ss:FontName="Calibri" ss:Size="10.5" ss:Bold="1" ss:Color="#1e293b"/><Interior ss:Color="#eaf0f7" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/><Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/><Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#c3cddb"/></Borders></Style>\n' +
+      '<Style ss:ID="sGrandTotal"><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#0f2d4a"/><Interior ss:Color="#eef2f7" ss:Pattern="Solid"/><Borders><Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#8fa0b5"/><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#8fa0b5"/></Borders></Style>\n' +
       '<Style ss:ID="sNum"><Alignment ss:Horizontal="Right"/><NumberFormat ss:Format="#,##0.00"/></Style>\n' +
       '<Style ss:ID="sCenter"><Alignment ss:Horizontal="Center"/></Style>\n' +
     '</Styles>\n';
@@ -4855,14 +4722,12 @@ function generateSpreadsheetML(sheets) {
   sheets.forEach(sheet => {
     xml += '<Worksheet ss:Name="' + (sheet.name.replace(/[:\\/?*\[\]]/g, ' ').slice(0, 31)) + '">\n<Table>\n';
 
-    // Header parameters rows
-    xml += '<Row ss:Height="26"><Cell ss:StyleID="sTitle"><Data ss:Type="String">Credit Analysis Report</Data></Cell></Row>\n';
-    xml += '<Row ss:Height="20"><Cell ss:StyleID="sCompany"><Data ss:Type="String">' + sheet.name + ' - FairPrice Management</Data></Cell></Row>\n';
-    xml += '<Row ss:Height="16"><Cell ss:StyleID="sParams"><Data ss:Type="String">Generated: 04-11-2026 10:30 | Range: ' + formatDateDMY(State.fromDate) + ' to ' + formatDateDMY(State.toDate) + '</Data></Cell></Row>\n';
-    xml += '<Row ss:Height="10"/>\n'; // Spacer
+    xml += '<Row ss:Height="24"><Cell ss:StyleID="sTitle"><Data ss:Type="String">Credit Analysis Report</Data></Cell></Row>\n';
+    xml += '<Row ss:Height="18"><Cell ss:StyleID="sCompany"><Data ss:Type="String">' + sheet.name + ' - FairPrice Management</Data></Cell></Row>\n';
+    xml += '<Row ss:Height="15"><Cell ss:StyleID="sParams"><Data ss:Type="String">Generated: 04-11-2026 10:30 | Range: ' + formatDateDMY(State.fromDate) + ' to ' + formatDateDMY(State.toDate) + '</Data></Cell></Row>\n';
+    xml += '<Row ss:Height="8"/>\n';
 
     if (sheet.tableHtml) {
-      // Parse HTML table rows into SpreadsheetML Rows
       const rows = sheet.tableHtml.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi) || [];
       rows.forEach(r => {
         xml += '<Row>\n';
@@ -4879,6 +4744,8 @@ function generateSpreadsheetML(sheets) {
         });
         xml += '</Row>\n';
       });
+    } else if (sheet.emptyMsg) {
+      xml += '<Row><Cell><Data ss:Type="String">' + sheet.emptyMsg + '</Data></Cell></Row>\n';
     }
 
     xml += '</Table>\n</Worksheet>\n';
@@ -4910,7 +4777,11 @@ function exportReportToExcel() {
       const sec = document.getElementById("office-section-" + off.replace(/\s+/g, '-'));
       if (sec) {
         const table = sec.querySelector("table");
-        if (table) sheets.push({ name: off, tableHtml: table.outerHTML });
+        if (table) {
+          sheets.push({ name: off, tableHtml: table.outerHTML });
+        } else {
+          sheets.push({ name: off, emptyMsg: "No records found for this office" });
+        }
       }
     });
     const xml = generateSpreadsheetML(sheets);
@@ -4927,8 +4798,11 @@ function exportSingleOfficeExcel(officeName) {
   const sec = document.getElementById("office-section-" + officeName.replace(/\s+/g, '-'));
   if (!sec) return;
   const table = sec.querySelector("table");
-  if (!table) return;
-  const xml = generateSpreadsheetML([{ name: officeName, tableHtml: table.outerHTML }]);
+  const xml = generateSpreadsheetML([{
+    name: officeName,
+    tableHtml: table ? table.outerHTML : null,
+    emptyMsg: table ? null : "No records found for this office"
+  }]);
   downloadXmlBlob(xml, "Credit_Analysis_" + officeName.replace(/\s+/g, '_') + "_" + TODAY + ".xls");
 }
 
@@ -4959,7 +4833,6 @@ window.addEventListener("DOMContentLoaded", () => {
   initMultiDropdowns();
   initCustomerAutocomplete();
 
-  // Mode Checkbox Logic
   const chkDetails = document.getElementById("chk-is-details");
   const chkColl = document.getElementById("chk-is-collection");
   const chkHist = document.getElementById("chk-is-history");
@@ -4991,12 +4864,10 @@ window.addEventListener("DOMContentLoaded", () => {
     onFilterCriteriaChange();
   });
 
-  // Hide checkboxes
   document.getElementById("chk-hide-cust").addEventListener("change", onFilterCriteriaChange);
   document.getElementById("chk-hide-sales").addEventListener("change", onFilterCriteriaChange);
   document.getElementById("chk-hide-coll").addEventListener("change", onFilterCriteriaChange);
 
-  // Filter By dropdown
   document.getElementById("f-filter-by").addEventListener("change", () => {
     syncFilterModeFields();
     onFilterCriteriaChange();
@@ -5004,7 +4875,6 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("f-filter-min").addEventListener("input", onFilterCriteriaChange);
   document.getElementById("f-filter-max").addEventListener("input", onFilterCriteriaChange);
 
-  // Sort By
   document.getElementById("f-sort-by").addEventListener("change", onFilterCriteriaChange);
   document.getElementById("btn-sort-dir").addEventListener("click", () => {
     State.sortDir = (State.sortDir === "asc") ? "desc" : "asc";
@@ -5012,7 +4882,6 @@ window.addEventListener("DOMContentLoaded", () => {
     onFilterCriteriaChange();
   });
 
-  // More Filters toggle
   document.getElementById("btn-toggle-more-filters").addEventListener("click", () => {
     const body = document.getElementById("more-filters-body");
     const arrow = document.getElementById("more-filters-arrow");
@@ -5021,7 +4890,6 @@ window.addEventListener("DOMContentLoaded", () => {
     arrow.textContent = isHidden ? "▴" : "▾";
   });
 
-  // Dashboard Toggle
   document.getElementById("btn-dashboard-toggle").addEventListener("click", () => {
     const content = document.getElementById("dashboard-content");
     const btn = document.getElementById("btn-dashboard-toggle");
@@ -5030,7 +4898,6 @@ window.addEventListener("DOMContentLoaded", () => {
     btn.textContent = State.dashboardVisible ? "Hide Dashboard" : "Show Dashboard";
   });
 
-  // Donut year & metric
   document.getElementById("pie-year-select").addEventListener("change", (e) => {
     State.pieYear = parseInt(e.target.value);
     renderMonthlyPie();
@@ -5040,15 +4907,11 @@ window.addEventListener("DOMContentLoaded", () => {
     renderMonthlyPie();
   });
 
-  // View button
   document.getElementById("btn-view").addEventListener("click", executeViewAction);
-
-  // Top Excel & Print buttons
   document.getElementById("btn-excel").addEventListener("click", exportReportToExcel);
   document.getElementById("btn-print").addEventListener("click", () => window.print());
   document.getElementById("btn-expand-report").addEventListener("click", toggleReportFocusMode);
 
-  // Sidebar toggle
   document.getElementById("sidebar-toggle").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("collapsed");
   });
@@ -5070,7 +4933,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Check initial office-wise visibility
   checkOfficeWiseVisibility();
   syncFilterModeFields();
   updateSortDirUI();
